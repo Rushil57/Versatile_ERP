@@ -1,0 +1,833 @@
+﻿@model VTPL_ERP.Models.Master.InventoryMasterViewModel
+@{
+    ViewData["Title"] = "Inventory_Master";
+
+}
+@*<h2>InventoryBrand_Master</h2>*@
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+            <!-- Revenue, Hit Rate & Deals -->
+            <div class="row">
+                @*===================*@
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @*<button type="button" class="btn btn-primary">Add New Courier</button>*@
+                        <h4 style="float:left" class="modal-title"><strong>Inventory Master</strong></h4>
+                        @*<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" onclick="clearData()">Add New Unit</button>*@
+                    </div>
+                </div>
+                <div id="myModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+                                <h4 class="modal-title"><i class="ft-user"></i> Inventory </h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Brand</label>
+                                            @Html.DropDownListFor(m => m.BrandId, ViewBag.BrandDataList as IEnumerable<SelectListItem>,
+                                               new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Category</label>
+                                            @Html.DropDownListFor(m => m.CategoryId, ViewBag.CategoryDataList as IEnumerable<SelectListItem>,
+                                               new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Unit</label>
+                                            @Html.DropDownListFor(m => m.UnitId, ViewBag.UnitDataList as IEnumerable<SelectListItem>,
+                                               new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    @*<div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Branch</label>
+                                            @Html.DropDownListFor(m => m.BranchId, ViewBag.BranchDataList as IEnumerable<SelectListItem>,
+                                               new { @class = "form-control" })
+                                        </div>
+                                    </div>*@
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput1">Item Name </label>
+                                            @*<input type="text" id="projectinput1" class="form-control" placeholder="Ex : Bhavesh"
+                                                name="fname">*@
+                                            @Html.HiddenFor(m => m.Id, new { @class = "form-control" })
+                                            @Html.HiddenFor(m => m.Created_Date, new { @class = "form-control" })
+                                            @Html.HiddenFor(m => m.Modified_Date, new { @class = "form-control" })
+                                            @Html.HiddenFor(m => m.IsActive, new { @class = "form-control" })
+                                            @Html.TextBoxFor(m => m.ItemName, new { @class = "form-control", @maxlength = 150 })
+                                        </div>
+                                    </div>
+                                    @*<div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Types of Good</label>
+                                            @Html.TextBoxFor(m => m.TypesOfGood, new { @class = "form-control" })
+                                        </div>
+                                    </div>*@
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Types of Good</label>
+                                            @{
+                                                List<SelectListItem> listItemsTypesOfGood = new List<SelectListItem>();
+                                                listItemsTypesOfGood.Add(new SelectListItem
+                                                {
+                                                    Text = "Goods",
+                                                    Value = "Goods"
+                                                });
+                                                listItemsTypesOfGood.Add(new SelectListItem
+                                                {
+                                                    Text = "Service",
+                                                    Value = "Service"
+                                                });
+                                            }
+
+                                            @Html.DropDownListFor(m => m.TypesOfGood, listItemsTypesOfGood, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6" id="divServiceTypeId">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Service Type</label>
+                                            @{
+                                                List<SelectListItem> listItemsServiceType = new List<SelectListItem>();
+                                                listItemsServiceType.Add(new SelectListItem
+                                                {
+                                                    Text = "Branch transfer outward",
+                                                    Value = "Branch transfer outward"
+                                                });
+                                                listItemsServiceType.Add(new SelectListItem
+                                                {
+                                                    Text = "Deemed exports excempt",
+                                                    Value = "Deemed exports excempt"
+                                                });
+                                                listItemsServiceType.Add(new SelectListItem
+                                                {
+                                                    Text = "Deemed exports nil rated",
+                                                    Value = "Deemed exports nil rated"
+                                                });
+                                                listItemsServiceType.Add(new SelectListItem
+                                                {
+                                                    Text = "Deemed exports taxable",
+                                                    Value = "Deemed exports taxable"
+                                                });
+                                                listItemsServiceType.Add(new SelectListItem
+                                                {
+                                                    Text = "Exports excempt",
+                                                    Value = "Exports excempt"
+                                                });
+                                                listItemsServiceType.Add(new SelectListItem
+                                                {
+                                                    Text = "Exports lut/bond",
+                                                    Value = "Exports lut/bond"
+                                                });
+                                                listItemsServiceType.Add(new SelectListItem
+                                                {
+                                                    Text = "Exports nil rated",
+                                                    Value = "Exports nil rated"
+                                                });
+                                                listItemsServiceType.Add(new SelectListItem
+                                                {
+                                                    Text = "Exports taxable",
+                                                    Value = "Exports taxable"
+                                                });
+                                                listItemsServiceType.Add(new SelectListItem
+                                                {
+                                                    Text = "Interstate sales excempt",
+                                                    Value = "Interstate sales excempt"
+                                                });
+                                                listItemsServiceType.Add(new SelectListItem
+                                                {
+                                                    Text = "Interstate sales taxable",
+                                                    Value = "Interstate sales taxable"
+                                                });
+                                                listItemsServiceType.Add(new SelectListItem
+                                                {
+                                                    Text = "Interstate deemed exports excempt",
+                                                    Value = "Interstate deemed exports excempt"
+                                                });
+                                                listItemsServiceType.Add(new SelectListItem
+                                                {
+                                                    Text = "Interstate deemed exports nil rated",
+                                                    Value = "Interstate deemed exports nil rated"
+                                                });
+                                                listItemsServiceType.Add(new SelectListItem
+                                                {
+                                                    Text = "Interstate deemed exports taxable",
+                                                    Value = "Interstate deemed exports taxable"
+                                                });
+                                                listItemsServiceType.Add(new SelectListItem
+                                                {
+                                                    Text = "Sales excempt",
+                                                    Value = "Sales excempt"
+                                                });
+                                                listItemsServiceType.Add(new SelectListItem
+                                                {
+                                                    Text = "Sales nil rated",
+                                                    Value = "Sales nil rated"
+                                                });
+                                                listItemsServiceType.Add(new SelectListItem
+                                                {
+                                                    Text = "Sales taxable",
+                                                    Value = "Sales taxable"
+                                                });
+                                                listItemsServiceType.Add(new SelectListItem
+                                                {
+                                                    Text = "Sales to consumer - excempt",
+                                                    Value = "Sales to consumer - excempt"
+                                                });
+                                                listItemsServiceType.Add(new SelectListItem
+                                                {
+                                                    Text = "Sales to consumer nil rated",
+                                                    Value = "Sales to consumer nil rated"
+                                                });
+                                                listItemsServiceType.Add(new SelectListItem
+                                                {
+                                                    Text = "Sales to consumer - taxable",
+                                                    Value = "Sales to consumer - taxable"
+                                                });
+                                                listItemsServiceType.Add(new SelectListItem
+                                                {
+                                                    Text = "Sales to sez - excempt",
+                                                    Value = "Sales to sez - excempt"
+                                                });
+                                                listItemsServiceType.Add(new SelectListItem
+                                                {
+                                                    Text = "Sales to sez - lut/bond",
+                                                    Value = "Sales to sez - lut/bond"
+                                                });
+                                                listItemsServiceType.Add(new SelectListItem
+                                                {
+                                                    Text = "Sales to sez - nil rated",
+                                                    Value = "Sales to sez - nil rated"
+                                                });
+                                                listItemsServiceType.Add(new SelectListItem
+                                                {
+                                                    Text = "Sales to sez - taxable",
+                                                    Value = "Sales to sez - taxable"
+                                                });
+                                            }
+
+                                            @Html.DropDownListFor(m => m.ServiceType, listItemsServiceType, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    @*<div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Rate</label>
+                                            @Html.TextBoxFor(m => m.Rate, new { @class = "form-control" })
+                                        </div>
+                                    </div>*@
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">IsGSTApplicable</label>
+                                            @Html.CheckBoxFor(m => m.IsGSTApplicable)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" id="inventoryGSTDivID">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">HSN Code</label>
+                                            @Html.TextBoxFor(m => m.GSTDetail.HSNCode, new { @class = "form-control", @minlength = 4, @maxlength = 10 })
+                                            @Html.HiddenFor(m => m.GSTDetail.Id, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Calculation Type</label>
+                                            @*@Html.TextBoxFor(m => m.GSTDetail.CalculationType, new { @class = "form-control" })*@
+                                            @{
+                                                List<SelectListItem> listItemsCalcType = new List<SelectListItem>();
+                                                listItemsCalcType.Add(new SelectListItem
+                                                {
+                                                    Text = "On Value",
+                                                    Value = "On Value"
+                                                });
+                                                listItemsCalcType.Add(new SelectListItem
+                                                {
+                                                    Text = "On Item",
+                                                    Value = "On Item"
+                                                });
+                                            }
+
+                                            @Html.DropDownListFor(m => m.GSTDetail.CalculationType, listItemsCalcType, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Taxability</label>
+                                            @*@Html.TextBoxFor(m => m.GSTDetail.Taxability, new { @class = "form-control" })*@
+                                            @{
+                                                List<SelectListItem> listItemsTaxability = new List<SelectListItem>();
+                                                listItemsTaxability.Add(new SelectListItem
+                                                {
+                                                    Text = "Nil rated",
+                                                    Value = "Nil rated"
+                                                });
+                                                listItemsTaxability.Add(new SelectListItem
+                                                {
+                                                    Text = "Taxable",
+                                                    Value = "Taxable"
+                                                });
+                                            }
+
+                                            @Html.DropDownListFor(m => m.GSTDetail.Taxability, listItemsTaxability, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Integrated Tax</label>
+                                            @Html.TextBoxFor(m => m.GSTDetail.IntegratedTax, new { @class = "form-control", @maxlength = 2 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Central Tax</label>
+                                            @Html.TextBoxFor(m => m.GSTDetail.CentralTax, new { @class = "form-control", @readonly = "readonly" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">State Tax</label>
+                                            @Html.TextBoxFor(m => m.GSTDetail.StateTax, new { @class = "form-control", @readonly = "readonly" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-warning mr-1" data-dismiss="modal">Close</button>
+                                    <button type="button" id="saveInventoryBtnId" class="btn btn-primary" onclick="saveInventory()">
+                                        <i class="la la-check-square-o"></i> Save
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                @*================*@
+
+
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <form class="form">
+                                    <div class="form-body">
+                                        <div class="form-group">
+                                            <button type="button" id="btnAddNew" style="float:right" class="btn btn-info btn-sm btn-round" data-toggle="modal" data-target="#myModal" onclick="clearData()"><i class="ft-plus"></i> Add New Inventory</button>
+                                        </div>
+                                        <h4 class="form-section"><i class="ft-user"></i> List of Inventory</h4>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="card-content collapse show vtpl-grid-align">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped" id="inventoryMastertblId">
+                                                            <thead>
+                                                                <tr>
+                                                                    @*<th>#</th>*@
+                                                                    <th>Item Name</th>
+                                                                    <th>Types Of Good</th>
+                                                                   @* <th>Rate</th>*@
+                                                                    <th style="width: 25px;">Edit</th>
+                                                                    <th style="width: 25px;">Delete</th>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+    var tblList;
+        $(document).ready(function () {
+            $("#BrandId").select2();
+           // $("#BranchId").select2();
+            $("#CategoryId").select2();
+            $("#UnitId").select2();
+            $("#TypesOfGood").select2();
+            $("#ServiceType").select2();
+            $("#GSTDetail_CalculationType").select2();
+            $("#GSTDetail_Taxability").select2();
+            //$("#BrandId").select2({ placeholder: 'Select Brand' });
+            $("#BrandId").select2("val", 0);
+           // $("#BranchId").select2({ placeholder: 'Select Branch' });
+           // $("#BranchId").select2("val", 0);
+            //$("#CategoryId").select2({ placeholder: 'Select Categoryt' });
+            $("#CategoryId").select2("val", 0);
+            //$("#UnitId").select2({ placeholder: 'Select Unit' });
+            $("#UnitId").select2("val", 0);
+            //$("#TypesOfGood").select2({ placeholder: 'Select Types of Good' });
+            $("#TypesOfGood").select2("val", 0);
+            $("#ServiceType").select2("val", 0);
+            $("#GSTDetail_CalculationType").select2("val", 0);
+            $("#GSTDetail_Taxability").select2("val", 0);
+            $('select').select2({
+                width: '100%'
+            });
+            $("#divServiceTypeId").hide();
+        BindInventoryList();
+        $("#inventoryGSTDivID").hide();
+        $("#GSTDetail_IntegratedTax").keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                // Allow: Shift+A, Command+A
+                //(e.keyCode === 65 && (e.shiftKey === true || e.metaKey === true)) ||
+                // Allow: home, end, left, right, down, up
+                (e.keyCode >= 35 && e.keyCode <= 40)) {
+                // let it happen, don't do anything
+                return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+        $("#GSTDetail_CentralTax").keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                // Allow: Shift+A, Command+A
+                //(e.keyCode === 65 && (e.shiftKey === true || e.metaKey === true)) ||
+                // Allow: home, end, left, right, down, up
+                (e.keyCode >= 35 && e.keyCode <= 40)) {
+                // let it happen, don't do anything
+                return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+        $("#GSTDetail_StateTax").keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                // Allow: Shift+A, Command+A
+                //(e.keyCode === 65 && (e.shiftKey === true || e.metaKey === true)) ||
+                // Allow: home, end, left, right, down, up
+                (e.keyCode >= 35 && e.keyCode <= 40)) {
+                // let it happen, don't do anything
+                return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+        $(document).keyup(function (e) {
+            var keyCode = e.keyCode || e.which;
+
+            if (keyCode == 115) {
+                // f4
+                if (($("#myModal").data('bs.modal') || {})._isShown) {
+                    $("#saveInventoryBtnId").focus();
+                    saveInventory();
+                }
+            }
+            if (keyCode == 119) {
+                // f8
+                $('#btnAddNew').click();
+            }
+            if (keyCode == 70) {
+                //shit + f
+                if (e.shiftKey) {
+                    $('#inventoryMastertblId_filter input').focus();
+                }
+            }
+        });
+        });
+        function saveInventory() {
+            if (ValidateForm()) {
+                var modelObj = {};
+                var gstDetail = {};
+                gstDetail.Id = $("#GSTDetail_Id").val();
+                gstDetail.HSNCode = $("#GSTDetail_HSNCode").val();
+                gstDetail.CalculationType = $("#GSTDetail_CalculationType").val();
+                gstDetail.Taxability = $("#GSTDetail_Taxability").val();
+                gstDetail.IntegratedTax = $("#GSTDetail_IntegratedTax").val();
+                gstDetail.CentralTax = $("#GSTDetail_CentralTax").val();
+                gstDetail.StateTax = $("#GSTDetail_StateTax").val()
+                modelObj.GSTDetail = gstDetail;
+                modelObj.Id = $("#Id").val();
+                modelObj.ItemName = $("#ItemName").val();
+                modelObj.BrandId = $("#BrandId").val();
+                modelObj.CategoryId = $("#CategoryId").val();
+                modelObj.UnitId = $("#UnitId").val();
+               // modelObj.BranchId = $("#BranchId").val();
+                modelObj.Created_Date = $("#Created_Date").val();
+                modelObj.TypesOfGood = $("#TypesOfGood").val();
+                modelObj.ServiceType = $("#ServiceType").val();
+               // modelObj.Rate = $("#Rate").val();
+                modelObj.IsGSTApplicable = $("#IsGSTApplicable").prop('checked');
+                $.ajax({
+                    type: "POST",
+                    url: '/api/Master/SaveInventory',
+                    data: modelObj,
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.isError == true) {
+                            swal("Error!", response.errorMessage, "error");
+                        }
+                        else {
+                            swal("Success!", response.successMessage, "success");
+                            $('#myModal').modal('hide');
+                            BindInventoryList();
+                        }
+                    },
+                    error: function () {
+                        swal("Error!", "Some error had occur!", "error");
+                    }
+                });
+            }
+        }
+        function DeleteData(id) {
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this data!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            type: "GET",
+                            url: '/api/Master/DeleteInventoryByKey?id=' + id,
+                            dataType: "json",
+                            success: function (response) {
+                                if (response.isError == true) {
+                                    swal("Error!", response.errorMessage, "error");
+                                }
+                                else {
+                                    swal("Success!", response.successMessage, "success");
+                                    BindInventoryList();
+                                }
+                            },
+                            error: function () {
+                            }
+                        });
+
+                    }
+                });
+        }
+        function EditData(id) {
+            $.ajax({
+                type: "GET",
+                url: '/api/Master/GetInventoryByKey?id='+id,
+                dataType: "json",
+                success: function (response) {
+                    $("#Id").val(response.id);
+                    $("#ItemName").val(response.itemName);
+                    $("#BrandId").val(response.brandId).trigger('change');
+                    $("#CategoryId").val(response.categoryId).trigger('change');
+                    $("#UnitId").val(response.unitId).trigger('change');
+                    //$("#BranchId").val(response.branchId).trigger('change');
+                    $("#TypesOfGood").val(response.typesOfGood).trigger('change');
+                    $("#ServiceType").val(response.serviceType).trigger('change');
+                   // $("#Rate").val(response.rate);
+                    $("input[name='IsGSTApplicable']").prop('checked', response.isGSTApplicable);
+                    if (response.isGSTApplicable)
+                    {
+                        $("#inventoryGSTDivID").show();
+                        $("#GSTDetail_Id").val(response.gstDetail.id);
+                        $("#GSTDetail_HSNCode").val(response.gstDetail.hsnCode);
+                        $("#GSTDetail_CalculationType").val(response.gstDetail.calculationType).trigger('change');;
+                        $("#GSTDetail_Taxability").val(response.gstDetail.taxability).trigger('change');;
+                        $("#GSTDetail_IntegratedTax").val(response.gstDetail.integratedTax);
+                        $("#GSTDetail_CentralTax").val(response.gstDetail.centralTax);
+                        $("#GSTDetail_StateTax").val(response.gstDetail.stateTax);
+                    }
+                    else {
+                        $("#inventoryGSTDivID").hide();
+                        $("#GSTDetail_HSNCode").val("");
+                        $("#GSTDetail_CalculationType").select2("val", 0);
+                        $("#GSTDetail_Taxability").select2("val", 0);
+                        $("#GSTDetail_IntegratedTax").val(0);
+                        $("#GSTDetail_CentralTax").val(0);
+                        $("#GSTDetail_StateTax").val(0);
+                    }
+                    if (response.typesOfGood == "Service") {
+                        $("#divServiceTypeId").show();
+                    }
+                    else {
+                        $("#divServiceTypeId").hide();
+                        $("#ServiceType").select2("val", 0);
+                    }
+                    $("#Created_Date").val(response.created_Date);
+                    $("#IsActive").val(response.isActive);
+                    $('#myModal').modal('show');
+                },
+                error: function () {
+                }
+            });
+        }
+        function BindInventoryList() {
+            $.ajax({
+                type: "Get",
+                url: '/api/Master/GetAllInventory',
+                dataType: "json",
+                success: function (response) {
+                    if ($.fn.dataTable.isDataTable('#inventoryMastertblId')) {
+                        tblList.destroy();
+                    }
+                    tblList = $('#inventoryMastertblId').DataTable({
+                        data: response,
+                        "columns": [
+                            //{ "data": "id" },
+                            { "data": "itemName" },
+                            { "data": "typesOfGood" },
+                           // { "data": "rate" },
+                            {
+                                "render": function (data, type, full, meta)
+                                { return "<a class='btn btn-info' href='#' onclick=EditData('" + full.id + "'); ><i class='ft-edit'></i></a>"; }
+                            },
+                            {
+                                data: null, render: function (data, type, row) {
+                                    return "<a href='#' class='btn btn-danger' onclick=DeleteData('" + row.id + "'); ><i class='ft-trash'></i></a>";
+                                }
+                            },
+                        ]
+                    });
+                },
+                error: function () {
+                    swal("Error!", "Some error had occur!", "error");
+                }
+            });
+        }
+        function ValidateForm() {
+            debugger;
+            var isValid = true;
+            try {
+                var brand = $("#BrandId").val();
+                var category = $("#CategoryId").val();
+                var unit = $("#UnitId").val();
+               // var branch = $("#BranchId").val();
+                var itemName = $("#ItemName").val().trim();
+                var typesOfName = $("#TypesOfGood").val();
+                var serviceType = $("#ServiceType").val();
+                //var rate = $("#Rate").val();
+                var gstApplicable = $("#IsGSTApplicable").prop('checked');
+                var hsnCode = $("#GSTDetail_HSNCode").val().trim();
+                var calculationType = $("#GSTDetail_CalculationType").val();
+                var taxability = $("#GSTDetail_Taxability").val();
+                var integratedTax = $("#GSTDetail_IntegratedTax").val();
+                var centralTax = $("#GSTDetail_CentralTax").val();
+                var stateTax = $("#GSTDetail_StateTax").val()
+                
+                if (brand == "0" || brand == null) {
+                    swal("Error!", "Please Select Brand Name", "error").then(function () {
+                        $("#BrandId").focus();
+                    });
+                    return false;
+                }
+                if (category == "0" || category == null) {
+                    swal("Error!", "Please Select Category Name", "error").then(function () {
+                        $("#CategoryId").focus();
+                    });
+                    return false;
+                }
+                if (unit == "0" || unit == null) {
+                    swal("Error!", "Please Select Unit Name", "error").then(function () {
+                        $("#UnitId").focus();
+                    });
+                    return false;
+                }
+                //if (branch == "0") {
+                //    swal("Error!", "Please Select Branch Name", "error").then(function () {
+                //        $("#BranchId").focus();
+                //    });
+                //    return false;
+                //}
+                if (itemName == "") {
+                    swal("Error!", "Please Enter Item Name", "error").then(function () {
+                        $("#ItemName").focus();
+                        $("#ItemName").val("");
+                    });
+                    return false;
+                }
+                if (typesOfName == "" || typesOfName == null) {
+                    swal("Error!", "Please Enter Types Of Good", "error").then(function () {
+                        $("#TypesOfGood").focus();
+                    });
+                    return false;
+                }
+                if (typesOfName == "Service") {
+                    if (serviceType == "" || serviceType == null) {
+                        swal("Error!", "Please Enter Service Type", "error").then(function () {
+                            $("#ServiceType").focus();
+                        });
+                        return false;
+                    }
+                }
+                //if (rate == "") {
+                //    swal("Error!", "Please Enter Rate", "error").then(function () {
+                //        $("#Rate").focus();
+                //    });
+                //    return false;
+                //}
+                if (gstApplicable == true)
+                {
+                    if (hsnCode == "") {
+                        swal("Error!", "Please Enter HSN Code", "error").then(function () {
+                            $("#GSTDetail_HSNCode").focus();
+                            $("#GSTDetail_HSNCode").val("");
+                        });
+                        return false;
+                    }
+                    if (hsnCode.length < 4) {
+                        swal("Error!", "Please Enter atleast 4 degit in HSN Code", "error").then(function () {
+                            $("#GSTDetail_HSNCode").focus();
+                        });
+                        return false;
+                    }
+                    if (calculationType == "" || calculationType == null) {
+                        swal("Error!", "Please Enter Calculation Type", "error").then(function () {
+                            $("#GSTDetail_CalculationType").focus();
+                        });
+                        return false;
+                    }
+                    if (taxability == "" || taxability == "0" || taxability == null) {
+                        swal("Error!", "Please Enter Taxability", "error").then(function () {
+                            $("#GSTDetail_Taxability").focus();
+                        });
+                        return false;
+                    }
+                    if (taxability == "Taxable") {
+                        if (integratedTax == "" || integratedTax == "0") {
+                            swal("Error!", "Please Enter Integrated Tax", "error").then(function () {
+                                $("#GSTDetail_IntegratedTax").focus();
+                            });
+                            return false;
+                        }
+                    }
+                    
+                    //if (centralTax == "" || centralTax == 0) {
+                    //    swal("Error!", "Please Enter Central Tax", "error").then(function () {
+                    //        $("#GSTDetail_CentralTax").focus();
+                    //    });
+                    //    return false;
+                    //}
+                    //if (stateTax == "" || stateTax == 0) {
+                    //    swal("Error!", "Please Enter State Tax", "error").then(function () {
+                    //        $("#GSTDetail_StateTax").focus();
+                    //    });
+                    //    return false;
+                    //}
+
+                }
+            } catch (err) {
+                alert(err);
+                return false;
+            }
+            return isValid;
+        }
+        $(':checkbox').change(function () {
+            debugger;
+            if ($("#IsGSTApplicable").is(":checked")) {
+                $("#inventoryGSTDivID").show();
+            }
+            else {
+                $("#inventoryGSTDivID").hide();
+            }
+        });
+        $("input[type='text']").on("focus", function () {
+            $(this).select();
+        });
+        //var gstAppli = $("#IsGSTApplicable").prop('checked');
+        //if (gstAppli == false)
+        //{
+        //    $("#IsGSTApplicable").focusout(function () {
+        //        $("#saveInventoryBtnId").focus();
+        //    });
+        //}
+        $("#GSTDetail_StateTax").focusout(function () {
+            $("#saveInventoryBtnId").focus();
+        });
+        $(document).on('focus', '.select2', function () {
+            $(this).siblings('select').select2('open');
+        });
+        $('#TypesOfGood').change(function () {
+            if ($("#TypesOfGood").val() == "Service") {
+                $("#divServiceTypeId").show();
+                $("#ServiceType").focus();
+            }
+            else {
+                $("#divServiceTypeId").hide();
+                $("#ServiceType").select2("val", 0);
+            }
+        });
+        $('#GSTDetail_Taxability').change(function () {
+            if ($("#GSTDetail_Taxability").val() == "Nil rated") {
+                $("#GSTDetail_IntegratedTax").prop("readonly", true);
+                $("#GSTDetail_IntegratedTax").val("0");
+                $("#GSTDetail_CentralTax").val("0");
+                $("#GSTDetail_StateTax").val("0");
+            }
+            else {
+                $("#GSTDetail_IntegratedTax").prop("readonly", false);
+            }
+        });
+        $('#GSTDetail_IntegratedTax').blur(function () {
+            var integratedTaxData = $("#GSTDetail_IntegratedTax").val();
+            if (integratedTaxData != 0) {
+                var taxData = parseFloat(integratedTaxData) / 2;
+                $("#GSTDetail_CentralTax").val(taxData);
+                $("#GSTDetail_StateTax").val(taxData);
+            }
+            else {
+                $("#GSTDetail_CentralTax").val(0);
+                $("#GSTDetail_StateTax").val(0);
+            }
+        });
+        function clearData() {
+            $("#ItemName").val("");
+            $("#BrandId").val("0");
+            $("#CategoryId").val("0");
+            $("#UnitId").val("0");
+            //$("#BranchId").val("0");
+            $("#TypesOfGood").val("");
+            $("#ServiceType").val("");
+            //$("#Rate").val("");
+            $("#IsGSTApplicable").val("");
+            $("#Id").val("");
+            $("#Created_Date").val("");
+            $("#Modified_Date").val("");
+            $("#IsActive").val("");
+            $("#GSTDetail_Id").val("");
+            $("#GSTDetail_HSNCode").val("");
+            $("#GSTDetail_CalculationType").val("");
+            $("#GSTDetail_Taxability").val("");
+            $("#GSTDetail_IntegratedTax").val(0);
+            $("#GSTDetail_CentralTax").val(0);
+            $("#GSTDetail_StateTax").val(0)
+        }
+        $('#myModal').on('shown.bs.modal', function () {
+            $('#BrandId').focus();
+        })
+    </script>
+}
+

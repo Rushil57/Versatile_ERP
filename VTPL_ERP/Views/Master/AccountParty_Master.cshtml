@@ -1,0 +1,2322 @@
+﻿@model VTPL_ERP.Models.Master.AccountPartyMasterViewModel
+@{
+    ViewData["Title"] = "AccountParty_Master";
+
+}
+@*<h2>Unit_Master</h2>*@
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+            <!-- Revenue, Hit Rate & Deals -->
+            <div class="row">
+                @*===================*@
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @*<button type="button" class="btn btn-primary">Add New Courier</button>*@
+                        <h4 style="float:left" class="modal-title"><strong>Account Party Master</strong></h4>
+                        @*<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" onclick="clearData()">Add New Unit</button>*@
+                    </div>
+                </div>
+                <div id="myModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+                                <h4 class="modal-title"><i class="ft-user"></i> Account Party </h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput1">Name </label>
+                                            @Html.HiddenFor(m => m.Id, new { @class = "form-control" })
+                                            @Html.HiddenFor(m => m.Created_Date, new { @class = "form-control" })
+                                            @Html.HiddenFor(m => m.Modified_Date, new { @class = "form-control" })
+                                            @Html.HiddenFor(m => m.IsActive, new { @class = "form-control" })
+                                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @maxlength = 80 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">IsSundery</label>
+                                            @{
+                                                List<SelectListItem> listItemsSundery = new List<SelectListItem>();
+                                                listItemsSundery.Add(new SelectListItem
+                                                {
+                                                    Text = "Sundery Debitors",
+                                                    Value = "1"
+                                                });
+                                                listItemsSundery.Add(new SelectListItem
+                                                {
+                                                    Text = "Sundery Creditors",
+                                                    Value = "2"
+                                                });
+                                                listItemsSundery.Add(new SelectListItem
+                                                {
+                                                    Text = "Unsecure Loan",
+                                                    Value = "3"
+                                                });
+                                                listItemsSundery.Add(new SelectListItem
+                                                {
+                                                    Text = "Secure Loan",
+                                                    Value = "4"
+                                                });
+                                                listItemsSundery.Add(new SelectListItem
+                                                {
+                                                    Text = "Director Loan",
+                                                    Value = "5"
+                                                });
+                                                listItemsSundery.Add(new SelectListItem
+                                                {
+                                                    Text = "LOANS AND ADVANCE",
+                                                    Value = "6"
+                                                });
+                                                listItemsSundery.Add(new SelectListItem
+                                                {
+                                                    Text = "Provisions",
+                                                    Value = "7"
+                                                });
+                                                listItemsSundery.Add(new SelectListItem
+                                                {
+                                                    Text = "Cash in Hand",
+                                                    Value = "8"
+                                                });
+                                                listItemsSundery.Add(new SelectListItem
+                                                {
+                                                    Text = "Bank O/D Details",
+                                                    Value = "9"
+                                                });
+                                                listItemsSundery.Add(new SelectListItem
+                                                {
+                                                    Text = "Indirect Expense",
+                                                    Value = "10"
+                                                });
+                                                listItemsSundery.Add(new SelectListItem
+                                                {
+                                                    Text = "Indirect Income",
+                                                    Value = "11"
+                                                });
+                                                listItemsSundery.Add(new SelectListItem
+                                                {
+                                                    Text = "Direct Expense",
+                                                    Value = "12"
+                                                });
+                                                listItemsSundery.Add(new SelectListItem
+                                                {
+                                                    Text = "Direct Income",
+                                                    Value = "13"
+                                                });
+                                                listItemsSundery.Add(new SelectListItem
+                                                {
+                                                    Text = "Bank",
+                                                    Value = "14"
+                                                });
+                                                listItemsSundery.Add(new SelectListItem
+                                                {
+                                                    Text = "Duties/Taxes",
+                                                    Value = "15"
+                                                });
+                                            }
+
+                                            @Html.DropDownListFor(model => model.IsSundery, listItemsSundery, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="defaultCreditPeriodDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput5">Default Credit Period (Days)</label>
+                                            @Html.TextBoxFor(m => m.DefaultCreditPeriod, new { @class = "form-control", @maxlength = 3 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="creditLimitDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput6">Credit Limit (Rupees)</label>
+                                            @Html.TextBoxFor(m => m.CreditLimit, new { @class = "form-control", @maxlength = 8 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="isMaintainBalanceByBillDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput4">IsMaintainBalanceByBill</label>
+                                            @{
+                                                List<SelectListItem> listItemsMaintainblnc = new List<SelectListItem>();
+                                                listItemsMaintainblnc.Add(new SelectListItem
+                                                {
+                                                    Text = "Yes",
+                                                    Value = "true"
+                                                });
+                                                listItemsMaintainblnc.Add(new SelectListItem
+                                                {
+                                                    Text = "No",
+                                                    Value = "false"
+                                                });
+                                            }
+
+                                            @Html.DropDownListFor(model => model.IsMaintainBalanceByBill, listItemsMaintainblnc, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="isActivateInterestCalculationDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput8">IsActivateInterestCalculation</label>
+                                            @{
+                                                List<SelectListItem> listItemsIntCal = new List<SelectListItem>();
+                                                listItemsIntCal.Add(new SelectListItem
+                                                {
+                                                    Text = "Yes",
+                                                    Value = "true"
+                                                });
+                                                listItemsIntCal.Add(new SelectListItem
+                                                {
+                                                    Text = "No",
+                                                    Value = "false"
+                                                });
+                                            }
+
+                                            @Html.DropDownListFor(model => model.IsActivateInterestCalculation, listItemsIntCal, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="interestDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput6">Interest(%)</label>
+                                            @Html.TextBoxFor(m => m.Interest, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="interestPeriodDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput8">Interest Period</label>
+                                            @{
+                                                List<SelectListItem> listItemsInterestPeriod = new List<SelectListItem>();
+                                                listItemsInterestPeriod.Add(new SelectListItem
+                                                {
+                                                    Text = "30 Day Month",
+                                                    Value = "30 Day Month"
+                                                });
+                                                listItemsInterestPeriod.Add(new SelectListItem
+                                                {
+                                                    Text = "365 Day Year",
+                                                    Value = "365 Day Year"
+                                                });
+                                                listItemsInterestPeriod.Add(new SelectListItem
+                                                {
+                                                    Text = "Calender Month",
+                                                    Value = "Calender Month"
+                                                });
+                                                listItemsInterestPeriod.Add(new SelectListItem
+                                                {
+                                                    Text = "Calender Year",
+                                                    Value = "Calender Year"
+                                                });
+                                            }
+
+                                            @Html.DropDownListFor(model => model.InterestPeriod, listItemsInterestPeriod, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="openingDateDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput9">Opening Date</label>
+                                            @Html.TextBoxFor(m => m.OpeningDateDisplay, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="emailDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">Email</label>
+                                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @maxlength = 150 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="mobileNoDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Mobile Number</label>
+                                            @Html.TextBoxFor(m => m.MobileNo, new { @class = "form-control", @minlength = 10, @maxlength = 10 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="landlineDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">Landline</label>
+                                            @Html.TextBoxFor(m => m.Landline, new { @class = "form-control", @minlength = 10, @maxlength = 12 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="email2DivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">Email 2</label>
+                                            @Html.TextBoxFor(m => m.Email2, new { @class = "form-control", @maxlength = 150 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="contactDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">Contact</label>
+                                            @Html.TextBoxFor(m => m.Contact, new { @class = "form-control", @minlength = 10, @maxlength = 12 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="contactPerson1DivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">ContactPerson 1</label>
+                                            @Html.TextBoxFor(m => m.ContactPerson1, new { @class = "form-control", @maxlength = 80 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="contactPerson2DivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">ContactPerson 2</label>
+                                            @Html.TextBoxFor(m => m.ContactPerson2, new { @class = "form-control", @maxlength = 80 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="mainAddressDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">Main Address</label>
+                                            @Html.TextAreaFor(m => m.MainAddress, new { @class = "form-control", @maxlength = 500 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="deliveryAddressDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">Delivery Address</label>
+                                            @Html.TextAreaFor(m => m.DeliveryAddress, new { @class = "form-control", @maxlength = 500 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="deliveryAddressContactPersonNameDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">Delivery Address Contact Person Name</label>
+                                            @Html.TextBoxFor(m => m.DeliveryAddressContactPersonName, new { @class = "form-control", @maxlength = 80 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="deliveryAddressContactPersonNoDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">Delivery Address Contact Person No</label>
+                                            @Html.TextBoxFor(m => m.DeliveryAddressContactPersonNo, new { @class = "form-control", @minlength = 10, @maxlength = 12 })
+                                        </div>
+                                    </div>
+                                    <div class='col-md-6 subDivCls' id="stateIdDivId">
+                                        <div class='form-group'>
+                                            <label for="user_firstname">State</label>
+                                            @*@Html.TextBoxFor(x => x.State, new { @class = "form-control" })*@
+                                            @Html.DropDownListFor(m => m.StateId, Model.StateSelectList, new { @class = "form-control", @onchange = "setGSTNoPrefix(this.value)" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="selectedSalesPersonIdDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">Sales Person Name</label>
+                                            @Html.DropDownListFor(m => m.SelectedSalesPersonId, Model.SalesPersonSelectList, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="pDCDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">PDC</label>
+                                            @{
+                                                List<SelectListItem> listItemsPDC = new List<SelectListItem>();
+                                                listItemsPDC.Add(new SelectListItem
+                                                {
+                                                    Text = "Yes",
+                                                    Value = "true"
+                                                });
+                                                listItemsPDC.Add(new SelectListItem
+                                                {
+                                                    Text = "No",
+                                                    Value = "false"
+                                                });
+                                            }
+                                            @Html.DropDownListFor(model => model.PDC, listItemsPDC, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="gSTDetailsDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">GST Details</label>
+                                            @{
+                                                List<SelectListItem> listItemsGSTDetails = new List<SelectListItem>();
+                                                listItemsGSTDetails.Add(new SelectListItem
+                                                {
+                                                    Text = "Consumer ",
+                                                    Value = "Consumer "
+                                                });
+                                                listItemsGSTDetails.Add(new SelectListItem
+                                                {
+                                                    Text = "Regular",
+                                                    Value = "Regular"
+                                                });
+                                            }
+                                            @Html.DropDownListFor(model => model.GSTDetails, listItemsGSTDetails, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="gstNumberDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">GST Number</label>
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">@Model.StateId</span>
+                                                @Html.TextBoxFor(m => m.GSTNumber, new { @class = "form-control", @maxlength = 13 })
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="panNumberDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">PAN Number</label>
+                                            @Html.TextBoxFor(m => m.PANNumber, new { @class = "form-control", @minlength = 10, @maxlength = 10 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="hSNCodeDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">HSN Code</label>
+                                            @Html.TextBoxFor(m => m.HSNCode, new { @class = "form-control", @minlength = 4, @maxlength = 10 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="typesOfGoodDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">Types Of Good</label>
+                                            @{
+                                                List<SelectListItem> listItemsTypesOfGood = new List<SelectListItem>();
+                                                listItemsTypesOfGood.Add(new SelectListItem
+                                                {
+                                                    Text = "Goods",
+                                                    Value = "Goods"
+                                                });
+                                                listItemsTypesOfGood.Add(new SelectListItem
+                                                {
+                                                    Text = "Service",
+                                                    Value = "Service"
+                                                });
+                                            }
+
+                                            @Html.DropDownListFor(m => m.TypesOfGood, listItemsTypesOfGood, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="taxabilityDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">Taxability</label>
+                                            @{
+                                                List<SelectListItem> listItemsTaxability = new List<SelectListItem>();
+                                                listItemsTaxability.Add(new SelectListItem
+                                                {
+                                                    Text = "Nil rated",
+                                                    Value = "Nil rated"
+                                                });
+                                                listItemsTaxability.Add(new SelectListItem
+                                                {
+                                                    Text = "Taxable",
+                                                    Value = "Taxable"
+                                                });
+                                            }
+
+                                            @Html.DropDownListFor(m => m.Taxability, listItemsTaxability, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="iGSTDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">IGST</label>
+                                            @Html.TextBoxFor(m => m.IGST, new { @class = "form-control", @maxlength = 2 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="sGSTDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">SGST</label>
+                                            @Html.TextBoxFor(m => m.SGST, new { @class = "form-control", @readonly = "readonly" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="cGSTDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">CGST</label>
+                                            @Html.TextBoxFor(m => m.CGST, new { @class = "form-control", @readonly = "readonly" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="currencyOfLedgerDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">Currency Of Ledger</label>
+                                            @Html.TextBoxFor(m => m.CurrencyOfLedger, new { @class = "form-control", @maxlength = 5 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="openingBalanceDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">Opening Balance</label>
+                                            @Html.TextBoxFor(m => m.OpeningBalance, new { @class = "form-control", @maxlength = 20 })
+                                        </div>
+                                    </div>
+                                    <div class='col-md-6 subDivCls' id="oDLimitDivId">
+                                        <div class='form-group'>
+                                            <label for="user_firstname">Set OD Limit</label>
+                                            @Html.TextBoxFor(x => x.ODLimit, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="aCHolderNameDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">Account Holder Name</label>
+                                            @Html.TextBoxFor(m => m.ACHolderName, new { @class = "form-control", @maxlength = 50 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="aCNameDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">Account Name</label>
+                                            @Html.TextBoxFor(m => m.ACName, new { @class = "form-control", @maxlength = 50 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="iFSCCodeDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">IFSC Code</label>
+                                            @Html.TextBoxFor(m => m.IFSCCode, new { @class = "form-control", @maxlength = 50 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="bankNameDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">Bank Name</label>
+                                            @Html.TextBoxFor(m => m.BankName, new { @class = "form-control", @maxlength = 50 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="branchDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">Branch</label>
+                                            @Html.TextBoxFor(m => m.Branch, new { @class = "form-control", @maxlength = 50 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="bSRCodeDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">BSR Code</label>
+                                            @Html.TextBoxFor(m => m.BSRCode, new { @class = "form-control", @maxlength = 50 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="isChequeBooksDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">Set cheque books</label>
+                                            @{
+                                                List<SelectListItem> listItemsChequeBooks = new List<SelectListItem>();
+                                                listItemsChequeBooks.Add(new SelectListItem
+                                                {
+                                                    Text = "Yes",
+                                                    Value = "true"
+                                                });
+                                                listItemsChequeBooks.Add(new SelectListItem
+                                                {
+                                                    Text = "No",
+                                                    Value = "false"
+                                                });
+                                            }
+
+                                            @Html.DropDownListFor(model => model.IsChequeBooks, listItemsChequeBooks, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="isChequePrintingConfgDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">Set cheque printing configuration</label>
+                                            @{
+                                                List<SelectListItem> listItemsChequePrintingConfg = new List<SelectListItem>();
+                                                listItemsChequePrintingConfg.Add(new SelectListItem
+                                                {
+                                                    Text = "Yes",
+                                                    Value = "true"
+                                                });
+                                                listItemsChequePrintingConfg.Add(new SelectListItem
+                                                {
+                                                    Text = "No",
+                                                    Value = "false"
+                                                });
+                                            }
+
+                                            @Html.DropDownListFor(model => model.IsChequePrintingConfg, listItemsChequePrintingConfg, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="countryDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">Country</label>
+                                            @Html.TextBoxFor(m => m.Country, new { @class = "form-control", @maxlength = 50 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="pinCodeDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">PinCode</label>
+                                            @Html.TextBoxFor(m => m.PinCode, new { @class = "form-control", @maxlength = 6 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="fAXNoDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">FAX Number</label>
+                                            @Html.TextBoxFor(m => m.FAXNo, new { @class = "form-control", @minlength = 10, @maxlength = 13 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="websiteDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">Website</label>
+                                            @Html.TextBoxFor(m => m.Website, new { @class = "form-control", @maxlength = 50 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="cCEmailDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">CC (if Any)</label>
+                                            @Html.TextBoxFor(m => m.CCEmail, new { @class = "form-control", @maxlength = 50 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="setServiceTaxDetailsDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">Set/Alter Service Tax details</label>
+                                            @{
+                                                List<SelectListItem> listItemsSetServiceTaxDetails = new List<SelectListItem>();
+                                                listItemsSetServiceTaxDetails.Add(new SelectListItem
+                                                {
+                                                    Text = "Yes",
+                                                    Value = "true"
+                                                });
+                                                listItemsSetServiceTaxDetails.Add(new SelectListItem
+                                                {
+                                                    Text = "No",
+                                                    Value = "false"
+                                                });
+                                            }
+
+                                            @Html.DropDownListFor(model => model.SetServiceTaxDetails, listItemsSetServiceTaxDetails, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="typesOfDutyDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">Types Of Duty</label>
+                                            @{
+                                                List<SelectListItem> listItemsTypesofDuty = new List<SelectListItem>();
+                                                listItemsTypesofDuty.Add(new SelectListItem
+                                                {
+                                                    Text = "Additional Tax",
+                                                    Value = "Additional Tax"
+                                                });
+                                                listItemsTypesofDuty.Add(new SelectListItem
+                                                {
+                                                    Text = "CST",
+                                                    Value = "CST"
+                                                });
+                                                listItemsTypesofDuty.Add(new SelectListItem
+                                                {
+                                                    Text = "GST",
+                                                    Value = "GST"
+                                                });
+                                                listItemsTypesofDuty.Add(new SelectListItem
+                                                {
+                                                    Text = "Krishiklyan Cess",
+                                                    Value = "Krishiklyan Cess"
+                                                });
+                                                listItemsTypesofDuty.Add(new SelectListItem
+                                                {
+                                                    Text = "Service Tax",
+                                                    Value = "Service Tax"
+                                                });
+                                                listItemsTypesofDuty.Add(new SelectListItem
+                                                {
+                                                    Text = "Swachh Bharat Cess",
+                                                    Value = "Swachh Bharat Cess"
+                                                });
+                                                listItemsTypesofDuty.Add(new SelectListItem
+                                                {
+                                                    Text = "VAT",
+                                                    Value = "VAT"
+                                                });
+                                            }
+
+                                            @Html.DropDownListFor(model => model.TypesOfDuty, listItemsTypesofDuty, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 subDivCls" id="taxTypeDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput10">Tax Type</label>
+                                            @{
+                                                List<SelectListItem> listItemsTaxType = new List<SelectListItem>();
+                                                listItemsTaxType.Add(new SelectListItem
+                                                {
+                                                    Text = "Integrated Tax",
+                                                    Value = "Integrated Tax"
+                                                });
+                                                listItemsTaxType.Add(new SelectListItem
+                                                {
+                                                    Text = "Central Tax",
+                                                    Value = "Central Tax"
+                                                });
+                                                listItemsTaxType.Add(new SelectListItem
+                                                {
+                                                    Text = "State Tax",
+                                                    Value = "State Tax"
+                                                });
+                                                listItemsTaxType.Add(new SelectListItem
+                                                {
+                                                    Text = "Cess",
+                                                    Value = "Cess"
+                                                });
+                                            }
+
+                                            @Html.DropDownListFor(model => model.TaxType, listItemsTaxType, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-warning mr-1" data-dismiss="modal">Close</button>
+                                    <button type="button" id="saveAccountPartyBtnId" class="btn btn-primary" onclick="saveAccountParty()">
+                                        <i class="la la-check-square-o"></i> Save
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                @*================*@
+
+
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <form class="form">
+                                    <div class="form-body">
+                                        <div class="form-group">
+                                            <button type="button" id="btnAddNew" style="float:right" class="btn btn-info btn-sm btn-round" data-toggle="modal" data-target="#myModal" onclick="clearData()"><i class="ft-plus"></i> Add New Account Party</button>
+                                        </div>
+                                        <h4 class="form-section"><i class="ft-user"></i> List of Account Party</h4>
+                                        <div class="row">
+                                            <div class="col-md-12">
+
+
+
+                                                <div class="card-content collapse show vtpl-grid-align">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped" id="accountPartyMastertblId">
+                                                            <thead>
+                                                                <tr>
+                                                                    @*<th>#</th>*@
+                                                                    <th>Name</th>
+                                                                    @*<th>Currency Of Ledger</th>*@
+                                                                    @*<th>Default Credit Period (Days)</th>*@
+                                                                    @*<th>Credit Limit (Rupees)</th>*@
+                                                                    @*<th>Opening Date</th>*@
+                                                                    @*<th>Email</th>*@
+                                                                    <th>Sundery Type</th>
+                                                                    <th style="width: 25px;">Edit</th>
+                                                                    <th style="width: 25px;">Delete</th>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+
+
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+    var tblList;
+        $(document).ready(function () {
+
+            $('#OpeningDateDisplay').datepicker({
+                format: 'dd/mm/yyyy',
+                forceParse: false
+            });
+            jQuery("#IsSundery").select2();
+            jQuery("#IsMaintainBalanceByBill").select2();
+            jQuery("#IsActivateInterestCalculation").select2();
+            //jQuery("#AccountType").select2();
+            jQuery("#InterestPeriod").select2();
+            jQuery("#SelectedSalesPersonId").select2();
+            jQuery("#PDC").select2();
+            jQuery("#GSTDetails").select2();
+            jQuery('#StateId').select2();
+            jQuery("#TypesOfGood").select2();
+            jQuery("#Taxability").select2();
+            jQuery("#IsChequeBooks").select2();
+            jQuery("#IsChequePrintingConfg").select2();
+            jQuery("#TypesOfDuty").select2();
+            jQuery("#TaxType").select2();
+            jQuery("#SetServiceTaxDetails").select2();
+            BindAccountPartyList();
+            //$("#IsSundery").select2({ placeholder: 'Select IsSundery' });
+            $("#IsSundery").select2("val", 0);
+            //$("#IsMaintainBalanceByBill").select2({ placeholder: 'Select IsMaintainBalanceByBill' });
+            $("#IsMaintainBalanceByBill").select2("val", 0);
+            //$("#IsActivateInterestCalculation").select2({ placeholder: 'Select IsActivateInterestCalculation' });
+            $("#IsActivateInterestCalculation").select2("val", 0);
+            //$("#AccountType").select2("val", 0);
+            $("#InterestPeriod").select2("val", 0);
+            $("#SelectedSalesPersonId").select2("val", 0);
+            $("#PDC").select2("val", 0);
+            $("#GSTDetails").select2("val", 0);
+            $("#TypesOfGood").select2("val", 0);
+            $("#Taxability").select2("val", 0);
+            $("#IsChequeBooks").select2("val", 0);
+            $("#IsChequePrintingConfg").select2("val", 0);
+            $("#TypesOfDuty").select2("val", 0);
+            $("#SetServiceTaxDetails").select2("val", 0);
+            $("#TaxType").select2("val", 0);
+            $('select').select2({
+                width: '100%'
+            });
+            $(".subDivCls").hide();
+            $("#interestDivId").hide();
+            $("#interestPeriodDivId").hide();
+            $("#gstNumberDivId").hide();
+            $("#panNumberDivId").hide();
+            $("#CreditLimit").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Shift+A, Command+A
+                    //(e.keyCode === 65 && (e.shiftKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+            $("#Interest").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Shift+A, Command+A
+                    //(e.keyCode === 65 && (e.shiftKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+            $("#DefaultCreditPeriod").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110]) !== -1 ||
+                    // Allow: Shift+A, Command+A
+                    //(e.keyCode === 65 && (e.shiftKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+            $("#MobileNo").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter
+                // for + 107
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110]) !== -1 ||
+                    // Allow: Shift+, Command+A
+                    //(e.keyCode === 187 && (e.shiftKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+            $("#Landline").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter, + and -
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 107, 189]) !== -1 ||
+                    // Allow: Shift+, Command+A
+                    (e.keyCode === 187 && (e.shiftKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+            $("#Contact").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter, + and -
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 107, 189]) !== -1 ||
+                    // Allow: Shift+, Command+A
+                    (e.keyCode === 187 && (e.shiftKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+            $("#DeliveryAddressContactPersonNo").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter, + and -
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 107, 189]) !== -1 ||
+                    // Allow: Shift+, Command+A
+                    (e.keyCode === 187 && (e.shiftKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+            $(document).keyup(function (e) {
+                var keyCode = e.keyCode || e.which;
+
+                if (keyCode == 115) {
+                    // f4
+                    if (($("#myModal").data('bs.modal') || {})._isShown) {
+                        $("#saveAccountPartyBtnId").focus();
+                        saveAccountParty();
+                    }
+                }
+                if (keyCode == 119) {
+                    // f8
+                    $('#btnAddNew').click();
+                }
+                if (keyCode == 70) {
+                    //shit + f
+                    if (e.shiftKey) {
+                        $('#accountPartyMastertblId_filter input').focus();
+                    }
+                }
+            });
+        });
+        function saveAccountParty() {
+            if (ValidateForm()) {
+                var modelObj = {
+                    Id: $("#Id").val(),
+                    Name: $("#Name").val(),
+                   // CurrencyOfLedger: $("#CurrencyOfLedger").val(),
+                    DefaultCreditPeriod: $("#DefaultCreditPeriod").val(),
+                    CreditLimit: $("#CreditLimit").val(),
+                    IsSundery: $("#IsSundery").val(),
+                    IsMaintainBalanceByBill: $("#IsMaintainBalanceByBill").val(),
+                   // IsInventoryValueEffected: $("#IsInventoryValueEffected").val(),
+                    IsActivateInterestCalculation: $("#IsActivateInterestCalculation").val(),
+                    //AccountType: $("#AccountType").val(),
+                    Created_Date: $("#Created_Date").val(),
+                    OpeningDate: $("#OpeningDateDisplay").val(),
+                    OpeningDateString: $("#OpeningDateDisplay").val(),
+                    Email: $("#Email").val(),
+                    MobileNo: $("#MobileNo").val(),
+                    Interest: $("#Interest").val(),
+                    Landline: $("#Landline").val(),
+                    Email2: $("#Email2").val(),
+                    Contact: $("#Contact").val(),
+                    ContactPerson1: $("#ContactPerson1").val(),
+                    ContactPerson2: $("#ContactPerson2").val(),
+                    MainAddress: $("#MainAddress").val(),
+                    DeliveryAddress: $("#DeliveryAddress").val(),
+                    DeliveryAddressContactPersonName: $("#DeliveryAddressContactPersonName").val(),
+                    DeliveryAddressContactPersonNo: $("#DeliveryAddressContactPersonNo").val(),
+                    InterestPeriod: $("#InterestPeriod").val(),
+                    SalesPersonId: $("#SelectedSalesPersonId").val(),
+                    PDC: $("#PDC").val(),
+                    GSTDetails: $("#GSTDetails").val(),
+                    GSTNumber: $("#GSTNumber").val(),
+                    PANNumber: $("#PANNumber").val(),
+                    State: $("#StateId").val(),
+                    StatePrefix: $(".input-group-text").text(),
+                    HSNCode: $("#HSNCode").val(),
+                    TypesOfGood: $("#TypesOfGood").val(),
+                    Taxability: $("#Taxability").val(),
+                    IGST: $("#IGST").val(),
+                    SGST: $("#SGST").val(),
+                    CGST: $("#CGST").val(),
+                    CurrencyOfLedger: $("#CurrencyOfLedger").val(),
+                    OpeningBalance: $("#OpeningBalance").val(),
+                    ACHolderName: $("#ACHolderName").val(),
+                    ACName: $("#ACName").val(),
+                    IFSCCode: $("#IFSCCode").val(),
+                    BankName: $("#BankName").val(),
+                    Branch: $("#Branch").val(),
+                    BSRCode: $("#BSRCode").val(),
+                    IsChequeBooks: $("#IsChequeBooks").val(),
+                    IsChequePrintingConfg: $("#IsChequePrintingConfg").val(),
+                    Country: $("#Country").val(),
+                    PinCode: $("#PinCode").val(),
+                    FAXNo: $("#FAXNo").val(),
+                    Website: $("#Website").val(),
+                    CCEmail: $("#CCEmail").val(),
+                    SetServiceTaxDetails: $("#SetServiceTaxDetails").val(),
+                    TypesOfDuty: $("#TypesOfDuty").val(),
+                    TaxType: $("#TaxType").val(),
+                    ODLimit: $("#ODLimit").val(),
+                };
+                $.ajax({
+                    type: "POST",
+                    url: '/api/Master/SaveAccountParty',
+                    data: modelObj,
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.isError == true) {
+                            swal("Error!", response.errorMessage, "error");
+                        }
+                        else {
+                            swal("Success!", response.successMessage, "success");
+                            $('#myModal').modal('hide');
+                            BindAccountPartyList();
+                        }
+                    },
+                    error: function () {
+                        swal("Error!", "Some error had occur!", "error");
+                    }
+                });
+            }
+        }
+        function DeleteData(id) {
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this data!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            type: "GET",
+                            url: '/api/Master/DeleteAccountPartyByKey?id=' + id,
+                            // data: id,
+                            dataType: "json",
+                            success: function (response) {
+                                if (response.isError == true) {
+                                    swal("Error!", response.errorMessage, "error");
+                                }
+                                else {
+                                    swal("Success!", response.successMessage, "success");
+                                    BindAccountPartyList();
+                                }
+                            },
+                            error: function () {
+                                //swal("Error!", "Some error had occur!", "error");
+                            }
+                        });
+
+                    }
+                });
+
+        }
+        function EditData(id) {
+            $.ajax({
+                type: "GET",
+                url: '/api/Master/GetAccountPartyByKey?id='+id,
+               // data: id,
+                dataType: "json",
+                success: function (response) {
+                    debugger;
+                    var opnDate = moment(response.openingDate).format('DD/MM/YYYY');
+                        $("#Id").val(response.id);
+                        $("#Name").val(response.name);
+                        //$("#CurrencyOfLedger").val(response.currencyOfLedger);
+                        $("#IsSundery").val(response.isSundery.toString()).trigger('change');
+                        $("#IsMaintainBalanceByBill").val(response.isMaintainBalanceByBill.toString()).trigger('change');
+                        $("#DefaultCreditPeriod").val(response.defaultCreditPeriod);
+                        $("#CreditLimit").val(response.creditLimit);
+                        //$("#IsInventoryValueEffected").val(response.isInventoryValueEffected.toString());
+                        $("#IsActivateInterestCalculation").val(response.isActivateInterestCalculation.toString()).trigger('change');
+                       // $("#AccountType").val(response.accountType).trigger('change');
+                        $("#OpeningDateDisplay").datepicker('setDate', opnDate);
+                        //$("#OpeningDate").val(opnDate);
+                        $("#Created_Date").val(response.created_Date);
+                        //$("#Modified_Date").val(response.modified_Date),
+                        $("#IsActive").val(response.isActive);
+                        $("#Email").val(response.email);
+                        $("#MobileNo").val(response.mobileNo);
+                        $("#Interest").val(response.interest);
+                        $("#InterestPeriod").val(response.interestPeriod).trigger('change');
+                        $("#Landline").val(response.landline);
+                        $("#Email2").val(response.email2);
+                        $("#Contact").val(response.contact);
+                        $("#ContactPerson1").val(response.contactPerson1);
+                        $("#ContactPerson2").val(response.contactPerson2);
+                        $("#MainAddress").val(response.mainAddress);
+                        $("#DeliveryAddress").val(response.deliveryAddress);
+                        $("#DeliveryAddressContactPersonName").val(response.deliveryAddressContactPersonName);
+                        $("#DeliveryAddressContactPersonNo").val(response.deliveryAddressContactPersonNo);
+                        $("#SelectedSalesPersonId").val(response.salesPersonId).trigger('change');
+                        $("#PDC").val(response.pdc.toString()).trigger('change');
+                        $("#GSTDetails").val(response.gstDetails).trigger('change');
+                        $("#GSTNumber").val(response.gstNumber);
+                        $("#PANNumber").val(response.panNumber);
+                        $("#StateId").val(response.state).trigger('change');
+                    $("#HSNCode").val(response.hsnCode);
+                    $("#TypesOfGood").val(response.typesOfGood).trigger('change');
+                    $("#Taxability").val(response.taxability).trigger('change');
+                    $("#IGST").val(response.igst);
+                    $("#SGST").val(response.sgst);
+                    $("#CGST").val(response.cgst);
+                    $("#CurrencyOfLedger").val(response.currencyOfLedger);
+                    $("#OpeningBalance").val(response.openingBalance);
+                    $("#ACHolderName").val(response.acHolderName);
+                    $("#ACName").val(response.acName);
+                    $("#IFSCCode").val(response.ifscCode);
+                    $("#BankName").val(response.bankName);
+                    $("#Branch").val(response.branch);
+                    $("#BSRCode").val(response.bsrCode);
+                    $("#IsChequeBooks").val(response.isChequeBooks.toString()).trigger('change');
+                    $("#IsChequePrintingConfg").val(response.isChequePrintingConfg.toString()).trigger('change');
+                    $("#Country").val(response.country);
+                    $("#PinCode").val(response.pinCode);
+                    $("#FAXNo").val(response.faxNo);
+                    $("#Website").val(response.website);
+                    $("#CCEmail").val(response.ccEmail);
+                    $("#SetServiceTaxDetails").val(response.setServiceTaxDetails.toString()).trigger('change');
+                    $("#TypesOfDuty").val(response.typesOfDuty).trigger('change');
+                    $("#TaxType").val(response.taxType).trigger('change');
+                    $("#ODLimit").val(response.odLimit);
+                       
+                    if (response.isSundery == "1" || response.isSundery == "2") {
+                        $(".subDivCls").hide();
+                        $("#defaultCreditPeriodDivId").show();
+                        $("#creditLimitDivId").show();
+                        $("#isMaintainBalanceByBillDivId").show();
+                        $("#isActivateInterestCalculationDivId").show();
+                        // $("#interestDivId").show();
+                        //$("#interestPeriodDivId").show();
+                        $("#openingDateDivId").show();
+                        $("#emailDivId").show();
+                        $("#mobileNoDivId").show();
+                        $("#landlineDivId").show();
+                        $("#email2DivId").show();
+                        $("#contactDivId").show();
+                        $("#contactPerson1DivId").show();
+                        $("#contactPerson2DivId").show();
+                        $("#mainAddressDivId").show();
+                        $("#deliveryAddressDivId").show();
+                        $("#deliveryAddressContactPersonNameDivId").show();
+                        $("#deliveryAddressContactPersonNoDivId").show();
+                        $("#stateIdDivId").show();
+                        $("#selectedSalesPersonIdDivId").show();
+                        $("#pDCDivId").show();
+                        $("#gSTDetailsDivId").show();
+                        //$("#gstNumberDivId").show();
+                        //$("#panNumberDivId").show();
+                    }
+                    else if (response.isSundery == "10" || response.isSundery == "11" || response.isSundery == "12" || response.isSundery == "13") {
+                        $(".subDivCls").hide();
+                        $("#hSNCodeDivId").show();
+                        $("#typesOfGoodDivId").show();
+                        $("#taxabilityDivId").show();
+                        $("#iGSTDivId").show();
+                        $("#sGSTDivId").show();
+                        $("#cGSTDivId").show();
+                    }
+                    else if (response.isSundery == "15") {
+                        $(".subDivCls").hide();
+                        $("#currencyOfLedgerDivId").show();
+                        $("#typesOfDutyDivId").show();
+                        $("#taxTypeDivId").show();
+                    }
+                    else if (response.isSundery == "14") {
+                        $(".subDivCls").hide();
+                        $("#currencyOfLedgerDivId").show();
+                        $("#openingBalanceDivId").show();
+                        $("#aCHolderNameDivId").show();
+                        $("#aCNameDivId").show();
+                        $("#iFSCCodeDivId").show();
+                        $("#bankNameDivId").show();
+                        $("#branchDivId").show();
+                        $("#bSRCodeDivId").show();
+                        $("#isChequeBooksDivId").show();
+                        $("#isChequePrintingConfgDivId").show();
+                        $("#deliveryAddressDivId").show();
+                        $("#countryDivId").show();
+                        $("#stateIdDivId").show();
+                        $("#pinCodeDivId").show();
+                        $("#deliveryAddressContactPersonNameDivId").show();
+                        $("#deliveryAddressContactPersonNoDivId").show();
+                        $("#mobileNoDivId").show();
+                        $("#fAXNoDivId").show();
+                        $("#websiteDivId").show();
+                        $("#cCEmailDivId").show();
+                        $("#emailDivId").show();
+                        //$("#gstNumberDivId").show();
+                        $("#gSTDetailsDivId").show();
+                        $("#setServiceTaxDetailsDivId").show();
+                    }
+                    else if (response.isSundery == "9") {
+                        $(".subDivCls").hide();
+                        $("#currencyOfLedgerDivId").show();
+                        $("#openingBalanceDivId").show();
+                        $("#isActivateInterestCalculationDivId").show();
+                        $("#oDLimitDivId").show();
+                        $("#aCHolderNameDivId").show();
+                        $("#aCNameDivId").show();
+                        $("#iFSCCodeDivId").show();
+                        $("#bankNameDivId").show();
+                        $("#branchDivId").show();
+                        $("#bSRCodeDivId").show();
+                        $("#isChequeBooksDivId").show();
+                        $("#isChequePrintingConfgDivId").show();
+                        $("#deliveryAddressDivId").show();
+                        $("#countryDivId").show();
+                        $("#stateIdDivId").show();
+                        $("#pinCodeDivId").show();
+                        $("#deliveryAddressContactPersonNameDivId").show();
+                        $("#deliveryAddressContactPersonNoDivId").show();
+                        $("#mobileNoDivId").show();
+                        $("#fAXNoDivId").show();
+                        $("#websiteDivId").show();
+                        $("#cCEmailDivId").show();
+                        $("#emailDivId").show();
+                        $("#gSTDetailsDivId").show();
+                       // $("#gstNumberDivId").show();
+                        $("#setServiceTaxDetailsDivId").show();
+                    }
+                    else if (response.isSundery == "8") {
+                        $(".subDivCls").hide();
+                        $("#openingBalanceDivId").show();
+                    }
+                    else if (response.isSundery == "3" || response.isSundery == "4" || response.isSundery == "5" || response.isSundery == "6" || response.isSundery == "7") {
+                        $(".subDivCls").hide();
+                        $("#deliveryAddressDivId").show();
+                        $("#stateIdDivId").show();
+                        $("#gSTDetailsDivId").show();
+                       // $("#gstNumberDivId").show();
+                        //$("#panNumberDivId").show();
+                        $("#emailDivId").show();
+                        $("#mobileNoDivId").show();
+                        $("#isActivateInterestCalculationDivId").show();
+                        //$("#interestDivId").show();
+                        $("#openingBalanceDivId").show();
+                    }
+                    if (response.isActivateInterestCalculation == true) {
+                        $("#interestDivId").show();
+                        $("#interestPeriodDivId").show();
+                    }
+                    else {
+                        $("#interestDivId").hide();
+                        $("#interestPeriodDivId").hide();
+                        $("#Interest").val("");
+                        $("#InterestPeriod").val("");
+                    }
+                    if (response.gstDetails == "Regular") {
+                        $("#gstNumberDivId").show();
+                        $("#panNumberDivId").show();
+                    }
+                    else {
+                        $("#gstNumberDivId").hide();
+                        $("#panNumberDivId").hide();
+                        $("#GSTNumber").val("");
+                        $("#PANNumber").val("");
+                    }
+                        $('#myModal').modal('show');
+                },
+                error: function () {
+                    //swal("Error!", "Some error had occur!", "error");
+                }
+            });
+        }
+        function BindAccountPartyList() {
+            $.ajax({
+                type: "Get",
+                url: '/api/Master/GetAllAccountParty',
+                dataType: "json",
+                success: function (response) {
+                    if ($.fn.dataTable.isDataTable('#accountPartyMastertblId')) {
+                        tblList.destroy();
+                    }
+                    tblList = $('#accountPartyMastertblId').DataTable({
+                        data: response,
+                        "columns": [
+                            //{ "data": "id" },
+                            { "data": "name" },
+                           // { "data": "currencyOfLedger" },
+                           // { "data": "defaultCreditPeriod" },
+                            //{ "data": "creditLimit" },
+                            //{
+                            //    "render": function (data, type, full, meta)
+                            //    {
+                            //        var opndate = moment(full.openingDate).format('DD/MM/YYYY');
+                            //        return opndate;
+                            //    }
+                            //},
+                            //{ "data": "email" },
+                            { "data": "sunderyType" },
+                            {
+                                "render": function (data, type, full, meta)
+                                { return "<a class='btn btn-info' href='#' onclick=EditData('" + full.id + "'); ><i class='ft-edit'></i></a>"; }
+                            },
+                            {
+                                data: null, render: function (data, type, row) {
+                                    return "<a href='#' class='btn btn-danger' onclick=DeleteData('" + row.id + "'); ><i class='ft-trash'></i></a>";
+                                }
+                            },
+                        ]
+                    });
+                },
+                error: function () {
+
+                    swal("Error!", "Some error had occur!", "error");
+                }
+            });
+        }
+        function ValidateForm() {
+            debugger;
+            var isValid = true;
+            try {
+                var nname = $("#Name").val().trim();
+                var issundery = $("#IsSundery").val();
+                var ismaintainBalanceByBill = $("#IsMaintainBalanceByBill").val();
+                // var isinventoryValueEffected = $("#IsInventoryValueEffected").val();
+                var isactivateInterestCalculation = $("#IsActivateInterestCalculation").val();
+                var interest = $("#Interest").val();
+                var interestPeriod = $("#InterestPeriod").val();
+                var openingdate = $("#OpeningDateDisplay").val();
+                var email = $("#Email").val().trim();
+                var email2 = $("#Email2").val().trim();
+                var mobileno = $("#MobileNo").val().trim();
+                var landline = $("#Landline").val().trim();
+                var contact = $("#Contact").val().trim();
+                var deliveryAddressContactPersonNo = $("#DeliveryAddressContactPersonNo").val().trim();
+                var contactPerson1 = $("#ContactPerson1").val().trim();
+                var mainAddress = $("#MainAddress").val().trim();
+                var deliveryAddress = $("#DeliveryAddress").val().trim();
+                var salesPerson = $("#SelectedSalesPersonId").val();
+                var pdc = $("#PDC").val();
+                var gstDetails = $("#GSTDetails").val();
+                var gstNumber = $("#GSTNumber").val().trim();
+                var panNumber = $("#PANNumber").val().trim();
+                var state = $("#StateId").val();
+                var hSNCode = $("#HSNCode").val().trim();
+                var typesOfGood = $("#TypesOfGood").val();
+                var taxability = $("#Taxability").val();
+                var iGST = $("#IGST").val().trim();
+                var sGST = $("#SGST").val().trim();
+                var cGST = $("#CGST").val().trim();
+                var currencyOfLedger = $("#CurrencyOfLedger").val().trim();
+                var openingBalance = $("#OpeningBalance").val().trim();
+                var aCHolderName = $("#ACHolderName").val().trim();
+                var aCName = $("#ACName").val().trim();
+                var iFSCCode = $("#IFSCCode").val().trim();
+                var bankName = $("#BankName").val().trim();
+                var branch = $("#Branch").val().trim();
+                var bSRCode = $("#BSRCode").val().trim();
+                var isChequeBooks = $("#IsChequeBooks").val();
+                var isChequePrintingConfg = $("#IsChequePrintingConfg").val();
+                var country = $("#Country").val().trim();
+                var pinCode = $("#PinCode").val().trim();
+                var fAXNo = $("#FAXNo").val().trim();
+                var website = $("#Website").val().trim();
+                var cCEmail = $("#CCEmail").val().trim();
+                var setServiceTaxDetails = $("#SetServiceTaxDetails").val();
+                var typesOfDuty = $("#TypesOfDuty").val();
+                var taxType = $("#TaxType").val();
+                var oDLimit = $("#ODLimit").val().trim();
+                
+                if (nname == "") {
+                    swal("Error!", "Please Enter Name", "error").then(function () {
+                        $("#Name").focus();
+                        $("#Name").val("");
+                    });
+                    return false;
+                }
+                if (issundery == "" || issundery == null) {
+                    swal("Error!", "Please Select IsSundery", "error").then(function () {
+                        $("#IsSundery").focus();
+                    });
+                    return false;
+                }
+
+                if (issundery == "1" || issundery == "2") {
+                    if (ismaintainBalanceByBill == "" || ismaintainBalanceByBill == null) {
+                        swal("Error!", "Please Select IsMaintainBalanceByBill", "error").then(function () {
+                            $("#IsMaintainBalanceByBill").focus();
+                        });
+                        return false;
+                    }
+                    if (isactivateInterestCalculation == "" || isactivateInterestCalculation == null) {
+                        swal("Error!", "Please Select IsActivateInterestCalculation", "error").then(function () {
+                            $("#IsActivateInterestCalculation").focus();
+                        });
+                        return false;
+                    }
+                    if (isactivateInterestCalculation == "true") {
+                        if (interest == "") {
+                            swal("Error!", "Please Enter Interest", "error").then(function () {
+                                $("#Interest").focus();
+                            });
+                            return false;
+                        }
+                        if (interestPeriod == "" || interestPeriod == null) {
+                            swal("Error!", "Please Enter Interest Period", "error").then(function () {
+                                $("#InterestPeriod").focus();
+                            });
+                            return false;
+                        }
+                    }
+                    if (openingdate == "" || openingdate == undefined) {
+                        swal("Error!", "Please Select Opening Date", "error").then(function () {
+                            $("#OpeningDateDisplay").focus();
+                        });
+                        return false;
+                    }
+                    if (email == "") {
+                        swal("Error!", "Please Enter Email", "error").then(function () {
+                            $("#Email").focus();
+                            $("#Email").val("");
+                        });
+                        return false;
+                    }
+                    var regex = /^([a-zA-Z0-9_.+-])+\@@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                    if (regex.test(email) == false) {
+                        swal("Error!", "Please Enter valid Email", "error").then(function () {
+                            $("#Email").focus();
+                        });
+                        return false;
+                    }
+                    if (mobileno == "") {
+                        swal("Error!", "Please Enter Mobile No", "error").then(function () {
+                            $("#MobileNo").focus();
+                            $("#MobileNo").val("");
+                        });
+                        return false;
+                    }
+                    if (mobileno.length < 10) {
+                        swal("Error!", "Please Enter atleast 10 degit in Mobile No", "error").then(function () {
+                            $("#MobileNo").focus();
+                        });
+                        return false;
+                    }
+                    if (landline != "") {
+                        if (landline.length < 10) {
+                            swal("Error!", "Please Enter atleast 10 degit in Landline", "error").then(function () {
+                                $("#Landline").focus();
+                            });
+                            return false;
+                        }
+                    }
+                    if (email2 != "") {
+                        if (regex.test(email2) == false) {
+                            swal("Error!", "Please Enter valid Email 2", "error").then(function () {
+                                $("#Email2").focus();
+                            });
+                            return false;
+                        }
+                    }
+                    if (contact != "") {
+                        if (contact.length < 10) {
+                            swal("Error!", "Please Enter atleast 10 degit in Contact", "error").then(function () {
+                                $("#Contact").focus();
+                            });
+                            return false;
+                        }
+                    }
+                    if (contactPerson1 == "") {
+                        swal("Error!", "Please Enter Contact Person1", "error").then(function () {
+                            $("#ContactPerson1").focus();
+                            $("#ContactPerson1").val("");
+                        });
+                        return false;
+                    }
+                    if (mainAddress == "") {
+                        swal("Error!", "Please Enter Main Address", "error").then(function () {
+                            $("#MainAddress").focus();
+                            $("#MainAddress").val("");
+                        });
+                        return false;
+                    }
+                    if (deliveryAddress == "") {
+                        swal("Error!", "Please Enter Delivery Address", "error").then(function () {
+                            $("#DeliveryAddress").focus();
+                            $("#DeliveryAddress").val("");
+                        });
+                        return false;
+                    }
+                    if (deliveryAddressContactPersonNo != "") {
+                        if (deliveryAddressContactPersonNo.length < 10) {
+                            swal("Error!", "Please Enter atleast 10 degit in Delivery Address Contact Person No", "error").then(function () {
+                                $("#DeliveryAddressContactPersonNo").focus();
+                            });
+                            return false;
+                        }
+                    }
+                    if (state == "" || state == null) {
+                        swal("Error!", "Please Enter State", "error").then(function () {
+                            $("#StateId").focus();
+                        });
+                        return false;
+                    }
+                    if (salesPerson == "" || salesPerson == null) {
+                        swal("Error!", "Please Enter Sales Person", "error").then(function () {
+                            $("#SelectedSalesPersonId").focus();
+                        });
+                        return false;
+                    }
+                    if (pdc == "" || pdc == null) {
+                        swal("Error!", "Please Enter PDC", "error").then(function () {
+                            $("#PDC").focus();
+                        });
+                        return false;
+                    }
+                    if (gstDetails == "" || gstDetails == null) {
+                        swal("Error!", "Please Enter GST Details", "error").then(function () {
+                            $("#GSTDetails").focus();
+                        });
+                        return false;
+                    }
+                    if (gstDetails == "Regular") {
+                        if (gstNumber == "") {
+                            swal("Error!", "Please Enter GST Number", "error").then(function () {
+                                $("#GSTNumber").focus();
+                                $("#GSTNumber").val("");
+                            });
+                            return false;
+                        }
+                        if (panNumber == "") {
+                            swal("Error!", "Please Enter PAN Number", "error").then(function () {
+                                $("#PANNumber").focus();
+                                $("#PANNumber").val("");
+                            });
+                            return false;
+                        }
+                        if (panNumber.length < 10) {
+                            swal("Error!", "Please Enter atleast 10 degit in PAN Number", "error").then(function () {
+                                $("#PANNumber").focus();
+                            });
+                            return false;
+                        }
+                    }
+                }
+                if (issundery == "3" || issundery == "4" || issundery == "5" || issundery == "6" || issundery == "7") {
+                    if (isactivateInterestCalculation == "" || isactivateInterestCalculation == null) {
+                        swal("Error!", "Please Select IsActivateInterestCalculation", "error").then(function () {
+                            $("#IsActivateInterestCalculation").focus();
+                        });
+                        return false;
+                    }
+                    if (isactivateInterestCalculation == "true") {
+                        if (interest == "") {
+                            swal("Error!", "Please Enter Interest", "error").then(function () {
+                                $("#Interest").focus();
+                            });
+                            return false;
+                        }
+                        if (interestPeriod == "" || interestPeriod == null) {
+                            swal("Error!", "Please Enter Interest Period", "error").then(function () {
+                                $("#InterestPeriod").focus();
+                            });
+                            return false;
+                        }
+                    }
+                    if (email == "") {
+                        swal("Error!", "Please Enter Email", "error").then(function () {
+                            $("#Email").focus();
+                            $("#Email").val("");
+                        });
+                        return false;
+                    }
+                    var regex = /^([a-zA-Z0-9_.+-])+\@@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                    if (regex.test(email) == false) {
+                        swal("Error!", "Please Enter valid Email", "error").then(function () {
+                            $("#Email").focus();
+                        });
+                        return false;
+                    }
+                    if (mobileno == "") {
+                        swal("Error!", "Please Enter Mobile No", "error").then(function () {
+                            $("#MobileNo").focus();
+                            $("#MobileNo").val("");
+                        });
+                        return false;
+                    }
+                    if (mobileno.length < 10) {
+                        swal("Error!", "Please Enter atleast 10 degit in Mobile No", "error").then(function () {
+                            $("#MobileNo").focus();
+                        });
+                        return false;
+                    }
+                    if (deliveryAddress == "") {
+                        swal("Error!", "Please Enter Delivery Address", "error").then(function () {
+                            $("#DeliveryAddress").focus();
+                            $("#DeliveryAddress").val("");
+                        });
+                        return false;
+                    }
+                    if (state == "" || state == null) {
+                        swal("Error!", "Please Enter State", "error").then(function () {
+                            $("#StateId").focus();
+                        });
+                        return false;
+                    }
+                    if (gstDetails == "" || gstDetails == null) {
+                        swal("Error!", "Please Enter GST Details", "error").then(function () {
+                            $("#GSTDetails").focus();
+                        });
+                        return false;
+                    }
+                    if (gstDetails == "Regular") {
+                        if (gstNumber == "") {
+                            swal("Error!", "Please Enter GST Number", "error").then(function () {
+                                $("#GSTNumber").focus();
+                                $("#GSTNumber").val("");
+                            });
+                            return false;
+                        }
+                        if (panNumber == "") {
+                            swal("Error!", "Please Enter PAN Number", "error").then(function () {
+                                $("#PANNumber").focus();
+                                $("#PANNumber").val("");
+                            });
+                            return false;
+                        }
+                        if (panNumber.length < 10) {
+                            swal("Error!", "Please Enter atleast 10 degit in PAN Number", "error").then(function () {
+                                $("#PANNumber").focus();
+                            });
+                            return false;
+                        }
+                    }
+                    if (openingBalance == "") {
+                        swal("Error!", "Please Enter Opening Balance", "error").then(function () {
+                            $("#OpeningBalance").focus();
+                            $("#OpeningBalance").val("");
+                        });
+                        return false;
+                    }
+
+                }
+                if (issundery == "8") {
+                    if (openingBalance == "") {
+                        swal("Error!", "Please Enter Opening Balance", "error").then(function () {
+                            $("#OpeningBalance").focus();
+                            $("#OpeningBalance").val("");
+                        });
+                        return false;
+                    }
+                }
+                if (issundery == "9") {
+                    if (isactivateInterestCalculation == "" || isactivateInterestCalculation == null) {
+                        swal("Error!", "Please Select IsActivateInterestCalculation", "error").then(function () {
+                            $("#IsActivateInterestCalculation").focus();
+                        });
+                        return false;
+                    }
+                    if (isactivateInterestCalculation == "true") {
+                        if (interest == "") {
+                            swal("Error!", "Please Enter Interest", "error").then(function () {
+                                $("#Interest").focus();
+                            });
+                            return false;
+                        }
+                        if (interestPeriod == "" || interestPeriod == null) {
+                            swal("Error!", "Please Enter Interest Period", "error").then(function () {
+                                $("#InterestPeriod").focus();
+                            });
+                            return false;
+                        }
+                    }
+                    if (oDLimit == "" || oDLimit == null) {
+                        swal("Error!", "Please insert OD Limit", "error").then(function () {
+                            $("#ODLimit").focus();
+                            $("#ODLimit").val("");
+                        });
+                        return false;
+                    }
+                    if (email == "") {
+                        swal("Error!", "Please Enter Email", "error").then(function () {
+                            $("#Email").focus();
+                            $("#Email").val("");
+                        });
+                        return false;
+                    }
+                    var regex = /^([a-zA-Z0-9_.+-])+\@@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                    if (regex.test(email) == false) {
+                        swal("Error!", "Please Enter valid Email", "error").then(function () {
+                            $("#Email").focus();
+                        });
+                        return false;
+                    }
+                    if (mobileno == "") {
+                        swal("Error!", "Please Enter Mobile No", "error").then(function () {
+                            $("#MobileNo").focus();
+                            $("#MobileNo").val("");
+                        });
+                        return false;
+                    }
+                    if (mobileno.length < 10) {
+                        swal("Error!", "Please Enter atleast 10 degit in Mobile No", "error").then(function () {
+                            $("#MobileNo").focus();
+                        });
+                        return false;
+                    }
+                    if (deliveryAddress == "") {
+                        swal("Error!", "Please Enter Delivery Address", "error").then(function () {
+                            $("#DeliveryAddress").focus();
+                            $("#DeliveryAddress").val("");
+                        });
+                        return false;
+                    }
+                    if (deliveryAddressContactPersonNo != "") {
+                        if (deliveryAddressContactPersonNo.length < 10) {
+                            swal("Error!", "Please Enter atleast 10 degit in Delivery Address Contact Person No", "error").then(function () {
+                                $("#DeliveryAddressContactPersonNo").focus();
+                            });
+                            return false;
+                        }
+                    }
+                    if (state == "" || state == null) {
+                        swal("Error!", "Please Enter State", "error").then(function () {
+                            $("#StateId").focus();
+                        });
+                        return false;
+                    }
+                    if (gstDetails == "" || gstDetails == null) {
+                        swal("Error!", "Please Enter GST Details", "error").then(function () {
+                            $("#GSTDetails").focus();
+                        });
+                        return false;
+                    }
+                    if (gstDetails == "Regular") {
+                        if (gstNumber == "") {
+                            swal("Error!", "Please Enter GST Number", "error").then(function () {
+                                $("#GSTNumber").focus();
+                                $("#GSTNumber").val("");
+                            });
+                            return false;
+                        }
+                        if (panNumber == "") {
+                            swal("Error!", "Please Enter PAN Number", "error").then(function () {
+                                $("#PANNumber").focus();
+                                $("#PANNumber").val("");
+                            });
+                            return false;
+                        }
+                        if (panNumber.length < 10) {
+                            swal("Error!", "Please Enter atleast 10 degit in PAN Number", "error").then(function () {
+                                $("#PANNumber").focus();
+                            });
+                            return false;
+                        }
+                    }
+                    if (currencyOfLedger == "" || currencyOfLedger == null) {
+                        swal("Error!", "Please Insert Currency of Ledger", "error").then(function () {
+                            $("#CurrencyOfLedger").focus();
+                            $("#CurrencyOfLedger").val("");
+                        });
+                        return false;
+                    }
+                    if (openingBalance == "") {
+                        swal("Error!", "Please Enter Opening Balance", "error").then(function () {
+                            $("#OpeningBalance").focus();
+                            $("#OpeningBalance").val("");
+                        });
+                        return false;
+                    }
+
+
+                    if (aCHolderName == "" || aCHolderName == null) {
+                        swal("Error!", "Please insert Account holder name", "error").then(function () {
+                            $("#ACHolderName").focus();
+                            $("#ACHolderName").val("");
+                        });
+                        return false;
+                    }
+                    if (aCName == "" || aCName == null) {
+                        swal("Error!", "Please insert Account name", "error").then(function () {
+                            $("#ACName").focus();
+                            $("#ACName").val("");
+                        });
+                        return false;
+                    }
+                    if (iFSCCode == "" || iFSCCode == null) {
+                        swal("Error!", "Please insert IFSC code", "error").then(function () {
+                            $("#IFSCCode").focus();
+                            $("#IFSCCode").val("");
+                        });
+                        return false;
+                    }
+                    if (bankName == "" || bankName == null) {
+                        swal("Error!", "Please insert Bank name", "error").then(function () {
+                            $("#BankName").focus();
+                            $("#BankName").val("");
+                        });
+                        return false;
+                    }
+                    if (branch == "" || branch == null) {
+                        swal("Error!", "Please insert branch name", "error").then(function () {
+                            $("#Branch").focus();
+                            $("#Branch").val("");
+                        });
+                        return false;
+                    }
+                    if (bSRCode == "" || bSRCode == null) {
+                        swal("Error!", "Please insert BSR Code", "error").then(function () {
+                            $("#BSRCode").focus();
+                            $("#BSRCode").val("");
+                        });
+                        return false;
+                    }
+                    if (isChequeBooks == "" || isChequeBooks == null) {
+                        swal("Error!", "Please select set cheque book", "error").then(function () {
+                            $("#IsChequeBooks").focus();
+                        });
+                        return false;
+                    }
+                    if (isChequePrintingConfg == "" || isChequePrintingConfg == null) {
+                        swal("Error!", "Please select Set Cheque Printing Configuration", "error").then(function () {
+                            $("#IsChequePrintingConfg").focus();
+                        });
+                        return false;
+                    }
+                    if (fAXNo != "") {
+                        if (fAXNo.length < 10) {
+                            swal("Error!", "Please Enter atleast 10 degit in Fax Number", "error").then(function () {
+                                $("#FAXNo").focus();
+                            });
+                            return false;
+                        }
+                    }
+                    if (website == "") {
+                        swal("Error!", "Please Enter Website", "error").then(function () {
+                            $("#Website").focus();
+                            $("#Website").val("");
+                        });
+                        return false;
+                    }
+                    if (/^((http|https|ftp):\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/i.test($("#Website").val())) {
+
+                    } else {
+                        swal("Error!", "Please Enter valid Website", "error").then(function () {
+                            $("#Website").focus();
+                        });
+                        return false;
+                    }
+                    if (setServiceTaxDetails == "" || setServiceTaxDetails == null) {
+                        swal("Error!", "Please Enter Set Service Tax Details", "error").then(function () {
+                            $("#SetServiceTaxDetails").focus();
+                        });
+                        return false;
+                    }
+                }
+                if (issundery == "10" || issundery == "11" || issundery == "12" || issundery == "13") {
+                    if (hSNCode != "") {
+                        if (hSNCode.length < 4) {
+                            swal("Error!", "Please Enter atleast 4 degit in HSN Code", "error").then(function () {
+                                $("#HSNCode").focus();
+                            });
+                            return false;
+                        }
+                    }
+                    if (typesOfGood == "" || typesOfGood == "0" || typesOfGood == null) {
+                        swal("Error!", "Please Enter Types Of Good", "error").then(function () {
+                            $("#TypesOfGood").focus();
+                        });
+                        return false;
+                    }
+                    if (taxability == "" || taxability == "0" || taxability == null) {
+                        swal("Error!", "Please Enter Taxability", "error").then(function () {
+                            $("#Taxability").focus();
+                        });
+                        return false;
+                    }
+                    if (taxability == "Taxable") {
+                        if (iGST == "" || iGST == "0") {
+                            swal("Error!", "Please Enter IGST", "error").then(function () {
+                                $("#IGST").focus();
+                            });
+                            return false;
+                        }
+                    }
+                }
+                if (issundery == "14") {
+                    if (email == "") {
+                        swal("Error!", "Please Enter Email", "error").then(function () {
+                            $("#Email").focus();
+                            $("#Email").val("");
+                        });
+                        return false;
+                    }
+                    var regex = /^([a-zA-Z0-9_.+-])+\@@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                    if (regex.test(email) == false) {
+                        swal("Error!", "Please Enter valid Email", "error").then(function () {
+                            $("#Email").focus();
+                        });
+                        return false;
+                    }
+                    if (mobileno == "") {
+                        swal("Error!", "Please Enter Mobile No", "error").then(function () {
+                            $("#MobileNo").focus();
+                            $("#MobileNo").val("");
+                        });
+                        return false;
+                    }
+                    if (mobileno.length < 10) {
+                        swal("Error!", "Please Enter atleast 10 degit in Mobile No", "error").then(function () {
+                            $("#MobileNo").focus();
+                        });
+                        return false;
+                    }
+                    if (deliveryAddress == "") {
+                        swal("Error!", "Please Enter Delivery Address", "error").then(function () {
+                            $("#DeliveryAddress").focus();
+                            $("#DeliveryAddress").val("");
+                        });
+                        return false;
+                    }
+                    if (deliveryAddressContactPersonNo != "") {
+                        if (deliveryAddressContactPersonNo.length < 10) {
+                            swal("Error!", "Please Enter atleast 10 degit in Delivery Address Contact Person No", "error").then(function () {
+                                $("#DeliveryAddressContactPersonNo").focus();
+                            });
+                            return false;
+                        }
+                    }
+                    if (state == "" || state == null) {
+                        swal("Error!", "Please Enter State", "error").then(function () {
+                            $("#StateId").focus();
+                        });
+                        return false;
+                    }
+                    if (gstDetails == "" || gstDetails == null) {
+                        swal("Error!", "Please Enter GST Details", "error").then(function () {
+                            $("#GSTDetails").focus();
+                        });
+                        return false;
+                    }
+                    if (gstDetails == "Regular") {
+                        if (gstNumber == "") {
+                            swal("Error!", "Please Enter GST Number", "error").then(function () {
+                                $("#GSTNumber").focus();
+                                $("#GSTNumber").val("");
+                            });
+                            return false;
+                        }
+                        if (panNumber == "") {
+                            swal("Error!", "Please Enter PAN Number", "error").then(function () {
+                                $("#PANNumber").focus();
+                                $("#PANNumber").val("");
+                            });
+                            return false;
+                        }
+                        if (panNumber.length < 10) {
+                            swal("Error!", "Please Enter atleast 10 degit in PAN Number", "error").then(function () {
+                                $("#PANNumber").focus();
+                            });
+                            return false;
+                        }
+                    }
+                    if (currencyOfLedger == "" || currencyOfLedger == null) {
+                        swal("Error!", "Please Insert Currency of Ledger", "error").then(function () {
+                            $("#CurrencyOfLedger").focus();
+                            $("#CurrencyOfLedger").val("");
+                        });
+                        return false;
+                    }
+                    if (openingBalance == "") {
+                        swal("Error!", "Please Enter Opening Balance", "error").then(function () {
+                            $("#OpeningBalance").focus();
+                            $("#OpeningBalance").val("");
+                        });
+                        return false;
+                    }
+                  
+                    
+                    if (aCHolderName == "" || aCHolderName == null) {
+                        swal("Error!", "Please insert Account holder name", "error").then(function () {
+                            $("#ACHolderName").focus();
+                            $("#ACHolderName").val("");
+                        });
+                        return false;
+                    }
+                    if (aCName == "" || aCName == null) {
+                        swal("Error!", "Please insert Account name", "error").then(function () {
+                            $("#ACName").focus();
+                            $("#ACName").val("");
+                        });
+                        return false;
+                    }
+                    if (iFSCCode == "" || iFSCCode == null) {
+                        swal("Error!", "Please insert IFSC code", "error").then(function () {
+                            $("#IFSCCode").focus();
+                            $("#IFSCCode").val("");
+                        });
+                        return false;
+                    }
+                    if (bankName == "" || bankName == null) {
+                        swal("Error!", "Please insert Bank name", "error").then(function () {
+                            $("#BankName").focus();
+                            $("#BankName").val("");
+                        });
+                        return false;
+                    }
+                    if (branch == "" || branch == null) {
+                        swal("Error!", "Please insert branch name", "error").then(function () {
+                            $("#Branch").focus();
+                            $("#Branch").val("");
+                        });
+                        return false;
+                    }
+                    if (bSRCode == "" || bSRCode == null) {
+                        swal("Error!", "Please insert BSR Code", "error").then(function () {
+                            $("#BSRCode").focus();
+                            $("#BSRCode").val("");
+                        });
+                        return false;
+                    }
+                    if (isChequeBooks == "" || isChequeBooks == null) {
+                        swal("Error!", "Please select set cheque book", "error").then(function () {
+                            $("#IsChequeBooks").focus();
+                        });
+                        return false;
+                    }
+                    if (isChequePrintingConfg == "" || isChequePrintingConfg == null) {
+                        swal("Error!", "Please select Set Cheque Printing Configuration", "error").then(function () {
+                            $("#IsChequePrintingConfg").focus();
+                        });
+                        return false;
+                    }
+                    if (fAXNo != "") {
+                        if (fAXNo.length < 10) {
+                            swal("Error!", "Please Enter atleast 10 degit in Fax Number", "error").then(function () {
+                                $("#FAXNo").focus();
+                            });
+                            return false;
+                        }
+                    }
+                    if (website == "") {
+                        swal("Error!", "Please Enter Website", "error").then(function () {
+                            $("#Website").focus();
+                            $("#Website").val("");
+                        });
+                        return false;
+                    }
+                    if (/^((http|https|ftp):\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/i.test($("#Website").val())) {
+
+                    } else {
+                        swal("Error!", "Please Enter valid Website", "error").then(function () {
+                            $("#Website").focus();
+                        });
+                        return false;
+                    }
+                    if (setServiceTaxDetails == "" || setServiceTaxDetails == null) {
+                        swal("Error!", "Please Enter Set Service Tax Details", "error").then(function () {
+                            $("#SetServiceTaxDetails").focus();
+                        });
+                        return false;
+                    }
+                }
+                if (issundery == "15") {
+                    if (currencyOfLedger == "" || currencyOfLedger == "0" || currencyOfLedger == null) {
+                        swal("Error!", "Please Enter Currency Of Ledger", "error").then(function () {
+                            $("#CurrencyOfLedger").focus();
+                        });
+                        return false;
+                    }
+                    if (typesOfDuty == "" || typesOfDuty == "0" || typesOfDuty == null) {
+                        swal("Error!", "Please Enter Types Of Duty", "error").then(function () {
+                            $("#TypesOfDuty").focus();
+                        });
+                        return false;
+                    }
+                    if (taxType == "" || taxType == "0" || taxType == null) {
+                        swal("Error!", "Please Enter Tax Type", "error").then(function () {
+                            $("#TaxType").focus();
+                        });
+                        return false;
+                    }
+                }
+            } catch (err) {
+                alert(err);
+                return false;
+            }
+            return isValid;
+        }
+        $('#IsSundery').change(function () {
+            $(".subDivCls").hide();
+            changeValueByIsSundery();
+            if ($("#IsSundery").val() == "1" || $("#IsSundery").val() == "2") {
+                $("#defaultCreditPeriodDivId").show();
+                $("#creditLimitDivId").show();
+                $("#isMaintainBalanceByBillDivId").show();
+                $("#isActivateInterestCalculationDivId").show();
+               // $("#interestDivId").show();
+                //$("#interestPeriodDivId").show();
+                $("#openingDateDivId").show();
+                $("#emailDivId").show();
+                $("#mobileNoDivId").show();
+                $("#landlineDivId").show();
+                $("#email2DivId").show();
+                $("#contactDivId").show();
+                $("#contactPerson1DivId").show();
+                $("#contactPerson2DivId").show();
+                $("#mainAddressDivId").show();
+                $("#deliveryAddressDivId").show();
+                $("#deliveryAddressContactPersonNameDivId").show();
+                $("#deliveryAddressContactPersonNoDivId").show();
+                $("#stateIdDivId").show();
+                $("#selectedSalesPersonIdDivId").show();
+                $("#pDCDivId").show();
+                $("#gSTDetailsDivId").show();
+                //$("#gstNumberDivId").show();
+                //$("#panNumberDivId").show();
+            }
+            else if ($("#IsSundery").val() == "10" || $("#IsSundery").val() == "11" || $("#IsSundery").val() == "12" || $("#IsSundery").val() == "13") {
+                $("#hSNCodeDivId").show();
+                $("#typesOfGoodDivId").show();
+                $("#taxabilityDivId").show();
+                $("#iGSTDivId").show();
+                $("#sGSTDivId").show();
+                $("#cGSTDivId").show();
+            }
+            else if ($("#IsSundery").val() == "15") {
+                $("#currencyOfLedgerDivId").show();
+                $("#typesOfDutyDivId").show();
+                $("#taxTypeDivId").show();
+            }
+            else if ($("#IsSundery").val() == "14") {
+                $("#currencyOfLedgerDivId").show();
+                $("#openingBalanceDivId").show();
+                $("#aCHolderNameDivId").show();
+                $("#aCNameDivId").show();
+                $("#iFSCCodeDivId").show();
+                $("#bankNameDivId").show();
+                $("#branchDivId").show();
+                $("#bSRCodeDivId").show();
+                $("#isChequeBooksDivId").show();
+                $("#isChequePrintingConfgDivId").show();
+                $("#deliveryAddressDivId").show();
+                $("#countryDivId").show();
+                $("#stateIdDivId").show();
+                $("#pinCodeDivId").show();
+                $("#deliveryAddressContactPersonNameDivId").show();
+                $("#deliveryAddressContactPersonNoDivId").show();
+                $("#mobileNoDivId").show();
+                $("#fAXNoDivId").show();
+                $("#websiteDivId").show();
+                $("#cCEmailDivId").show();
+                $("#emailDivId").show();
+                $("#gSTDetailsDivId").show();
+                //$("#gstNumberDivId").show();
+                $("#setServiceTaxDetailsDivId").show();
+            }
+            else if ($("#IsSundery").val() == "9") {
+                $("#currencyOfLedgerDivId").show();
+                $("#openingBalanceDivId").show();
+                $("#isActivateInterestCalculationDivId").show();
+                $("#oDLimitDivId").show();
+                $("#aCHolderNameDivId").show();
+                $("#aCNameDivId").show();
+                $("#iFSCCodeDivId").show();
+                $("#bankNameDivId").show();
+                $("#branchDivId").show();
+                $("#bSRCodeDivId").show();
+                $("#isChequeBooksDivId").show();
+                $("#isChequePrintingConfgDivId").show();
+                $("#deliveryAddressDivId").show();
+                $("#countryDivId").show();
+                $("#stateIdDivId").show();
+                $("#pinCodeDivId").show();
+                $("#deliveryAddressContactPersonNameDivId").show();
+                $("#deliveryAddressContactPersonNoDivId").show();
+                $("#mobileNoDivId").show();
+                $("#fAXNoDivId").show();
+                $("#websiteDivId").show();
+                $("#cCEmailDivId").show();
+                $("#emailDivId").show();
+                $("#gSTDetailsDivId").show();
+                //$("#gstNumberDivId").show();
+                $("#setServiceTaxDetailsDivId").show();
+            }
+            else if ($("#IsSundery").val() == "8") {
+                $("#openingBalanceDivId").show();
+            }
+            else if ($("#IsSundery").val() == "3" || $("#IsSundery").val() == "4" || $("#IsSundery").val() == "5" || $("#IsSundery").val() == "6" || $("#IsSundery").val() == "7") {
+                $("#deliveryAddressDivId").show();
+                $("#stateIdDivId").show();
+                $("#gSTDetailsDivId").show();
+               // $("#gstNumberDivId").show();
+               // $("#panNumberDivId").show();
+                $("#emailDivId").show();
+                $("#mobileNoDivId").show();
+                $("#isActivateInterestCalculationDivId").show();
+                //$("#interestDivId").show();
+                $("#openingBalanceDivId").show();
+            }
+        });
+        $('#IsActivateInterestCalculation').change(function () {
+            if ($("#IsActivateInterestCalculation").val() == "true") {
+                $("#interestDivId").show();
+                $("#interestPeriodDivId").show();
+                $("#Interest").focus();
+            }
+            else {
+                $("#interestDivId").hide();
+                $("#interestPeriodDivId").hide();
+                $("#Interest").val("");
+                $("#InterestPeriod").val("");
+            }
+        });
+        $('#GSTDetails').change(function () {
+            if ($("#GSTDetails").val() == "Regular") {
+                $("#gstNumberDivId").show();
+                $("#panNumberDivId").show();
+                $("#GSTNumber").focus();
+            }
+            else {
+                $("#gstNumberDivId").hide();
+                $("#panNumberDivId").hide();
+                $("#GSTNumber").val("");
+                $("#PANNumber").val("");
+            }
+        });
+        $('#Taxability').change(function () {
+            if ($("#Taxability").val() == "Nil rated") {
+                $("#IGST").prop("readonly", true);
+                $("#IGST").val("0");
+                $("#CGST").val("0");
+                $("#SGST").val("0");
+            }
+            else {
+                $("#IGST").prop("readonly", false);
+            }
+        });
+        $('#IGST').blur(function () {
+            var integratedTaxData = $("#IGST").val();
+            if (integratedTaxData != 0) {
+                var taxData = parseFloat(integratedTaxData) / 2;
+                $("#CGST").val(taxData);
+                $("#SGST").val(taxData);
+            }
+            else {
+                $("#CGST").val(0);
+                $("#SGST").val(0);
+            }
+        });
+        $("input[type='text']").on("focus", function () {
+            $(this).select();
+        });
+        $("#PANNumber").focusout(function () {
+            $("#saveAccountPartyBtnId").focus();
+        });
+        $(document).on('focus', '.select2', function () {
+            $(this).siblings('select').select2('open');
+        });
+        function setGSTNoPrefix(stateId) {
+            $(".input-group-text").text(stateId);
+        }
+        function clearData() {
+            $("#Id").val("");
+            $("#Name").val("");
+            $("#IsSundery").select2("val", 0);
+            $("#IsMaintainBalanceByBill").select2("val", 0);
+            $("#IsActivateInterestCalculation").select2("val", 0);
+           // $("#AccountType").select2("val", 0);
+            $("#InterestPeriod").select2("val", 0);
+            $("#DefaultCreditPeriod").val("");
+            $("#CreditLimit").val("");
+            var curDate = moment('@DateTime.Now').format('DD/MM/YYYY');
+            $('#OpeningDateDisplay').datepicker('setDate', curDate);
+            $("#Created_Date").val("");
+            $("#Modified_Date").val("");
+            $("#IsActive").val("");
+            $("#Email").val("");
+            $("#MobileNo").val("");
+            $("#Interest").val("");
+            $("#Landline").val("");
+            $("#Email2").val("");
+            $("#Contact").val("");
+            $("#ContactPerson1").val("");
+            $("#ContactPerson2").val("");
+            $("#MainAddress").val("");
+            $("#DeliveryAddress").val("");
+            $("#DeliveryAddressContactPersonName").val("");
+            $("#DeliveryAddressContactPersonNo").val("");
+            $("#SelectedSalesPersonId").select2("val", 0);
+            $("#PDC").select2("val", 0);
+            $("#GSTDetails").select2("val", 0);
+            $("#StateId").select2("val", 0);
+            $("#HSNCode").val("");
+            $("#TypesOfGood").select2("val", 0);
+            $("#Taxability").select2("val", 0);
+            $("#IGST").val("");
+            $("#SGST").val("");
+            $("#CGST").val("");
+            $("#CurrencyOfLedger").val("");
+            $("#OpeningBalance").val("");
+            $("#ACHolderName").val("");
+            $("#ACName").val("");
+            $("#IFSCCode").val("");
+            $("#BankName").val("");
+            $("#Branch").val("");
+            $("#BSRCode").val("");
+            $("#IsChequeBooks").select2("val", 0);
+            $("#IsChequePrintingConfg").select2("val", 0);
+            $("#Country").val("");
+            $("#PinCode").val("");
+            $("#FAXNo").val("");
+            $("#Website").val("");
+            $("#CCEmail").val("");
+            $("#SetServiceTaxDetails").select2("val", 0);
+            $("#TypesOfDuty").select2("val", 0);
+            $("#TaxType").select2("val", 0);
+            $("#ODLimit").val("");
+        }
+        function changeValueByIsSundery() {
+            $("#IsMaintainBalanceByBill").select2("val", 0);
+            $("#IsActivateInterestCalculation").select2("val", 0);
+           // $("#AccountType").select2("val", 0);
+            $("#InterestPeriod").select2("val", 0);
+            $("#DefaultCreditPeriod").val("");
+            $("#CreditLimit").val("");
+            var curDate = moment('@DateTime.Now').format('DD/MM/YYYY');
+            $('#OpeningDateDisplay').datepicker('setDate', curDate);
+            $('#Created_Date').datepicker('setDate', curDate);
+           // $("#Created_Date").val("");
+            $("#Modified_Date").val("");
+            $("#IsActive").val("");
+            $("#Email").val("");
+            $("#MobileNo").val("");
+            $("#Interest").val("");
+            $("#Landline").val("");
+            $("#Email2").val("");
+            $("#Contact").val("");
+            $("#ContactPerson1").val("");
+            $("#ContactPerson2").val("");
+            $("#MainAddress").val("");
+            $("#DeliveryAddress").val("");
+            $("#DeliveryAddressContactPersonName").val("");
+            $("#DeliveryAddressContactPersonNo").val("");
+            $("#SelectedSalesPersonId").select2("val", 0);
+            $("#PDC").select2("val", 0);
+            $("#GSTDetails").select2("val", 0);
+            $("#StateId").select2("val", 0);
+            $("#HSNCode").val("");
+            $("#TypesOfGood").select2("val", 0);
+            $("#Taxability").select2("val", 0);
+            $("#IGST").val("");
+            $("#SGST").val("");
+            $("#CGST").val("");
+            $("#CurrencyOfLedger").val("");
+            $("#OpeningBalance").val("");
+            $("#ACHolderName").val("");
+            $("#ACName").val("");
+            $("#IFSCCode").val("");
+            $("#BankName").val("");
+            $("#Branch").val("");
+            $("#BSRCode").val("");
+            $("#IsChequeBooks").select2("val", 0);
+            $("#IsChequePrintingConfg").select2("val", 0);
+            $("#Country").val("");
+            $("#PinCode").val("");
+            $("#FAXNo").val("");
+            $("#Website").val("");
+            $("#CCEmail").val("");
+            $("#SetServiceTaxDetails").select2("val", 0);
+            $("#TypesOfDuty").select2("val", 0);
+            $("#TaxType").select2("val", 0);
+            $("#ODLimit").val("");
+        }
+        $('#myModal').on('shown.bs.modal', function () {
+            $('#Name').focus();
+        })
+    </script>
+}
+

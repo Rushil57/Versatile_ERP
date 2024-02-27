@@ -1,0 +1,700 @@
+﻿@*@model VTPL_ERP.Models.PEInfoViewModel
+@{
+    ViewData["Title"] = "ViewPurchaseEntry";
+}
+<div class="app-content content" id="mainDiv">
+    <div id="focusDiv"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <h4 style="float:left" class="modal-title"><strong>Purchase Order Detail</strong></h4>
+                    </div>
+                </div>
+                <div id="productSerailModel" class="modal fade" role="dialog" tabindex='-1'>
+                    <div class="modal-dialog">
+
+                         Modal content
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title"><i class="ft-user"></i> Purchase Order Detail</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group col-sm-12">
+                                    <label for="email">Item Name:</label>
+                                    <span id="spnItemName"></span>
+                                    <input id="hdnSerialItemId" type="hidden" value="" />
+                                </div>
+                                <div class="form-inline">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label for="txtItemSerialNo">Serial No: </label>
+                                                    <input type="text" class="form-control" id="txtItemSerialNo" style="width:65%;" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2" style="top:9px">
+                                                <div class="form-group">
+                                                    <button type="button" class="btn btn-warning mr-1" data-dismiss="modal">Cancel</button><br />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3" style="top:9px">
+                                                <div class="form-group">
+                                                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="SaveSerialNosAndClose()">Add Qty</button><br />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card-content collapse show vtpl-grid-align">
+                                            <div class="table-responsive" style="width:40%;">
+                                                <table class="table table-bordered table-striped" id="serialDetailsGrid">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Serial No.</th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <form class="form">
+                                    <div class="form-body">
+                                        <h4 class="form-section"><i class="ft-user"></i> Purchase Order</h4>
+                                        <div class="row">
+                                            <div class='col-md-4'>
+                                                <div class='form-group'>
+                                                    <label for="user_title">Purchase Order No.</label>
+                                                    @Html.TextBoxFor(x => x.PurchaseEntryData.PENo, new { @class = "form-control", @readonly = "readonly" })
+                                                    @Html.HiddenFor(m => m.PurchaseEntryData.Created_Date, new { @class = "form-control" })
+                                                    @Html.HiddenFor(m => m.PurchaseEntryData.Modified_Date, new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                            <div class='col-md-4'>
+                                                <div class='form-group'>
+                                                    <label for="user_firstname">Purchase Order Date</label><br />
+                                                    @Html.Label("PurchaseDate", Model.PurchaseEntryData.PurchaseDate.ToString("dd/MM/yyyy"), new { @class = "form-control" })
+                                                    @Html.TextBoxFor(x => x.PurchaseEntryData.PurchaseDate, new { @class = "form-control", @type = "date" })
+                                                </div>
+                                            </div>
+                                            <div class='col-md-4'>
+                                                <div class='form-group'>
+                                                    <label>Supplier Invoice Number</label>
+                                                    <br />
+                                                    @Html.Label("SupplierInvoiceNo", Model.PurchaseEntryData.SupplierInvoiceNo, new { @class = "form-control" })
+                                                    @Html.TextBoxFor(m => m.PurchaseEntryData.SupplierInvoiceNo, new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                            <div class='col-md-4'>
+                                                <div class='form-group'>
+                                                    <label>Current Balance</label>
+                                                    <br />
+                                                    @Html.Label("CurrentBalance", Model.PurchaseEntryData.CurrentBalance.ToString(), new { @class = "form-control" })
+                                                    @Html.TextBoxFor(m => m.PurchaseEntryData.CurrentBalance, new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                            <div class='col-md-4'>
+                                                <div class='form-group'>
+                                                    <label>Purchase Account</label>
+                                                    <br />
+                                                    @Html.Label("PurchaseAccount", Model.PurchaseEntryData.PurchaseAccount, new { @class = "form-control" })
+                                                    @Html.TextBoxFor(m => m.PurchaseEntryData.PurchaseAccount, new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                            <div class='col-md-4'>
+                                                <div class='form-group'>
+                                                    <label>Narration</label>
+                                                    <br />
+                                                    @Html.Label("Narration", Model.PurchaseEntryData.Narration, new { @class = "form-control" })
+                                                    @Html.TextAreaFor(m => m.PurchaseEntryData.Narration, new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='row'>
+                                            <div class='col-sm-3'>
+                                                <div class='form-group' style="width:90%;">
+                                                    <label>Suppliers</label>
+                                                    <br />
+                                                    @Html.DropDownListFor(m => m.PurchaseEntryData.SupplierName, ViewBag.SupplierDataList as IEnumerable<SelectListItem>,
+                                                        new { @class = "form-control" })
+                                                    @Html.DropDownListFor(m => m.SelectedSupplierId, Model.SupplierSelectList, new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='row'>
+                                            <div class='col-sm-3'>
+                                                <div class='form-group' style="width:90%;">
+                                                    <label>Stock Items</label>
+                                                    <br />
+                                                    <select id="SelectedStockItemId" style="width:66%;"></select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="min-height:200px;">
+                                            <div class="col-md-12">
+                                                <div class="card-content collapse show vtpl-grid-align">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped" id="stockGrid">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Id</th>
+                                                                    <th>Item Name</th>
+                                                                    <th>QTY</th>
+                                                                    <th>Rate</th>
+                                                                    <th>Gross Amt.</th>
+                                                                    <th>Disc %</th>
+                                                                    <th>Disc Amt</th>
+                                                                    <th>Tax%</th>
+                                                                    <th>Tax Amt</th>
+                                                                    <th>Total Amount</th>
+                                                                    <th>Action</th>
+                                                                </tr>
+                                                                @foreach (var item in Model.PurchaseEntryDetails)
+                                                                {
+                                                                    <tr>
+                                                                        <td>@item.InventoryId</td>
+                                                                        <td>@item.InventoryItemName</td>
+                                                                        <td>@item.Qty</td>
+                                                                        <td>@item.Rate</td>
+                                                                        <td>@item.GrossAmt</td>
+                                                                        <td>@item.Discount</td>
+                                                                        <td>@item.DiscAmt</td>
+                                                                        <td>@item.Tax</td>
+                                                                        <td>@item.TaxAmt</td>
+                                                                        <td>@item.TotalAmount</td>
+                                                                        <td><a href='#' class='btn btn-danger' onclick="DeleteData(@item.Id)"><i class='ft-trash'></i></a></td>
+                                                                    </tr>
+                                                                }
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div><br />
+                                        <div class='row'>
+                                            <div class='col-sm-3'>
+                                                <div class='form-group' style="width:90%;">
+                                                    <label>Other Charges</label>
+                                                    <br />
+                                                    @Html.DropDownListFor(m => m.SelectedOtherChargesId, Model.OtherChargesSelectList, new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                            <div class='col-sm-5'>
+                                                <div id="divotherChargesGrid">
+                                                    <table class="table table-bordered table-striped" id="otherChargesGrid">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="width:50px">Charges Name </th>
+                                                                <th style="width:50px">Amount</th>
+                                                            </tr>
+                                                            @foreach (var item in Model.PEOtherChargesDetails)
+                                                            {
+                                                                <tr>
+                                                                    <td>@item.OtherChargeName</td>
+                                                                    <td>@item.Amount</td>
+                                                                </tr>
+                                                            }
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class='col-sm-4'>
+                                                <div class="card-content collapse show vtpl-grid-align">
+                                                    <div class="table-responsive" style="border:1px solid #c6c6c6;width:50%; float:right">
+                                                        <table id="TotalGrid" class="table table-bordered table-striped">
+                                                            <tr>
+                                                                <td>Amount</td>
+                                                                <td id="total-amt">@Model.PurchaseEntryData.Amount</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Disc. Amount</td>
+                                                                <td id="total-discamt">@Model.PurchaseEntryData.DiscAmount</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Other Charges</td>
+                                                                <td id="total-othercharges">@Model.PurchaseEntryData.OtherCharges</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Tax Amount </td>
+                                                                <td id="total-taxamount">@Model.PurchaseEntryData.TotalTaxAmount</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Round Off </td>
+                                                                <td id="total-roundoff">@Model.PurchaseEntryData.RoundOff</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Total Amount </td>
+                                                                <td id="total-totalamt">@Model.PurchaseEntryData.TotalAmount</td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><br />
+                                        <div class="row">
+                                            <div class='col-sm-11'>
+                                                <div class="card-content collapse show vtpl-grid-align">
+                                                    <div class="table-responsive" style="border:1px solid #c6c6c6;width:100%;">
+                                                        <table id="stockTaxGrid" class="table table-bordered table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>HSN/SAC</th>
+                                                                    <th>Taxable Value</th>
+                                                                    <th style="text-align: center;" colspan="2">Central Tax</th>
+                                                                    <th style="text-align: center;" colspan="2">State Tax</th>
+                                                                    <th>Total Tax Amount</th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                    <th>Rate %</th>
+                                                                    <th>Amount</th>
+                                                                    <th>Rate %</th>
+                                                                    <th>Amount</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                                @foreach (var item in Model.PurchaseEntryDetails)
+                                                                {
+                                                                    <tr class="stocktax-row">
+                                                                        <td>@item.HSNCode</td>
+                                                                        <td class="item-grossamtdata">@item.GrossAmountData</td>
+                                                                        <td class="item-centraltax">@item.CentralTax</td>
+                                                                        <td class="item-centralamt"></td>
+                                                                        <td class="item-statetax">@item.StateTax</td>
+                                                                        <td class="item-stateamt"></td>
+                                                                        <td class="item-totaltaxamt"></td>
+                                                                    </tr>
+
+                                                                }
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+        try {
+            jQuery('#PurchaseEntryData_PurchaseDate').datepicker({
+                format: 'mm/dd/yyyy',
+                orientation: "bottom",
+            });
+            jQuery('#PurchaseEntryData_PurchaseDate').focus();
+            jQuery('#PurchaseEntryData_PurchaseDate').focus();
+            jQuery('#SelectedBranchId').select2();
+            jQuery('#SelectedSupplierId').select2();
+            jQuery('#SelectedOtherChargesId').select2();
+            var stockJsonData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.StockData));
+            $("#SelectedStockItemId").select2({ data: stockJsonData });
+            $("#SelectedOtherChargesId").select2({ placeholder: 'Select Other Charges' });
+            $("#SelectedSupplierId").select2({ placeholder: 'Select Supplier' });
+            $("#SelectedStockItemId").select2("val", 0);
+            $("#SelectedOtherChargesId").select2("val", 0);
+            $("#SelectedSupplierId").select2("val", 0);
+            $('#SelectedStockItemId').on('select2:select', function (e) {
+                var data = e.params.data;
+                console.log(data);
+                var cnt = $("#stockGrid").find('.stock-row').length + 1;
+                var trRow = "<tr class='stock-row' data-item-id=" + data.id + ">" +
+                    "<td class='srno'>" + cnt + "</td>" +
+                    "<td class='item-id'>" + data.id + "</td>" +
+                    "<td class='item-name'>" + data.text + "</td>" +
+                    "<td class='item-qty editablecell'>1</td>" +
+                    "<td class='item-rate editablecell'>" + parseFloat(data.Rate).toFixed(2) + "</td>" +
+                    "<td class='item-grossamt'>" + parseFloat(data.Rate).toFixed(2) + "</td>" +
+                    "<td class='item-disc editablecell'>0.00</td>" +
+                    "<td class='item-discamt'>0.00</td>" +
+                    "<td class='item-tax'>" + parseFloat(data.Tax).toFixed(2) + "</td>" +
+                    "<td class='item-taxamt'>0.00</td>" +
+                    "<td class='item-totalamt'>0.00</td>" +
+                    "<td><a href='#' class='btn btn-danger' onclick=DeleteData('" + data.id + "');><i class='ft-trash'></i></a></td>" +
+                    "</tr>";
+                var stockTableRow = $("#stockGrid").find('tr.stock-row[data-item-id=' + data.id + ']');
+                if (stockTableRow.length == 0)
+                {
+                    $("#stockGrid").append(trRow);
+                    $("#SelectedStockItemId").select2("val", 0);
+                    $('#stockGrid tr:last').find('.item-qty').trigger('click');
+                    CalculateThisRow($('#stockGrid tr:last'));
+                    //
+                    var trRowTax = "<tr class='stocktax-row' data-item-id=" + data.id + ">" +
+                        "<td class='item-hsncode'>" + data.HSNCode + "</td>" +
+                        "<td class='item-taxableamt'>" + parseFloat(data.Rate).toFixed(2) + "</td>" +
+                        "<td class='item-centraltax'>" + parseFloat(data.CentralTax).toFixed(2) + "</td>" +
+                        "<td class='item-centralamt'>0.00</td>" +
+                        "<td class='item-statetax'>" + parseFloat(data.StateTax).toFixed(2) + "</td>" +
+                        "<td class='item-stateamt'>0.00</td>" +
+                        "<td class='item-totaltaxamt'>0.00</td>" +
+                        "</tr>";
+                    $("#stockTaxGrid").append(trRowTax);
+                    CalculateStockTaxRow($('#stockTaxGrid tr:last'));
+                //
+                }
+                else {
+                    swal("Error!", "Stock Item already added. Please select other stock item!", "error");
+
+                }
+            });
+            $('#SelectedOtherChargesId').on('select2:select', function (e) {
+                $("#divotherChargesGrid").show();
+                var dataCharges = e.params.data;
+
+                var trRowCharges = "<tr class='stockcharge-row' data-item-id=" + dataCharges.id + ">" +
+                    "<td>" + dataCharges.text + "</td>" +
+                    "<td><input class='ot-charge-txt' type='number' step='.01' value='0.00' /></td>" +
+                    "</tr>";
+                var otherchargesTableRow = $("#otherChargesGrid").find('tr.stockcharge-row[data-item-id=' + dataCharges.id + ']');
+                if (otherchargesTableRow.length == 0) {
+                    $("#otherChargesGrid").append(trRowCharges);
+                    $('#otherChargesGrid tr:last').find('.ot-charge-txt').focus();
+                }
+                else {
+                    swal("Error!", "This other charges is already added. Please select another charge!", "error");
+                }
+            });
+        } catch (err) {
+            alert(err);
+            }
+
+            $(document).keyup(function (e) {
+                var keyCode = e.keyCode || e.which;
+
+                if (keyCode == 113) {
+                    
+                    if (($("#productSerailModel").data('bs.modal') || {})._isShown) {
+                        SaveSerialNosAndClose();
+                    }
+                }
+                if (keyCode == 115) {
+                   
+                    if (!($("#productSerailModel").data('bs.modal') || {})._isShown) {
+                        $("#btnSavePE").focus();
+                        SavePEWithDetials();
+                    }
+                }
+                if (keyCode == 79) {
+                    
+                    if (e.shiftKey) {
+                        if (!($("#productSerailModel").data('bs.modal') || {})._isShown) {
+
+                            $("#SelectedOtherChargesId").select2('open');
+                        }
+                    }
+                }
+
+            });
+            $("body").on('click', '#focusDiv', function (e) {
+
+            });
+            $("body").on('keypress', '#txtItemSerialNo', function (e) {
+                if (e.keyCode == 13) {
+                    if ($(this).val().trim() != "") {
+                        $("#serialDetailsGrid").append("<tr class='tr-serial'><td>" + $(this).val() + "</td></tr>");
+                        $(this).val('');
+                    }
+                }
+            });
+            
+            $("body").on('keydown', '#mainDiv', function (e) {
+                var keyCode = e.keyCode || e.which;
+
+                if (keyCode == 9) {
+                    if ($(e.target).closest('tr.stock-row').length > 0) {
+                        e.preventDefault();
+                        if (e.shiftKey) {
+                            if ($(e.target).closest('td').prevAll('td.editablecell:eq(0)').length > 0) {
+                                $(e.target).closest('td').prevAll('td.editablecell:eq(0)').trigger('click');
+                            }
+                            else if ($(e.target).closest('tr.stock-row').prev('tr.stock-row').length > 0) {
+                                $(e.target).closest('tr.stock-row').prev('tr.stock-row').find('.item-qty').trigger('click');
+                            }
+                            else {
+                                $("#SelectedStockItemId").select2('open');
+                            }
+                        }
+                        else {
+                            if ($(e.target).closest('td').nextAll('td.editablecell:eq(0)').length > 0) {
+                                $(e.target).closest('td').nextAll('td.editablecell:eq(0)').trigger('click');
+                            }
+                            else if ($(e.target).closest('tr.stock-row').next('tr.stock-row').length > 0) {
+                                $(e.target).closest('tr.stock-row').next('tr.stock-row').find('.item-qty').trigger('click');
+                            }
+                            else {
+                                $("#SelectedStockItemId").select2('open');
+                            }
+                        }
+                    }
+                    else if ($(e.target).closest('tr.stockcharge-row').length > 0) {
+                        e.preventDefault();
+                        $("#SelectedOtherChargesId").select2('open');
+                    }
+                }
+
+            });
+
+           
+            $("body").on("click", ".txt-qty", function (e) {
+                e.stopPropagation();
+            });
+            $("body").on("blur", ".txt-qty", function (e) {
+                var currentQty = $(this).val();
+                var currentTD_Qty = $(this).closest('.item-qty');
+                $(currentTD_Qty).html(currentQty);
+                CalculateThisRow($(currentTD_Qty).closest('tr.stock-row'));
+            });
+            $("body").on("click", ".item-qty", function () {
+                var oldQty = $(this).text();
+                $(this).html("<input class='txt-qty editable-txt' type='number' value="+oldQty+" />");
+                $(this).find('.txt-qty').focus();
+                $(this).find('.txt-qty').select();
+                $("#spnItemName").html($(this).closest('tr.stock-row').find('.item-name').text());
+                $("#hdnSerialItemId").val($(this).closest('tr.stock-row').find('.item-id').text());
+                var sernos = $(this).closest('tr.stock-row').attr('data-serial-nos');
+                if (sernos != undefined && sernos != null && sernos.trim() != "") {
+                    var list = sernos.split(';');
+                    for (var i = 0; i < list.length; i++) {
+                        $("#serialDetailsGrid").append("<tr class='tr-serial'><td>" + list[i] + "</td></tr>");
+                    }
+                }
+                $("#productSerailModel").modal('show');
+            });
+
+            $("#productSerailModel").on('shown.bs.modal', function () {
+                $("#txtItemSerialNo").val("");
+                $("#txtItemSerialNo").focus();
+            });
+            $("#productSerailModel").on('hidden.bs.modal', function () {
+                $("#spnItemName").html('');
+                $("#hdnSerialItemId").val('');
+                $(".tr-serial").remove();
+                RemoveRow();
+            });
+            
+            $("body").on("click", ".txt-rate", function (e) {
+                e.stopPropagation();
+            });
+            $("body").on("blur", ".txt-rate", function (e) {
+                var currentRate = $(this).val();
+                var currentTD_Rate = $(this).closest('.item-rate');
+                $(currentTD_Rate).html(currentRate);
+                CalculateThisRow($(currentTD_Rate).closest('tr.stock-row'));
+            });
+            $("body").on("click", ".item-rate", function () {
+                var oldRate = $(this).text();
+                $(this).html("<input class='txt-rate editable-txt' type='number' step='.01' value=" + oldRate + " />");
+                $(this).find('.txt-rate').focus();
+                $(this).find('.txt-rate').select();
+            });
+
+            
+            $("body").on("click", ".txt-disc", function (e) {
+                e.stopPropagation();
+            });
+            $("body").on("blur", ".txt-disc", function (e) {
+                var currentDisc = $(this).val();
+                var currentTD_Disc = $(this).closest('.item-disc');
+                $(currentTD_Disc).html(currentDisc);
+                CalculateThisRow($(currentTD_Disc).closest('tr.stock-row'));
+            });
+            $("body").on("click", ".item-disc", function () {
+                var oldDisc = $(this).text();
+                $(this).html("<input class='txt-disc editable-txt' type='number' step='.01' value=" + oldDisc + " />");
+                $(this).find('.txt-disc').focus();
+                $(this).find('.txt-disc').select();
+            });
+            $("body").on("blur", ".ot-charge-txt", function (e) {
+                CalculateTotal();
+            });
+        });
+
+            var grossAmt = 0;
+            var centraltax = 0;
+            var statetax = 0;
+            var $dataRows = $("#stockTaxGrid").find('.stocktax-row');
+            $dataRows.each(function (i) {
+                grossAmt = parseFloat($(this).find('.item-grossamtdata').text()).toFixed(2);
+                centraltax = parseFloat($(this).find('.item-centraltax').text()).toFixed(2);
+                statetax = parseFloat($(this).find('.item-statetax').text()).toFixed(2);
+
+                var centralAmt = (parseFloat(grossAmt) * parseFloat(centraltax)) / 100;
+                $(this).find('.item-centralamt').html(parseFloat(centralAmt).toFixed(2));
+
+                var stateAmt = (parseFloat(grossAmt) * parseFloat(statetax)) / 100;
+                $(this).find('.item-stateamt').html(parseFloat(stateAmt).toFixed(2));
+
+                var totaltaxAmt = (parseFloat(centralAmt) + parseFloat(stateAmt));
+                $(this).find('.item-totaltaxamt').html(parseFloat(totaltaxAmt).toFixed(2));
+            });
+
+        });
+        function CalculateThisRow(currentRow) {
+            var qty = 0;
+            var disc = 0;
+            var rate = 0;
+
+            qty = parseFloat($(currentRow).find('.item-qty').text()).toFixed(2);
+            if (isNaN(qty)) {
+                qty = parseFloat($(currentRow).find('.txt-qty').val()).toFixed(2);
+            }
+
+            rate = parseFloat($(currentRow).find('.item-rate').text()).toFixed(2);
+            if (isNaN(rate)) {
+                rate = parseFloat($(currentRow).find('.txt-rate').val()).toFixed(2);
+            }
+
+
+            disc = parseFloat($(currentRow).find('.item-disc').text()).toFixed(2);
+            if (isNaN(disc)) {
+                disc = parseFloat($(currentRow).find('.txt-disc').val()).toFixed(2);
+            }
+
+
+            var tax = parseFloat($(currentRow).find('.item-tax').text()).toFixed(2);
+
+            var grossAmt = parseFloat(qty) * parseFloat(rate);
+            $(currentRow).find('.item-grossamt').html(parseFloat(grossAmt).toFixed(2));
+
+            var discAmt = (parseFloat(grossAmt) * parseFloat(disc)) / 100;
+            $(currentRow).find('.item-discamt').html(parseFloat(discAmt).toFixed(2));
+
+            
+            var invId = $(currentRow).attr('data-item-id');
+            if ($("#stockTaxGrid").find('tr[data-item-id="' + invId + '"]').length > 0) {
+                var taxamnt = parseFloat(grossAmt) - parseFloat(discAmt);
+                $("#stockTaxGrid").find('tr[data-item-id="' + invId + '"]').find('.item-taxableamt').html(parseFloat(taxamnt).toFixed(2));
+                CalculateStockTaxRow($("#stockTaxGrid").find('tr[data-item-id="' + invId + '"]'));
+            }
+           
+
+            var finalPrice = parseFloat(grossAmt) - parseFloat(discAmt);
+            var taxAmt = (parseFloat(finalPrice) * parseFloat(tax)) / 100;
+
+            $(currentRow).find('.item-taxamt').html(parseFloat(taxAmt).toFixed(2));
+
+            var totalAmtWithoutTax = parseFloat(grossAmt) - parseFloat(discAmt);
+            var totalAmt = parseFloat(totalAmtWithoutTax) + parseFloat(taxAmt);
+            $(currentRow).find('.item-totalamt').html(parseFloat(totalAmt).toFixed(2));
+
+            CalculateTotal();
+        }
+        function CalculateTotal() {
+            debugger;
+            var totalamts = 0.0;
+            var totaldiscamts = 0.0;
+            var totaltaxamts = 0.0;
+            var totalothercharges = 0.0;
+            var totalroundoff = 0.0;
+            var $dataRows = $("#stockGrid").find('.stock-row');
+            var $dataOtherChargesRows = $("#otherChargesGrid").find('.stockcharge-row');
+            $dataRows.each(function (i) {
+                totalamts += parseFloat($(this).find('.item-grossamt').html());
+                totaldiscamts += parseFloat($(this).find('.item-discamt').html());
+                totaltaxamts += parseFloat($(this).find('.item-taxamt').html());
+            });
+            $dataOtherChargesRows.each(function (i) {
+                totalothercharges += parseFloat($(this).find('.ot-charge-txt').val());
+            });
+            $("#total-amt").html(parseFloat(totalamts).toFixed(2));
+            $("#total-discamt").html(parseFloat(totaldiscamts).toFixed(2));
+            $("#total-taxamount").html(parseFloat(totaltaxamts).toFixed(2));
+            $("#total-othercharges").html(parseFloat(totalothercharges).toFixed(2));
+            var totalAmouts = totalamts + totaltaxamts + totalothercharges - totaldiscamts;
+            var decimals = totalAmouts - Math.floor(totalAmouts);
+            var exactDecimal = decimals.toFixed(2);
+            if (exactDecimal > 0.50) {
+                totalroundoff = 1 - exactDecimal;
+            }
+            else {
+                totalroundoff = -exactDecimal;
+            }
+            $("#total-roundoff").html(parseFloat(totalroundoff).toFixed(2));
+            var finalTotalAmout = totalamts + totaltaxamts + totalothercharges + totalroundoff - totaldiscamts;
+            $("#total-totalamt").html(parseFloat(finalTotalAmout).toFixed(2));
+        }
+        function CalculateStockTaxRow(currentTaxRow) {
+            var rate = 0;
+            var centraltax = 0;
+            var statetax = 0;
+            rate = parseFloat($(currentTaxRow).find('.item-taxableamt').text()).toFixed(2);
+            centraltax = parseFloat($(currentTaxRow).find('.item-centraltax').text()).toFixed(2);
+            statetax = parseFloat($(currentTaxRow).find('.item-statetax').text()).toFixed(2);
+
+            var centralAmt = (parseFloat(rate) * parseFloat(centraltax)) / 100;
+            $(currentTaxRow).find('.item-centralamt').html(parseFloat(centralAmt).toFixed(2));
+
+            var stateAmt = (parseFloat(rate) * parseFloat(statetax)) / 100;
+            $(currentTaxRow).find('.item-stateamt').html(parseFloat(stateAmt).toFixed(2));
+
+            var totaltaxAmt = (parseFloat(centralAmt) + parseFloat(stateAmt));
+            $(currentTaxRow).find('.item-totaltaxamt').html(parseFloat(totaltaxAmt).toFixed(2));
+        }
+        function SaveSerialNosAndClose() {
+            var allSerialTrs = $("#serialDetailsGrid").find('tr.tr-serial');
+            var dataItemId = $("#hdnSerialItemId").val();
+            if (allSerialTrs.length > 0) {
+                var currentRow = $("#stockGrid").find('tr.stock-row[data-item-id=' + dataItemId + ']');
+                var serialNos = "";
+                $.each(allSerialTrs, function () {
+                    if (serialNos.trim() != "") {
+                        serialNos += ";";
+                    }
+                    serialNos += $(this).find('td').text();
+                });
+                $(currentRow).attr('data-serial-nos', serialNos);
+                $("#productSerailModel").modal('hide');
+                $(currentRow).find('.item-qty').html(allSerialTrs.length);
+                $(currentRow).find('.item-rate').trigger('click');
+                CalculateThisRow($(currentRow));
+                $(".tr-serial").remove();
+            }
+            else {
+            }
+        }
+        function RemoveRow() {
+            var allStockRow = $("#stockGrid").find('tr.stock-row');
+            $.each(allStockRow, function () {
+                var srNo = $(this).attr('data-serial-nos');
+                if (srNo === undefined || srNo == "") {
+                    var taxId = $(this).attr('data-item-id');
+                    var allStockTaxRow = $("#stockTaxGrid").find('tr.stocktax-row[data-item-id=' + taxId + ']');
+                    allStockTaxRow.remove();
+                    $(this).remove();
+                    CalculateTotal();
+                }
+            });
+        }
+    </script>
+}*@

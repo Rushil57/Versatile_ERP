@@ -1,0 +1,157 @@
+﻿
+@{
+    ViewData["Title"] = "SalesReturnEntryDetails";
+}
+@*<h2>SalesReturnEntryDetails</h2>*@
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+            <!-- Revenue, Hit Rate & Deals -->
+            <div class="row">
+                @*===================*@
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <h4 style="float:left" class="modal-title"><strong>Sales Return Entry Details</strong></h4>
+                    </div>
+                </div>
+                @*================*@
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <form class="form">
+                                    <div class="form-body">
+                                        <div class="form-group">
+                                            <button type="button" id="btnAddNew" style="float:right" onclick="@("window.location.href='" + @Url.Action("SalesReturnEntry", "SalesReturnEntry") + "'");" class="btn btn-info btn-sm btn-round"><i class="ft-plus"></i> Add New Sales Return Entry</button>
+                                        </div>
+                                        <h4 class="form-section"><i class="ft-user"></i> List of Sales Return Entry</h4>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="card-content collapse show vtpl-grid-align">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped" id="salesReturnEntrytblId">
+                                                            <thead>
+                                                                <tr>
+                                                                    @*<th>#</th>*@
+                                                                    <th>CreditNoteNo</th>
+                                                                    <th>Total Amount</th>
+                                                                    <th>Original Sales Entry</th>
+                                                                    <th>Supplier Name</th>
+                                                                    <th style="width: 25px;">Edit</th>
+                                                                    <th style="width: 25px;">Delete</th>
+                                                                    <th style="width: 25px;">Print</th>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        var tblList;
+        $(document).ready(function () {
+            BindSREList();
+            $(document).keyup(function (e) {
+                var keyCode = e.keyCode || e.which;
+                if (keyCode == 119) {
+                    // f8
+                    $('#btnAddNew').click();
+                }
+                if (keyCode == 70) {
+                    //shit + f
+                    if (e.shiftKey) {
+                        $('#salesReturnEntrytblId_filter input').focus();
+                    }
+                }
+            });
+        });
+        function BindSREList() {
+            $.ajax({
+                type: "Get",
+                url: '/api/SalesReturnEntry/GetAllSalesReturnEntry',
+                dataType: "json",
+                success: function (response) {
+                    if ($.fn.dataTable.isDataTable('#salesReturnEntrytblId')) {
+                        tblList.destroy();
+                    }
+                    tblList = $('#salesReturnEntrytblId').DataTable({
+                        data: response,
+                        "columns": [
+                            //{ "data": "id" },
+                            { "data": "creditNoteNo" },
+                            { "data": "totalAmount" },
+                            { "data": "originalSalesEntryId" },
+                            { "data": "supplierName" },
+                            {
+                                "render": function (data, type, full, meta)
+                                { return "<a class='btn btn-info' href='/SalesReturnEntry/SalesReturnEntry?CreditNoteNo=" + full.creditNoteNo +"'><i class='ft-edit'></i></a>"; }
+                            },
+                            {
+                                data: null, render: function (data, type, row) {
+                                    return "<a href='#' class='btn btn-danger' onclick=DeleteData('" + row.creditNoteNo + "'); ><i class='ft-trash'></i></a>";
+                                }
+                            },
+                            {
+                                "render": function (data, type, full, meta)
+                                { return "<a class='btn btn-info' target='_blank' href='/api/SalesReturnEntry/PrintSalesReturnEntry?CreditNoteNo=" + full.creditNoteNo + "'><i class='ft-printer'></i></a>"; }
+                            },
+                        ]
+                    });
+                },
+                error: function () {
+                    swal("Error!", "Some error had occur!", "error");
+                }
+            });
+        }
+        function DeleteData(creditNoteNo) {
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this data!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            type: "GET",
+                            url: '/api/SalesReturnEntry/DeleteSalesReturnEntryByKey?CreditNoteNo=' + creditNoteNo,
+                            // data: id,
+                            dataType: "json",
+                            success: function (response) {
+                                if (response.isError == true) {
+                                    swal("Error!", response.errorMessage, "error");
+                                }
+                                else {
+                                    swal("Success!", response.successMessage, "success");
+                                    BindSREList();
+                                }
+                            },
+                            error: function () {
+                                //swal("Error!", "Some error had occur!", "error");
+                            }
+                        });
+
+                    } else {
+                        //swal("Your data is safe!");
+                    }
+                });
+
+        }
+    </script>
+}
+
+

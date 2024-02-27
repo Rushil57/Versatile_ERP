@@ -1,0 +1,374 @@
+﻿@model VTPL_ERP.Models.ContraEntryViewModel
+@{
+    ViewData["Title"] = "Contra_Entry";
+
+}
+@*<h2>Contra_Entry</h2>*@
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+            <!-- Revenue, Hit Rate & Deals -->
+            <div class="row">
+                @*===================*@
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @*<button type="button" class="btn btn-primary">Add New Courier</button>*@
+                        <h4 style="float:left" class="modal-title"><strong>Contra Entry</strong></h4>
+                        @*<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" onclick="clearData()">Add New Unit</button>*@
+                    </div>
+                </div>
+                <div id="myModal" class="modal fade" role="dialog" tabindex='-1'>
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+                                <h4 class="modal-title"><i class="ft-user"></i> Contra Entry </h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Contra Entry No</label>
+                                            @Html.TextBoxFor(m => m.CONo, new { @class = "form-control", @readonly = "readonly" })
+                                        </div>
+                                    </div>
+                                    <div class='col-md-6'>
+                                        <div class='form-group'>
+                                            <label for="user_firstname">Date</label>
+                                            @Html.TextBoxFor(x => x.ContraDateDisplay, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput1">Source Bank Name </label>
+                                            @Html.DropDownListFor(m => m.SourceBankId, Model.SourceBankSelectList, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Current Balance</label>
+                                            @Html.TextBoxFor(m => m.CurrentBalance, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput1">Destination Bank Name </label>
+                                            @Html.HiddenFor(m => m.CONo, new { @class = "form-control" })
+                                            @Html.DropDownListFor(m => m.DestinationBankId, Model.DestinationBankSelectList, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Amount</label>
+                                            @Html.TextBoxFor(m => m.Amount, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-warning mr-1" data-dismiss="modal">Close</button>
+                                    <button type="button" id="saveContraEntryBtnId" class="btn btn-primary" onclick="saveContraEntry()">
+                                        <i class="la la-check-square-o"></i> Save
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                @*================*@
+
+
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <form class="form">
+                                    <div class="form-body">
+                                        <div class="form-group">
+                                            <button type="button" id="btnAddNew" style="float:right" class="btn btn-info btn-sm btn-round" data-toggle="modal" data-target="#myModal" onclick="clearData()"><i class="ft-plus"></i> Add New Contra Entry</button>
+                                        </div>
+                                        <h4 class="form-section"><i class="ft-user"></i> List of Contra Entry</h4>
+                                        <div class="row">
+                                            <div class="col-md-12">
+
+
+
+                                                <div class="card-content collapse show vtpl-grid-align">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped" id="contraEntrytblId">
+                                                            <thead>
+                                                                <tr>
+                                                                    @*<th>#</th>*@
+                                                                    <th>Source Bank Name</th>
+                                                                    <th>Current Balance</th>
+                                                                    <th>Destination Bank Name</th>
+                                                                    <th>Amount</th>
+                                                                    <th style="width: 25px;">Edit</th>
+                                                                    <th style="width: 25px;">Delete</th>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+
+
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        var tblList;
+        $(document).ready(function () {
+            $('#ContraDateDisplay').datepicker({
+                format: 'dd/mm/yyyy',
+                forceParse: false,
+                orientation: "bottom",
+            });
+            jQuery('#SourceBankId').select2();
+            jQuery('#DestinationBankId').select2();
+            //$("#SourceBankId").select2({ placeholder: 'Select Source Bank Name' });
+            //$("#DestinationBankId").select2({ placeholder: 'Select Destination Bank Name' });
+            $("#SourceBankId").select2("val", 0);
+            $("#DestinationBankId").select2("val", 0);
+            $('select').select2({
+                width: '100%'
+            });
+            BindContraEntryList();
+            $(document).keyup(function (e) {
+                var keyCode = e.keyCode || e.which;
+
+                if (keyCode == 115) {
+                    // f4
+                    if (($("#myModal").data('bs.modal') || {})._isShown) {
+                        $("#saveContraEntryBtnId").focus();
+                        saveContraEntry();
+                    }
+                }
+                if (keyCode == 119) {
+                    // f8
+                    $('#btnAddNew').click();
+                }
+                if (keyCode == 70) {
+                    //shit + f
+                    if (e.shiftKey) {
+                        $('#contraEntrytblId_filter input').focus();
+                    }
+                }
+            });
+        });
+        function saveContraEntry() {
+            if (ValidateForm()) {
+                var modelObj = {
+                    CONo: $("#CONo").val(),
+                    SourceBankId: $("#SourceBankId").val(),
+                    CurrentBalance: $("#CurrentBalance").val(),
+                    DestinationBankId: $("#DestinationBankId").val(),
+                    Amount: $("#Amount").val(),
+                    ContraDate: $("#ContraDateDisplay").val(),
+                    ContraDateDisplay: $("#ContraDateDisplay").val()
+                };
+                $.ajax({
+                    type: "POST",
+                    url: '/api/ContraEntry/SaveContraEntry',
+                    data: modelObj,
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.isError == true) {
+                            swal("Error!", response.errorMessage, "error");
+                        }
+                        else {
+                            swal("Success!", response.successMessage, "success");
+                            $('#myModal').modal('hide');
+                            BindContraEntryList();
+                        }
+                    },
+                    error: function () {
+                        swal("Error!", "Some error had occur!", "error");
+                    }
+                });
+            }
+
+        }
+        function DeleteData(id) {
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this data!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            type: "GET",
+                            url: '/api/ContraEntry/DeleteContraEntryByKey?id=' + id,
+                            // data: id,
+                            dataType: "json",
+                            success: function (response) {
+                                if (response.isError == true) {
+                                    swal("Error!", response.errorMessage, "error");
+                                }
+                                else {
+                                    swal("Success!", response.successMessage, "success");
+                                    BindContraEntryList();
+                                }
+                            },
+                            error: function () {
+                                //swal("Error!", "Some error had occur!", "error");
+                            }
+                        });
+
+                    }
+                });
+
+        }
+        function EditData(id) {
+            $.ajax({
+                type: "GET",
+                url: '/api/ContraEntry/GetContraEntryByKey?id=' + id,
+                // data: id,
+                dataType: "json",
+                success: function (response) {
+                    var contradate = moment(response.contraDate).format('DD/MM/YYYY');
+                    $("#CONo").val(response.coNo);
+                    $("#SourceBankId").val(response.sourceBankId).trigger('change');
+                    $("#CurrentBalance").val(response.currentBalance);
+                    $("#DestinationBankId").val(response.destinationBankId).trigger('change');
+                    $("#Amount").val(response.amount);
+                    $("#ContraDateDisplay").val(contradate);
+                    $('#myModal').modal('show');
+                },
+                error: function () {
+                    //swal("Error!", "Some error had occur!", "error");
+                }
+            });
+        }
+        function BindContraEntryList() {
+            $.ajax({
+                type: "Get",
+                url: '/api/ContraEntry/GetAllContraEntry',
+                dataType: "json",
+                success: function (response) {
+                    if ($.fn.dataTable.isDataTable('#contraEntrytblId')) {
+                        tblList.destroy();
+                    }
+                    tblList = $('#contraEntrytblId').DataTable({
+                        data: response,
+                        "columns": [
+                            //{ "data": "id" },
+                            { "data": "sourceBankName" },
+                            { "data": "currentBalance" },
+                            { "data": "destinationBankName" },
+                            { "data": "amount" },
+                            {
+                                "render": function (data, type, full, meta) { return "<a class='btn btn-info' href='#' onclick=EditData('" + full.coNo + "'); ><i class='ft-edit'></i></a>"; }
+                            },
+                            {
+                                data: null, render: function (data, type, row) {
+                                    return "<a href='#' class='btn btn-danger' onclick=DeleteData('" + row.coNo + "'); ><i class='ft-trash'></i></a>";
+                                }
+                            },
+                        ]
+                    });
+                },
+                error: function () {
+                    swal("Error!", "Some error had occur!", "error");
+                }
+            });
+        }
+        function ValidateForm() {
+            var isValid = true;
+            try {
+                var sourceBank = $("#SourceBankId").val();
+                var currentBalance = $("#CurrentBalance").val().trim();
+                var destinationBank = $("#DestinationBankId").val();
+                var amount = $("#Amount").val().trim();
+                if (sourceBank == "" || sourceBank == "0" || sourceBank == null) {
+                    swal("Error!", "Please Select Source Bank Name", "error").then(function () {
+                        $("#SourceBankId").focus();
+                    });
+                    return false;
+                }
+                if (currentBalance == "") {
+                    swal("Error!", "Please Enter Current Balance", "error").then(function () {
+                        $("#CurrentBalance").focus();
+                        $("#CurrentBalance").val("");
+                    });
+                    return false;
+                }
+                if (destinationBank == "" || destinationBank == "0" || destinationBank == null) {
+                    swal("Error!", "Please Select Destination Bank Name", "error").then(function () {
+                        $("#DestinationBankId").focus();
+                    });
+                    return false;
+                }
+                if (amount == "") {
+                    swal("Error!", "Please Enter Amount", "error").then(function () {
+                        $("#Amount").focus();
+                        $("#Amount").val("");
+                    });
+                    return false;
+                }
+
+            } catch (err) {
+                alert(err);
+                return false;
+            }
+            return isValid;
+        }
+        $("input[type='text']").on("focus", function () {
+            $(this).select();
+        });
+        $("#Amount").focusout(function () {
+            $("#saveContraEntryBtnId").focus();
+        });
+        function clearData() {
+            $("#SourceBankId").select2("val", 0);
+            $("#DestinationBankId").select2("val", 0);
+            $("#CONo").val("");
+            $("#Amount").val("");
+            $("#CurrentBalance").val("");
+            var curDate = moment('@DateTime.Now').format('DD/MM/YYYY');
+            $('#ContraDateDisplay').datepicker('setDate', curDate);
+            $.ajax({
+                type: "GET",
+                url: '/api/ContraEntry/GetIdByTable',
+                dataType: "json",
+                success: function (response) {
+                    $("#CONo").val(response);
+                },
+                error: function () {
+                    //swal("Error!", "Some error had occur!", "error");
+                }
+            });
+        }
+        $(document).on('focus', '.select2', function () {
+            $(this).siblings('select').select2('open');
+        });
+        $('#myModal').on('shown.bs.modal', function () {
+            $('#ContraDateDisplay').focus();
+        })
+    </script>
+}
+

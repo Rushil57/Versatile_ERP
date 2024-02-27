@@ -1,0 +1,1320 @@
+﻿@using System;
+@using System.Collections.Generic;
+@using System.Linq;
+@using System.Threading.Tasks;
+@using ERP.DAL.Dto;
+@using Microsoft.AspNetCore.Mvc;
+@using Microsoft.AspNetCore.Mvc.Filters;
+@using Microsoft.AspNetCore.Routing;
+@using VTPL_ERP.Util;
+@using static VTPL_ERP.Util.AppConstants;
+<!DOCTYPE html>
+<html class="loading" lang="en" data-textdirection="ltr">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="description" content="Modern admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities with bitcoin dashboard.">
+    <meta name="keywords" content="admin template, modern admin template, dashboard template, flat admin template, responsive admin template, web app, crypto dashboard, bitcoin dashboard">
+    <meta name="author" content="PIXINVENT">
+    <title> VTPL | ERP | Online </title>
+    <link rel="apple-touch-icon" href="~/theme/app-assets/images/ico/apple-icon-120.png">
+    <link rel="shortcut icon" type="image/x-icon" href="~/theme/app-assets/images/ico/favicon.ico">
+    <environment include="Development,Production">
+        @*<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Quicksand:300,400,500,700"
+            rel="stylesheet">*@
+        <link href="https://maxcdn.icons8.com/fonts/line-awesome/1.1/css/line-awesome.min.css"
+              rel="stylesheet">
+        <link href="~/css/fontstyle.css" rel="stylesheet" />
+        <link href="~/css/all.css" rel="stylesheet" />
+        <link href="~/css/fontawesome.css" rel="stylesheet" />
+        <!-- BEGIN VENDOR CSS-->
+        <link rel="stylesheet" type="text/css" href="~/theme/app-assets/css/vendors.css">
+        <link rel="stylesheet" type="text/css" href="~/theme/app-assets/vendors/css/forms/icheck/icheck.css">
+        <link rel="stylesheet" type="text/css" href="~/theme/app-assets/vendors/css/forms/icheck/custom.css">
+        <!-- END VENDOR CSS-->
+        <!-- BEGIN MODERN CSS-->
+        <link rel="stylesheet" type="text/css" href="~/theme/app-assets/css/app.css">
+        <!-- END MODERN CSS-->
+        <!-- BEGIN Page Level CSS-->
+        <link rel="stylesheet" type="text/css" href="~/theme/app-assets/css/core/menu/menu-types/vertical-menu.css">
+        <link rel="stylesheet" type="text/css" href="~/theme/app-assets/css/core/colors/palette-gradient.css">
+        <link rel="stylesheet" type="text/css" href="~/theme/app-assets/vendors/css/charts/jquery-jvectormap-2.0.3.css">
+        <link rel="stylesheet" type="text/css" href="~/theme/app-assets/vendors/css/charts/morris.css">
+        <link rel="stylesheet" type="text/css" href="~/theme/app-assets/fonts/simple-line-icons/style.css">
+        <link rel="stylesheet" type="text/css" href="~/theme/app-assets/css/core/colors/palette-gradient.css">
+        <!-- END Page Level CSS-->
+        <!-- BEGIN Custom CSS-->
+        <link rel="stylesheet" type="text/css" href="~/theme/assets/css/style.css">
+        <link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
+        <link href="~/css/loader.css" rel="stylesheet" />
+        @*<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.css" rel="stylesheet" />*@
+        <link href="~/css/select2.min.css" rel="stylesheet" />
+        <link href="~/css/bootstrap-datepicker.css" rel="stylesheet" />
+        <!-- END Custom CSS-->
+    </environment>
+
+
+
+</head>
+<body class="horizontal-layout horizontal-menu 2-columns   menu-expanded" data-open="hover"
+      data-menu="horizontal-menu" data-col="2-columns">
+    <!-- fixed-top-->
+    @functions{
+        public bool IsHasRightView(AppPages pageId, RoleActions actionId)
+        {
+            var pgId = (int)pageId;
+            var actId = (int)actionId;
+
+            var sessionRolesAndRights = Context.Session.GetObject<List<RolesAndRightsMasterDto>>(AppConstants.SessionKey.CURRENT_USER_RIGHTS);
+            var sessiondata = sessionRolesAndRights.Where(x => x.ActionId.Equals(actId) && x.PageId.Equals(pgId)).FirstOrDefault();
+            if (sessiondata != null)
+            {
+                return true;
+            }
+            else
+            {
+                return true;
+            }
+        }
+    }
+    <nav class="header-navbar navbar-expand-md navbar navbar-with-menu navbar-without-dd-arrow navbar-static-top navbar-light navbar-brand-center">
+        <div class="navbar-wrapper">
+            <div class="navbar-header">
+                <ul class="nav navbar-nav flex-row">
+                    <li class="nav-item mobile-menu d-md-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ft-menu font-large-1"></i></a></li>
+                    <li class="nav-item">
+                        @*<a class="navbar-brand" href="index.html">
+                                <img class="brand-logo" alt="modern admin logo" src="app-assets/images/logo/logo.png">
+                                <h3 class="brand-text">Modern Admin</h3>
+                            </a>*@
+                    </li>
+                    <li class="nav-item d-md-none">
+                        <a class="nav-link open-navbar-container" data-toggle="collapse" data-target="#navbar-mobile"><i class="la la-ellipsis-v"></i></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="navbar-container content">
+                <div class="collapse navbar-collapse" id="navbar-mobile">
+                    <ul class="nav navbar-nav mr-auto float-left">
+                        <li class="nav-item d-none d-md-block"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ft-menu"></i></a></li>
+                        <li class="nav-item d-none d-md-block"><a class="nav-link nav-link-expand" href="#"><i class="ficon ft-maximize"></i></a></li>
+                        <li class="dropdown nav-item mega-dropdown">
+                            <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown">Mega</a>
+                            <ul class="mega-dropdown-menu dropdown-menu row">
+                                <li class="col-md-2">
+                                    <h6 class="dropdown-menu-header text-uppercase mb-1"><i class="la la-newspaper-o"></i> News</h6>
+                                    <div id="mega-menu-carousel-example">
+                                        <div>
+                                            <img class="rounded img-fluid mb-1" src="app-assets/images/slider/slider-2.png"
+                                                 alt="First slide"><a class="news-title mb-0" href="#">Poster Frame PSD</a>
+                                            <p class="news-content">
+                                                <span class="font-small-2">January 26, 2018</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="col-md-3">
+                                    <h6 class="dropdown-menu-header text-uppercase"><i class="la la-random"></i> Drill down menu</h6>
+                                    <ul class="drilldown-menu">
+                                        <li class="menu-list">
+                                            <ul>
+                                                <li>
+                                                    <a class="dropdown-item" href="layout-2-columns.html"><i class="ft-file"></i> Page layouts & Templates</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#"><i class="ft-align-left"></i> Multi level menu</a>
+                                                    <ul>
+                                                        <li><a class="dropdown-item" href="#"><i class="la la-bookmark-o"></i>  Second level</a></li>
+                                                        <li>
+                                                            <a href="#"><i class="la la-lemon-o"></i> Second level menu</a>
+                                                            <ul>
+                                                                <li><a class="dropdown-item" href="#"><i class="la la-heart-o"></i>  Third level</a></li>
+                                                                <li><a class="dropdown-item" href="#"><i class="la la-file-o"></i> Third level</a></li>
+                                                                <li><a class="dropdown-item" href="#"><i class="la la-trash-o"></i> Third level</a></li>
+                                                                <li><a class="dropdown-item" href="#"><i class="la la-clock-o"></i> Third level</a></li>
+                                                            </ul>
+                                                        </li>
+                                                        <li><a class="dropdown-item" href="#"><i class="la la-hdd-o"></i> Second level, third link</a></li>
+                                                        <li><a class="dropdown-item" href="#"><i class="la la-floppy-o"></i> Second level, fourth link</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="color-palette-primary.html"><i class="ft-camera"></i> Color palette system</a>
+                                                </li>
+                                                <li><a class="dropdown-item" href="sk-2-columns.html"><i class="ft-edit"></i> Page starter kit</a></li>
+                                                <li><a class="dropdown-item" href="changelog.html"><i class="ft-minimize-2"></i> Change log</a></li>
+                                                <li>
+                                                    <a class="dropdown-item" href="https://pixinvent.ticksy.com/"><i class="la la-life-ring"></i> Customer support center</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="col-md-3">
+                                    <h6 class="dropdown-menu-header text-uppercase"><i class="la la-list-ul"></i> Accordion</h6>
+                                    <div id="accordionWrap" role="tablist" aria-multiselectable="true">
+                                        <div class="card border-0 box-shadow-0 collapse-icon accordion-icon-rotate">
+                                            <div class="card-header p-0 pb-2 border-0" id="headingOne" role="tab">
+                                                <a data-toggle="collapse" data-parent="#accordionWrap" href="#accordionOne"
+                                                   aria-expanded="true" aria-controls="accordionOne">Accordion Item #1</a>
+                                            </div>
+                                            <div class="card-collapse collapse show" id="accordionOne" role="tabpanel" aria-labelledby="headingOne"
+                                                 aria-expanded="true">
+                                                <div class="card-content">
+                                                    <p class="accordion-text text-small-3">
+                                                        Caramels dessert chocolate cake pastry jujubes bonbon.
+                                                        Jelly wafer jelly beans. Caramels chocolate cake liquorice
+                                                        cake wafer jelly beans croissant apple pie.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="card-header p-0 pb-2 border-0" id="headingTwo" role="tab">
+                                                <a class="collapsed" data-toggle="collapse" data-parent="#accordionWrap"
+                                                   href="#accordionTwo" aria-expanded="false" aria-controls="accordionTwo">Accordion Item #2</a>
+                                            </div>
+                                            <div class="card-collapse collapse" id="accordionTwo" role="tabpanel" aria-labelledby="headingTwo"
+                                                 aria-expanded="false">
+                                                <div class="card-content">
+                                                    <p class="accordion-text">
+                                                        Sugar plum bear claw oat cake chocolate jelly tiramisu
+                                                        dessert pie. Tiramisu macaroon muffin jelly marshmallow
+                                                        cake. Pastry oat cake chupa chups.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="card-header p-0 pb-2 border-0" id="headingThree" role="tab">
+                                                <a class="collapsed" data-toggle="collapse" data-parent="#accordionWrap"
+                                                   href="#accordionThree" aria-expanded="false" aria-controls="accordionThree">Accordion Item #3</a>
+                                            </div>
+                                            <div class="card-collapse collapse" id="accordionThree" role="tabpanel" aria-labelledby="headingThree"
+                                                 aria-expanded="false">
+                                                <div class="card-content">
+                                                    <p class="accordion-text">
+                                                        Candy cupcake sugar plum oat cake wafer marzipan jujubes
+                                                        lollipop macaroon. Cake dragée jujubes donut chocolate
+                                                        bar chocolate cake cupcake chocolate topping.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="col-md-4">
+                                    <h6 class="dropdown-menu-header text-uppercase mb-1"><i class="la la-envelope-o"></i> Contact Us</h6>
+                                    <form class="form form-horizontal">
+                                        <div class="form-body">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 form-control-label" for="inputName1">Name</label>
+                                                <div class="col-sm-9">
+                                                    <div class="position-relative has-icon-left">
+                                                        <input class="form-control" type="text" id="inputName1" placeholder="John Doe">
+                                                        <div class="form-control-position pl-1"><i class="la la-user"></i></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 form-control-label" for="inputEmail1">Email</label>
+                                                <div class="col-sm-9">
+                                                    <div class="position-relative has-icon-left">
+                                                        <input class="form-control" type="email" id="inputEmail1" placeholder="john@example.com">
+                                                        <div class="form-control-position pl-1"><i class="la la-envelope-o"></i></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 form-control-label" for="inputMessage1">Message</label>
+                                                <div class="col-sm-9">
+                                                    <div class="position-relative has-icon-left">
+                                                        <textarea class="form-control" id="inputMessage1" rows="2" placeholder="Simple Textarea"></textarea>
+                                                        <div class="form-control-position pl-1"><i class="la la-commenting-o"></i></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12 mb-1">
+                                                    <button class="btn btn-info float-right" type="button"><i class="la la-paper-plane-o"></i> Send </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item nav-search">
+                            <a class="nav-link nav-link-search" href="#"><i class="ficon ft-search"></i></a>
+                            <div class="search-input">
+                                <input class="input" type="text" placeholder="Explore Modern...">
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav float-right">
+                        <li class="dropdown dropdown-user nav-item">
+                            <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
+                                <span class="mr-1">
+                                    Hello,
+                                    <span class="user-name text-bold-700">@ViewData["username"]</span>
+                                </span>
+                                <span class="avatar avatar-online">
+                                    @if (ViewData["PhotoUrl"] == null)
+                                    {<img src="~/theme/app-assets/images/portrait/small/avatar-s-19.png" alt="avatar"><i></i>
+                                    }
+                                    else
+                                    {
+                                        <img src="@ViewData["PhotoUrl"]" alt="avatar"><i></i>
+
+
+                                    }
+                                </span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="#"><i class="ft-user"></i> Edit Profile</a>
+                                <a class="dropdown-item" href="#"><i class="ft-mail"></i> My Inbox</a>
+                                <a class="dropdown-item" href="#"><i class="ft-check-square"></i> Task</a>
+                                <a class="dropdown-item" href="#"><i class="ft-message-square"></i> Chats</a>
+                                <div class="dropdown-divider"></div><a class="dropdown-item" href="@Url.Action("Logout", "Account")"><i class="ft-power"></i> Logout</a>
+                            </div>
+                        </li>
+                        <li class="dropdown dropdown-language nav-item">
+                            <a class="dropdown-toggle nav-link" id="dropdown-flag" href="#" data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false"><i class="flag-icon flag-icon-gb"></i><span class="selected-language"></span></a>
+                            <div class="dropdown-menu" aria-labelledby="dropdown-flag">
+                                <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-gb"></i> English</a>
+                                <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-fr"></i> French</a>
+                                <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-cn"></i> Chinese</a>
+                                <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-de"></i> German</a>
+                            </div>
+                        </li>
+                        <li class="dropdown dropdown-notification nav-item">
+                            <a class="nav-link nav-link-label" href="#" data-toggle="dropdown">
+                                <i class="ficon ft-bell"></i>
+                                <span class="badge badge-pill badge-default badge-danger badge-default badge-up badge-glow">5</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
+                                <li class="dropdown-menu-header">
+                                    <h6 class="dropdown-header m-0">
+                                        <span class="grey darken-2">Notifications</span>
+                                    </h6>
+                                    <span class="notification-tag badge badge-default badge-danger float-right m-0">5 New</span>
+                                </li>
+                                <li class="scrollable-container media-list w-100">
+                                    <a href="javascript:void(0)">
+                                        <div class="media">
+                                            <div class="media-left align-self-center"><i class="ft-plus-square icon-bg-circle bg-cyan"></i></div>
+                                            <div class="media-body">
+                                                <h6 class="media-heading">You have new order!</h6>
+                                                <p class="notification-text font-small-3 text-muted">Lorem ipsum dolor sit amet, consectetuer elit.</p>
+                                                <small>
+                                                    <time class="media-meta text-muted" datetime="2015-06-11T18:29:20+08:00">30 minutes ago</time>
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="javascript:void(0)">
+                                        <div class="media">
+                                            <div class="media-left align-self-center"><i class="ft-download-cloud icon-bg-circle bg-red bg-darken-1"></i></div>
+                                            <div class="media-body">
+                                                <h6 class="media-heading red darken-1">99% Server load</h6>
+                                                <p class="notification-text font-small-3 text-muted">Aliquam tincidunt mauris eu risus.</p>
+                                                <small>
+                                                    <time class="media-meta text-muted" datetime="2015-06-11T18:29:20+08:00">Five hour ago</time>
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="javascript:void(0)">
+                                        <div class="media">
+                                            <div class="media-left align-self-center"><i class="ft-alert-triangle icon-bg-circle bg-yellow bg-darken-3"></i></div>
+                                            <div class="media-body">
+                                                <h6 class="media-heading yellow darken-3">Warning notifixation</h6>
+                                                <p class="notification-text font-small-3 text-muted">Vestibulum auctor dapibus neque.</p>
+                                                <small>
+                                                    <time class="media-meta text-muted" datetime="2015-06-11T18:29:20+08:00">Today</time>
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="javascript:void(0)">
+                                        <div class="media">
+                                            <div class="media-left align-self-center"><i class="ft-check-circle icon-bg-circle bg-cyan"></i></div>
+                                            <div class="media-body">
+                                                <h6 class="media-heading">Complete the task</h6>
+                                                <small>
+                                                    <time class="media-meta text-muted" datetime="2015-06-11T18:29:20+08:00">Last week</time>
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="javascript:void(0)">
+                                        <div class="media">
+                                            <div class="media-left align-self-center"><i class="ft-file icon-bg-circle bg-teal"></i></div>
+                                            <div class="media-body">
+                                                <h6 class="media-heading">Generate monthly report</h6>
+                                                <small>
+                                                    <time class="media-meta text-muted" datetime="2015-06-11T18:29:20+08:00">Last month</time>
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="dropdown-menu-footer"><a class="dropdown-item text-muted text-center" href="javascript:void(0)">Read all notifications</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown dropdown-notification nav-item">
+                            <a class="nav-link nav-link-label" href="#" data-toggle="dropdown"><i class="ficon ft-mail">             </i></a>
+                            <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
+                                <li class="dropdown-menu-header">
+                                    <h6 class="dropdown-header m-0">
+                                        <span class="grey darken-2">Messages</span>
+                                    </h6>
+                                    <span class="notification-tag badge badge-default badge-warning float-right m-0">4 New</span>
+                                </li>
+                                <li class="scrollable-container media-list w-100">
+                                    <a href="javascript:void(0)">
+                                        <div class="media">
+                                            <div class="media-left">
+                                                <span class="avatar avatar-sm avatar-online rounded-circle">
+                                                    <img src="../../../app-assets/images/portrait/small/avatar-s-19.png" alt="avatar"><i></i>
+                                                </span>
+                                            </div>
+                                            <div class="media-body">
+                                                <h6 class="media-heading">Margaret Govan</h6>
+                                                <p class="notification-text font-small-3 text-muted">I like your portfolio, let's start.</p>
+                                                <small>
+                                                    <time class="media-meta text-muted" datetime="2015-06-11T18:29:20+08:00">Today</time>
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="javascript:void(0)">
+                                        <div class="media">
+                                            <div class="media-left">
+                                                <span class="avatar avatar-sm avatar-busy rounded-circle">
+                                                    <img src="../../../app-assets/images/portrait/small/avatar-s-2.png" alt="avatar"><i></i>
+                                                </span>
+                                            </div>
+                                            <div class="media-body">
+                                                <h6 class="media-heading">Bret Lezama</h6>
+                                                <p class="notification-text font-small-3 text-muted">I have seen your work, there is</p>
+                                                <small>
+                                                    <time class="media-meta text-muted" datetime="2015-06-11T18:29:20+08:00">Tuesday</time>
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="javascript:void(0)">
+                                        <div class="media">
+                                            <div class="media-left">
+                                                <span class="avatar avatar-sm avatar-online rounded-circle">
+                                                    <img src="../../../app-assets/images/portrait/small/avatar-s-3.png" alt="avatar"><i></i>
+                                                </span>
+                                            </div>
+                                            <div class="media-body">
+                                                <h6 class="media-heading">Carie Berra</h6>
+                                                <p class="notification-text font-small-3 text-muted">Can we have call in this week ?</p>
+                                                <small>
+                                                    <time class="media-meta text-muted" datetime="2015-06-11T18:29:20+08:00">Friday</time>
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="javascript:void(0)">
+                                        <div class="media">
+                                            <div class="media-left">
+                                                <span class="avatar avatar-sm avatar-away rounded-circle">
+                                                    <img src="../../../app-assets/images/portrait/small/avatar-s-6.png" alt="avatar"><i></i>
+                                                </span>
+                                            </div>
+                                            <div class="media-body">
+                                                <h6 class="media-heading">Eric Alsobrook</h6>
+                                                <p class="notification-text font-small-3 text-muted">We have project party this saturday.</p>
+                                                <small>
+                                                    <time class="media-meta text-muted" datetime="2015-06-11T18:29:20+08:00">last month</time>
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="dropdown-menu-footer"><a class="dropdown-item text-muted text-center" href="javascript:void(0)">Read all messages</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- ////////////////////////////////////////////////////////////////////////////-->
+
+    <div class="header-navbar navbar-expand-sm navbar navbar-horizontal navbar-fixed navbar-dark navbar-without-dd-arrow navbar-shadow"
+         role="navigation" data-menu="menu-wrapper">
+        <div class="navbar-container main-menu-content" data-menu="menu-container">
+            <ul class="nav navbar-nav" id="main-menu-navigation" data-menu="menu-navigation">
+
+
+
+                <li class="dropdown nav-item" data-menu="dropdown">
+                    <a class="dropdown-toggle nav-link" href="@Url.Action("Index", "Dashboard")">
+                        <i class="la la-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="dropdown nav-item" data-menu="dropdown">
+                    <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="la la-television"></i><span>Admin</span></a>
+                    <ul class="dropdown-menu">
+                        <li data-menu="">
+                            <a class="dropdown-item" href="@Url.Action("RolesAndRights", "RolesAndRights")">Roles and Rights</a>
+                        </li>
+                        
+                        @if (IsHasRightView(VTPL_ERP.Util.AppConstants.AppPages.Company, VTPL_ERP.Util.AppConstants.RoleActions.IsPageVisible))
+                        {
+                            <li data-menu="">
+                                <a class="dropdown-item" href="@Url.Action("Company", "Company")">Company</a>
+                            </li>
+                        }
+                    </ul>
+                </li>
+                <li class="dropdown nav-item" data-menu="dropdown">
+                    <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="la la-terminal"></i><span>Master</span></a>
+                    <ul class="dropdown-menu">
+                        @if (IsHasRightView(VTPL_ERP.Util.AppConstants.AppPages.Unit_Master, VTPL_ERP.Util.AppConstants.RoleActions.IsPageVisible))
+                        {
+                            <li data-menu="">
+                                <a class="dropdown-item" href="@Url.Action("Unit_Master", "Master")">Unit Master</a>
+                            </li>
+                        }
+                        @if (IsHasRightView(VTPL_ERP.Util.AppConstants.AppPages.Branch_Master, VTPL_ERP.Util.AppConstants.RoleActions.IsPageVisible))
+                        {
+                            <li data-menu="">
+                                <a class="dropdown-item" href="@Url.Action("Branch_Master", "Master")">Branch Master</a>
+                            </li>
+                        }
+                        @if (IsHasRightView(VTPL_ERP.Util.AppConstants.AppPages.Employee_Master, VTPL_ERP.Util.AppConstants.RoleActions.IsPageVisible))
+                        {
+                            <li data-menu="">
+                                <a class="dropdown-item" href="@Url.Action("Employee_Master", "Master")">Employee Master</a>
+                            </li>
+                        }
+                        @if (IsHasRightView(VTPL_ERP.Util.AppConstants.AppPages.Inventory_Master, VTPL_ERP.Util.AppConstants.RoleActions.IsPageVisible))
+                        {
+                            <li data-menu="">
+                                <a class="dropdown-item" href="@Url.Action("Inventory_Master", "Master")">Inventory Master</a>
+                            </li>
+                        }
+                        @if (IsHasRightView(VTPL_ERP.Util.AppConstants.AppPages.Courier_Master, VTPL_ERP.Util.AppConstants.RoleActions.IsPageVisible))
+                        {
+                            <li data-menu="">
+                                <a class="dropdown-item" href="@Url.Action("Courier_Master", "Master")">Courier Master</a>
+                            </li>
+                        }
+                        @if (IsHasRightView(VTPL_ERP.Util.AppConstants.AppPages.Problem_Master, VTPL_ERP.Util.AppConstants.RoleActions.IsPageVisible))
+                        {
+                            <li data-menu="">
+                                <a class="dropdown-item" href="@Url.Action("Problem_Master", "Master")">Problem Master</a>
+                            </li>
+                        }
+                        @if (IsHasRightView(VTPL_ERP.Util.AppConstants.AppPages.OtherCharges_Master, VTPL_ERP.Util.AppConstants.RoleActions.IsPageVisible))
+                        {
+                            <li data-menu="">
+                                <a class="dropdown-item" href="@Url.Action("OtherCharges_Master", "Master")">Other Charges Master</a>
+                            </li>
+                        }
+                        @if (IsHasRightView(VTPL_ERP.Util.AppConstants.AppPages.Roles_Master, VTPL_ERP.Util.AppConstants.RoleActions.IsPageVisible))
+                        {
+                            <li data-menu="">
+                                <a class="dropdown-item" href="@Url.Action("Roles_Master", "Master")">Roles Master</a>
+                            </li>
+                        }
+                        @if (IsHasRightView(VTPL_ERP.Util.AppConstants.AppPages.InventoryBrand_Master, VTPL_ERP.Util.AppConstants.RoleActions.IsPageVisible))
+                        {
+                            <li data-menu="">
+                                <a class="dropdown-item" href="@Url.Action("InventoryBrand_Master", "Master")">Inventory Brand Master</a>
+                            </li>
+                        }
+                        @if (IsHasRightView(VTPL_ERP.Util.AppConstants.AppPages.InventoryCategory_Master, VTPL_ERP.Util.AppConstants.RoleActions.IsPageVisible))
+                        {
+                            <li data-menu="">
+                                <a class="dropdown-item" href="@Url.Action("InventoryCategory_Master", "Master")">Inventory Category Master</a>
+                            </li>
+                        }
+                        @if (IsHasRightView(VTPL_ERP.Util.AppConstants.AppPages.AccountParty_Master, VTPL_ERP.Util.AppConstants.RoleActions.IsPageVisible))
+                        {
+                            <li data-menu="">
+                                <a class="dropdown-item" href="@Url.Action("AccountParty_Master", "Master")">Account Party Master</a>
+                            </li>
+                        }
+                    </ul>
+                </li>
+                <li class="dropdown nav-item" data-menu="dropdown">
+                    <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="la la-clipboard"></i><span>Purchase</span></a>
+                    <ul class="dropdown-menu">
+                        @if (IsHasRightView(VTPL_ERP.Util.AppConstants.AppPages.PurchaseQuotation, VTPL_ERP.Util.AppConstants.RoleActions.IsPageVisible))
+                        {
+                            <li data-menu="">
+                                <a class="dropdown-item" href="@Url.Action("PurchaseQuotationDetails", "Purchase")">Purchase Quotation</a>
+                            </li>
+                        }
+                        @if (IsHasRightView(VTPL_ERP.Util.AppConstants.AppPages.PurchaseEntry, VTPL_ERP.Util.AppConstants.RoleActions.IsPageVisible))
+                        {
+                            <li data-menu="">
+                                <a class="dropdown-item" href="@Url.Action("PurchaseEntryDetails", "PurchaseEntry")">Purchase Entry</a>
+                            </li>
+                        }
+                        @if (IsHasRightView(VTPL_ERP.Util.AppConstants.AppPages.PurchaseReturnEntry, VTPL_ERP.Util.AppConstants.RoleActions.IsPageVisible))
+                        {
+                            <li data-menu="">
+                                <a class="dropdown-item" href="@Url.Action("PurchaseReturnEntryDetails", "PurchaseReturnEntry")">Purchase Return Entry</a>
+                            </li>
+                        }
+                    </ul>
+                </li>
+                <li class="dropdown nav-item" data-menu="dropdown">
+                    <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="la la-file-text"></i><span>Sales</span></a>
+                    <ul class="dropdown-menu">
+                        @if (IsHasRightView(VTPL_ERP.Util.AppConstants.AppPages.SalesOrder, VTPL_ERP.Util.AppConstants.RoleActions.IsPageVisible))
+                        {
+                            <li data-menu="">
+                                <a class="dropdown-item" href="@Url.Action("SalesOrderDetails", "SalesOrder")">Sales Order</a>
+                            </li>
+                        }
+                        @if (IsHasRightView(VTPL_ERP.Util.AppConstants.AppPages.SalesEntry, VTPL_ERP.Util.AppConstants.RoleActions.IsPageVisible))
+                        {
+                            <li data-menu="">
+                                <a class="dropdown-item" href="@Url.Action("SalesEntryDetails", "SalesEntry")">Sales Entry</a>
+                            </li>
+                        }
+                        @if (IsHasRightView(VTPL_ERP.Util.AppConstants.AppPages.SalesReturnEntry, VTPL_ERP.Util.AppConstants.RoleActions.IsPageVisible))
+                        {
+                            <li data-menu="">
+                                <a class="dropdown-item" href="@Url.Action("SalesReturnEntryDetails", "SalesReturnEntry")">Sales Return Entry</a>
+                            </li>
+                        }
+                    </ul>
+                </li>
+                <li class="dropdown nav-item" data-menu="dropdown">
+                    <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="la la-folder-open"></i><span>General</span></a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown"><i class="la la-paint-brush"></i>Color Palette</a>
+                            <ul class="dropdown-menu">
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="color-palette-primary.html" data-toggle="dropdown">Primary palette</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="color-palette-danger.html" data-toggle="dropdown">Danger palette</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="color-palette-success.html" data-toggle="dropdown">Success palette</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="color-palette-warning.html" data-toggle="dropdown">Warning palette</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="color-palette-info.html" data-toggle="dropdown">Info palette</a>
+                                </li>
+                                <li class="dropdown-divider"></li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="color-palette-red.html" data-toggle="dropdown">Red palette</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="color-palette-pink.html" data-toggle="dropdown">Pink palette</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="color-palette-purple.html" data-toggle="dropdown">Purple palette</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="color-palette-blue.html" data-toggle="dropdown">Blue palette</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="color-palette-cyan.html" data-toggle="dropdown">Cyan palette</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="color-palette-teal.html" data-toggle="dropdown">Teal palette</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="color-palette-yellow.html" data-toggle="dropdown">Yellow palette</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="color-palette-amber.html" data-toggle="dropdown">Amber palette</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="color-palette-blue-grey.html" data-toggle="dropdown">Blue Grey palette</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown"><i class="la la-puzzle-piece"></i>Starter kit</a>
+                            <ul class="dropdown-menu">
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="../../../starter-kit/ltr/horizontal-menu-template-nav/horizontal-layout-1-column.html"
+                                       data-toggle="dropdown">1 column</a>
+                                </li>
+                                <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu">
+                                    <a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Content Det. Sidebar</a>
+                                    <ul class="dropdown-menu">
+                                        <li data-menu="">
+                                            <a class="dropdown-item" href="../../../starter-kit/ltr/horizontal-menu-template-nav/layout-content-detached-left-sidebar.html"
+                                               data-toggle="dropdown">Detached left sidebar</a>
+                                        </li>
+                                        <li data-menu="">
+                                            <a class="dropdown-item" href="../../../starter-kit/ltr/horizontal-menu-template-nav/layout-content-detached-left-sticky-sidebar.html"
+                                               data-toggle="dropdown">Detached sticky left sidebar</a>
+                                        </li>
+                                        <li data-menu="">
+                                            <a class="dropdown-item" href="../../../starter-kit/ltr/horizontal-menu-template-nav/layout-content-detached-right-sidebar.html"
+                                               data-toggle="dropdown">Detached right sidebar</a>
+                                        </li>
+                                        <li data-menu="">
+                                            <a class="dropdown-item" href="../../../starter-kit/ltr/horizontal-menu-template-nav/layout-content-detached-right-sticky-sidebar.html"
+                                               data-toggle="dropdown">Detached sticky right sidebar</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-divider"></li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="../../../starter-kit/ltr/horizontal-menu-template-nav/layout-fixed-navigation.html"
+                                       data-toggle="dropdown">Fixed navigation</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="../../../starter-kit/ltr/horizontal-menu-template-nav/layout-fixed.html"
+                                       data-toggle="dropdown">Fixed layout</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="../../../starter-kit/ltr/horizontal-menu-template-nav/layout-boxed.html"
+                                       data-toggle="dropdown">Boxed layout</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="../../../starter-kit/ltr/horizontal-menu-template-nav/layout-static.html"
+                                       data-toggle="dropdown">Static layout</a>
+                                </li>
+                                <li class="dropdown-divider"></li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="../../../starter-kit/ltr/horizontal-menu-template-nav/layout-light.html"
+                                       data-toggle="dropdown">Light layout</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="../../../starter-kit/ltr/horizontal-menu-template-nav/layout-dark.html"
+                                       data-toggle="dropdown">Dark layout</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li data-menu="">
+                            <a class="dropdown-item" href="changelog.html" data-toggle="dropdown"><i class="la la-copy"></i>Changelog</a>
+                        </li>
+                        <li class="disabled" data-menu="">
+                            <a class="dropdown-item" href="#" data-toggle="dropdown"><i class="la la-eye-slash"></i>Disabled Menu</a>
+                        </li>
+                        <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown"><i class="la la-android"></i>Menu levels</a>
+                            <ul class="dropdown-menu">
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="#" data-toggle="dropdown">Second level</a>
+                                </li>
+                                <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu">
+                                    <a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Second level child</a>
+                                    <ul class="dropdown-menu">
+                                        <li data-menu="">
+                                            <a class="dropdown-item" href="#" data-toggle="dropdown">Third level</a>
+                                        </li>
+                                        <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu">
+                                            <a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Third level child</a>
+                                            <ul class="dropdown-menu">
+                                                <li data-menu="">
+                                                    <a class="dropdown-item" href="#" data-toggle="dropdown">Fourth level</a>
+                                                </li>
+                                                <li data-menu="">
+                                                    <a class="dropdown-item" href="#" data-toggle="dropdown">Fourth level</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown nav-item" data-menu="dropdown">
+                    <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="la la-file-text"></i><span>Pages</span></a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown"><i class="la la-briefcase"></i>Project</a>
+                            <ul class="dropdown-menu">
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="project-summary.html" data-toggle="dropdown">Project Summary</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="project-tasks.html" data-toggle="dropdown">Project Task</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="project-bugs.html" data-toggle="dropdown">Project Bugs</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li data-menu="">
+                            <a class="dropdown-item" href="scrumboard.html" data-toggle="dropdown"><i class="la la-check-square"></i>Scrumboard</a>
+                        </li>
+                        <li data-menu="">
+                            <a class="dropdown-item" href="email-application.html" data-toggle="dropdown"><i class="la la-envelope"></i>Email Application</a>
+                        </li>
+                        <li data-menu="">
+                            <a class="dropdown-item" href="chat-application.html" data-toggle="dropdown"><i class="la la-comments"></i>Chat Application</a>
+                        </li>
+                        <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown"><i class="la la-clipboard"></i>Invoice</a>
+                            <ul class="dropdown-menu">
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="invoice-summary.html" data-toggle="dropdown">Invoice Summary</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="invoice-template.html" data-toggle="dropdown">Invoice Template</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="invoice-list.html" data-toggle="dropdown">Invoice List</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown"><i class="la la-film"></i>Timelines</a>
+                            <ul class="dropdown-menu">
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="timeline-center.html" data-toggle="dropdown">Timelines Center</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="timeline-left.html" data-toggle="dropdown">Timelines Left</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="timeline-right.html" data-toggle="dropdown">Timelines Right</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="timeline-horizontal.html" data-toggle="dropdown">Timelines Horizontal</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown"><i class="la la-user"></i>Users</a>
+                            <ul class="dropdown-menu">
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="user-profile.html" data-toggle="dropdown">Users Profile</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="user-cards.html" data-toggle="dropdown">Users Cards</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="users-contacts.html" data-toggle="dropdown">Users List</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown"><i class="la la-image"></i>Gallery</a>
+                            <ul class="dropdown-menu">
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="gallery-grid.html" data-toggle="dropdown">Gallery Grid</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="gallery-grid-with-desc.html" data-toggle="dropdown">Gallery Grid with Desc</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="gallery-masonry.html" data-toggle="dropdown">Masonry Gallery</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="gallery-masonry-with-desc.html" data-toggle="dropdown">Masonry Gallery with Desc</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="gallery-hover-effects.html" data-toggle="dropdown">Hover Effects</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown"><i class="la la-search"></i>Search</a>
+                            <ul class="dropdown-menu">
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="search-page.html" data-toggle="dropdown">Search Page</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="search-website.html" data-toggle="dropdown">Search Website</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="search-images.html" data-toggle="dropdown">Search Images</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="search-videos.html" data-toggle="dropdown">Search Videos</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown"><i class="la la-unlock"></i>Authentication</a>
+                            <ul class="dropdown-menu">
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="login-simple.html" data-toggle="dropdown">Login Simple</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="login-with-bg.html" data-toggle="dropdown">Login with Bg</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="login-with-bg-image.html" data-toggle="dropdown">Login with Bg Image</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="login-with-navbar.html" data-toggle="dropdown">Login with Navbar</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="login-advanced.html" data-toggle="dropdown">Login Advanced</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="register-simple.html" data-toggle="dropdown">Register Simple</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="register-with-bg.html" data-toggle="dropdown">Register with Bg</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="register-with-bg-image.html" data-toggle="dropdown">Register with Bg Image</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="register-with-navbar.html" data-toggle="dropdown">Register with Navbar</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="register-advanced.html" data-toggle="dropdown">Register Advanced</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="unlock-user.html" data-toggle="dropdown">Unlock User</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="recover-password.html" data-toggle="dropdown">recover-password</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown"><i class="la la-warning"></i>Error</a>
+                            <ul class="dropdown-menu">
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="error-400.html" data-toggle="dropdown">Error 400</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="error-400-with-navbar.html" data-toggle="dropdown">Error 400 with Navbar</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="error-401.html" data-toggle="dropdown">Error 401</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="error-401-with-navbar.html" data-toggle="dropdown">Error 401 with Navbar</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="error-403.html" data-toggle="dropdown">Error 403</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="error-403-with-navbar.html" data-toggle="dropdown">Error 403 with Navbar</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="error-404.html" data-toggle="dropdown">Error 404</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="error-404-with-navbar.html" data-toggle="dropdown">Error 404 with Navbar</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="error-500.html" data-toggle="dropdown">Error 500</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="error-500-with-navbar.html" data-toggle="dropdown">Error 500 with Navbar</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown"><i class="la la-file-text"></i>Others</a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu">
+                                    <a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Coming Soon</a>
+                                    <ul class="dropdown-menu">
+                                        <li data-menu="">
+                                            <a class="dropdown-item" href="coming-soon-flat.html" data-toggle="dropdown">Flat</a>
+                                        </li>
+                                        <li data-menu="">
+                                            <a class="dropdown-item" href="coming-soon-bg-image.html" data-toggle="dropdown">Bg image</a>
+                                        </li>
+                                        <li data-menu="">
+                                            <a class="dropdown-item" href="coming-soon-bg-video.html" data-toggle="dropdown">Bg video</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="under-maintenance.html" data-toggle="dropdown">Maintenance</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown nav-item" data-menu="dropdown">
+                    <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="la la-pencil"></i><span>UI</span></a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown"><i class="la la-tablet"></i>Cards</a>
+                            <ul class="dropdown-menu">
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="card-bootstrap.html" data-toggle="dropdown">Bootstrap</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="card-headings.html" data-toggle="dropdown">Headings</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="card-options.html" data-toggle="dropdown">Options</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="card-actions.html" data-toggle="dropdown">Action</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="card-draggable.html" data-toggle="dropdown">Draggable</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown"><i class="la la-fire"></i>Advance Cards</a>
+                            <ul class="dropdown-menu">
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="card-statistics.html" data-toggle="dropdown">Statistics</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="card-weather.html" data-toggle="dropdown">Weather</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="card-charts.html" data-toggle="dropdown">Charts</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="card-interactive.html" data-toggle="dropdown">Interactive</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="card-maps.html" data-toggle="dropdown">Maps</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="card-social.html" data-toggle="dropdown">Social</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="card-ecommerce.html" data-toggle="dropdown">E-Commerce</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown"><i class="la la-compass"></i>Content</a>
+                            <ul class="dropdown-menu">
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="content-grid.html" data-toggle="dropdown">Grid</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="content-typography.html" data-toggle="dropdown">Typography</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="content-text-utilities.html" data-toggle="dropdown">Text utilities</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="content-syntax-highlighter.html" data-toggle="dropdown">Syntax highlighter</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="content-helper-classes.html" data-toggle="dropdown">Helper classes</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown"><i class="la la-server"></i>Components</a>
+                            <ul class="dropdown-menu">
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="component-alerts.html" data-toggle="dropdown">Alerts</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="component-callout.html" data-toggle="dropdown">Callout</a>
+                                </li>
+                                <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu">
+                                    <a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Buttons</a>
+                                    <ul class="dropdown-menu">
+                                        <li data-menu="">
+                                            <a class="dropdown-item" href="component-buttons-basic.html"
+                                               data-toggle="dropdown">Basic Buttons</a>
+                                        </li>
+                                        <li data-menu="">
+                                            <a class="dropdown-item" href="component-buttons-extended.html"
+                                               data-toggle="dropdown">Extended Buttons</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="component-carousel.html" data-toggle="dropdown">Carousel</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="component-collapse.html" data-toggle="dropdown">Collapse</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="component-dropdowns.html" data-toggle="dropdown">Dropdowns</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="component-list-group.html" data-toggle="dropdown">List Group</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="component-modals.html" data-toggle="dropdown">Modals</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="component-pagination.html" data-toggle="dropdown">Pagination</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="component-navs-component.html" data-toggle="dropdown">Navs Component</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="component-tabs-component.html" data-toggle="dropdown">Tabs Component</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="component-pills-component.html" data-toggle="dropdown">Pills Component</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="component-tooltips.html" data-toggle="dropdown">Tooltips</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="component-popovers.html" data-toggle="dropdown">Popovers</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="component-badges.html" data-toggle="dropdown">Badges</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="component-pill-badges.html" data-toggle="dropdown">Pill Badges</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="component-progress.html" data-toggle="dropdown">Progress</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="component-media-objects.html" data-toggle="dropdown">Media Objects</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="component-scrollable.html" data-toggle="dropdown">Scrollable</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="component-spinners.html" data-toggle="dropdown">Spinners</a>
+                                </li>
+                            </ul>
+                        </li>
+                        
+                        
+                        <li data-menu="">
+                            <a class="dropdown-item" href="animation.html" data-toggle="dropdown"><i class="la la-spinner spinner"></i>Animation</a>
+                        </li>
+                    </ul>
+                </li>
+                
+                <li class="dropdown nav-item" data-menu="dropdown">
+                    <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="la la-table"></i><span>Tables</span></a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown"><i class="la la-table"></i>Bootstrap Tables</a>
+                            <ul class="dropdown-menu">
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="table-basic.html" data-toggle="dropdown">Basic Tables</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="table-border.html" data-toggle="dropdown">Table Border</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="table-sizing.html" data-toggle="dropdown">Table Sizing</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="table-styling.html" data-toggle="dropdown">Table Styling</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="table-components.html" data-toggle="dropdown">Table Components</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown"><i class="la la-th"></i>DataTables</a>
+                            <ul class="dropdown-menu">
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="dt-basic-initialization.html" data-toggle="dropdown">Basic Initialisation</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="dt-advanced-initialization.html" data-toggle="dropdown">Advanced initialisation</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="dt-styling.html" data-toggle="dropdown">Styling</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="dt-data-sources.html" data-toggle="dropdown">Data Sources</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="dt-api.html" data-toggle="dropdown">API</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown"><i class="la la-th-large"></i>DataTables Ext.</a>
+                            <ul class="dropdown-menu">
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="dt-extensions-autofill.html" data-toggle="dropdown">AutoFill</a>
+                                </li>
+                                <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu">
+                                    <a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Buttons</a>
+                                    <ul class="dropdown-menu">
+                                        <li data-menu="">
+                                            <a class="dropdown-item" href="dt-extensions-buttons-basic.html"
+                                               data-toggle="dropdown">Basic Buttons</a>
+                                        </li>
+                                        <li data-menu="">
+                                            <a class="dropdown-item" href="dt-extensions-buttons-html-5-data-export.html"
+                                               data-toggle="dropdown">HTML 5 Data Export</a>
+                                        </li>
+                                        <li data-menu="">
+                                            <a class="dropdown-item" href="dt-extensions-buttons-flash-data-export.html"
+                                               data-toggle="dropdown">Flash Data Export</a>
+                                        </li>
+                                        <li data-menu="">
+                                            <a class="dropdown-item" href="dt-extensions-buttons-column-visibility.html"
+                                               data-toggle="dropdown">Column Visibility</a>
+                                        </li>
+                                        <li data-menu="">
+                                            <a class="dropdown-item" href="dt-extensions-buttons-print.html"
+                                               data-toggle="dropdown">Print</a>
+                                        </li>
+                                        <li data-menu="">
+                                            <a class="dropdown-item" href="dt-extensions-buttons-api.html"
+                                               data-toggle="dropdown">API</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="dt-extensions-column-reorder.html"
+                                       data-toggle="dropdown">Column Reorder</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="dt-extensions-fixed-columns.html"
+                                       data-toggle="dropdown">Fixed Columns</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="dt-extensions-key-table.html" data-toggle="dropdown">Key Table</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="dt-extensions-row-reorder.html" data-toggle="dropdown">Row Reorder</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="dt-extensions-select.html" data-toggle="dropdown">Select</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="dt-extensions-fix-header.html" data-toggle="dropdown">Fix Header</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="dt-extensions-responsive.html" data-toggle="dropdown">Responsive</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="dt-extensions-column-visibility.html"
+                                       data-toggle="dropdown">Column Visibility</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown"><i class="la la-th-list"></i>Handson Table</a>
+                            <ul class="dropdown-menu">
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="handson-table-appearance.html" data-toggle="dropdown">Appearance</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="handson-table-rows-columns.html" data-toggle="dropdown">Rows Columns</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="handson-table-rows-only.html" data-toggle="dropdown">Rows Only</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="handson-table-columns-only.html" data-toggle="dropdown">Columns Only</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="handson-table-data-operations.html"
+                                       data-toggle="dropdown">Data Operations</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="handson-table-cell-features.html"
+                                       data-toggle="dropdown">Cell Features</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="handson-table-cell-types.html" data-toggle="dropdown">Cell Types</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="handson-table-integrations.html" data-toggle="dropdown">Integrations</a>
+                                </li>
+                                <li data-menu="">
+                                    <a class="dropdown-item" href="handson-table-utilities.html" data-toggle="dropdown">Utilities</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li data-menu="">
+                            <a class="dropdown-item" href="table-jsgrid.html" data-toggle="dropdown"><i class="la la-table"></i>jsGrid</a>
+                        </li>
+                    </ul>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+
+    @*<div style="padding-left: 33px;cursor:pointer;" onclick="history.back();"> back</div>*@
+    <button type="button" style="margin-left: 30px;margin-top: 5px;position: absolute;z-index: 99999;cursor:pointer;float:right" class="btn btn-info btn-sm btn-round" onclick="history.back();">Back</button>
+    <div class="modalLoader"></div>
+    @RenderBody()
+    <!-- ////////////////////////////////////////////////////////////////////////////-->
+    <footer class="footer footer-static footer-light navbar-border navbar-shadow">
+        <p class="clearfix blue-grey lighten-2 text-sm-center mb-0 px-2">
+            <span class="float-md-left d-block d-md-inline-block">
+                Copyright &copy; 2018 <a class="text-bold-800 grey darken-2" href="https://www.versatiletechno.com/"
+                                         target="_blank">Versatile Techno Labs PVT. Ltd</a>, All rights reserved.
+            </span>
+            <span class="float-md-right d-block d-md-inline-blockd-none d-lg-block">Hand-crafted & Made with <i class="ft-heart pink"></i></span>
+        </p>
+    </footer>
+    <environment include="Development,Production">
+        <!-- BEGIN VENDOR JS-->
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
+        <script src="~/theme/app-assets/vendors/js/vendors.min.js"></script>
+
+        <script src="~/theme/app-assets/vendors/js/forms/icheck/icheck.min.js" type="text/javascript"></script>
+        <script src="~/theme/app-assets/vendors/js/forms/toggle/bootstrap-checkbox.min.js"
+                type="text/javascript"></script>
+        <script src="~/theme/app-assets/vendors/js/charts/chart.min.js" type="text/javascript"></script>
+        <script src="~/theme/app-assets/vendors/js/charts/raphael-min.js" type="text/javascript"></script>
+        <script src="~/theme/app-assets/vendors/js/charts/morris.min.js" type="text/javascript"></script>
+        <script src="~/theme/app-assets/vendors/js/charts/jvector/jquery-jvectormap-2.0.3.min.js"
+                type="text/javascript"></script>
+        <script src="~/theme/app-assets/vendors/js/charts/jvector/jquery-jvectormap-world-mill.js"
+                type="text/javascript"></script>
+        <script src="~/theme/app-assets/data/jvector/visitor-data.js" type="text/javascript"></script>
+
+        <script src="~/theme/app-assets/js/core/app-menu.js" type="text/javascript"></script>
+        <script src="~/theme/app-assets/js/core/app.js" type="text/javascript"></script>
+        <script src="~/theme/app-assets/js/scripts/customizer.js" type="text/javascript"></script>
+
+        <script src="~/theme/app-assets/js/scripts/pages/dashboard-sales.js" type="text/javascript"></script>
+
+
+
+        <script src="~/theme/app-assets/vendors/js/forms/toggle/switchery.min.js"></script>
+        @*<script src="~/theme/app-assets/vendors/js/forms/select/select2.full.min.js" type="text/javascript"></script>*@
+
+        <script src="~/theme/app-assets/vendors/js/forms/spinner/jquery.bootstrap-touchspin.js" type="text/javascript"></script>
+        @*<script src="https://www.google.com/jsapi" type="text/javascript"></script>*@
+        <script src="~/js/jsapi.js"></script>
+        <script src="~/theme/app-assets/vendors/js/charts/jquery.sparkline.min.js" type="text/javascript"></script>
+        <script src="~/theme/app-assets/js/scripts/tables/components/table-components.js" type="text/javascript"></script>
+
+        <script src="~/js/jquery.dataTables.min.js"></script>
+
+        <script src="~/js/sweetalert.min.js"></script>
+        <script src="~/theme/app-assets/vendors/js/extensions/moment.min.js"></script>
+
+        @*<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>*@
+        <script src="~/js/select2.min.js"></script>
+        <script src="~/js/bootstrap-datepicker.min.js"></script>
+    </environment>
+
+    @RenderSection("scripts", false)
+</body>
+</html>
+<script>
+    $body = $("body");
+
+    $(document).on({
+
+
+        ajaxStart: function () { $body.addClass("loading"); },
+        ajaxStop: function () { $body.removeClass("loading"); }
+    });
+</script>

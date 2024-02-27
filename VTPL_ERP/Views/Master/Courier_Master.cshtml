@@ -1,0 +1,404 @@
+﻿@model VTPL_ERP.Models.Master.CourierMasterViewModel
+@{
+    ViewData["Title"] = "Courier_Master";
+}
+
+@*<h2>Courier_Master</h2>*@
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+            <!-- Revenue, Hit Rate & Deals -->
+            <div class="row">
+                @*===================*@
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @*<button type="button" class="btn btn-primary">Add New Courier</button>*@
+                        <h4 style="float:left" class="modal-title"><strong>Courier Master</strong></h4>
+                        @*<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" onclick="clearData()">Add New Courier</button>*@
+                    </div>
+                </div>
+                <div id="myModal" class="modal fade" role="dialog" tabindex='-1'>
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+                                <h4 class="modal-title"><i class="ft-user"></i> Courier </h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput1">Courier Name </label>
+                                            @*<input type="text" id="projectinput1" class="form-control" placeholder="Ex : Mahavir Courier"
+                                                   name="fname">*@
+                                            @Html.HiddenFor(m => m.Id, new { @class = "form-control" })
+                                            @Html.HiddenFor(m => m.Created_Date, new { @class = "form-control" })
+                                            @Html.HiddenFor(m => m.Modified_Date, new { @class = "form-control" })
+                                            @Html.HiddenFor(m => m.IsActive, new { @class = "form-control" })
+                                            @Html.TextBoxFor(m => m.CourierName, new { @class = "form-control", @maxlength = 80 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput8">Address</label>
+                                            @*<textarea id="projectinput8" rows="5" class="form-control" name="comment" placeholder="Ex Ahmedabad"></textarea>*@
+                                            @Html.TextAreaFor(m => m.Address, new { @class = "form-control", @maxlength = 500 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Website</label>
+                                            @*<input type="text" id="projectinput2" class="form-control" placeholder="Ex : www.mahavircourier.com"
+                                                   name="lname">*@
+                                            @Html.TextBoxFor(m => m.Website, new { @class = "form-control", @maxlength = 150 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Mobile</label>
+                                            @*<input type="text" id="projectinput2" class="form-control" placeholder="Ex : 9624932472"
+                                                   name="lname">*@
+                                            @Html.TextBoxFor(m => m.Mobile, new { @class = "form-control", @minlength = 10, @maxlength = 10 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Contact</label>
+                                            @*<input type="text" id="projectinput2" class="form-control" placeholder="Ex : 079-40324950"
+                                                   name="lname">*@
+                                            @Html.TextBoxFor(m => m.Contact, new { @class = "form-control", @minlength = 10, @maxlength = 12 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput8">Remarks</label>
+                                            @*<textarea id="projectinput8" rows="5" class="form-control" name="comment" placeholder="Ex Mahavir Memnagar Branch"></textarea>*@
+                                            @Html.TextAreaFor(m => m.Remarks, new { @class = "form-control", @maxlength = 500 })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-warning mr-1" data-dismiss="modal">Close</button>
+                                    <button type="button" id="saveCourierBtnId" class="btn btn-primary" onclick="saveCourier()">
+                                        <i class="la la-check-square-o"></i> Save
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                @*================*@
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <form class="form">
+                                    <div class="form-body">
+                                        <div class="form-group">
+                                            <button type="button" id="btnAddCourierId" style="float:right" class="btn btn-info btn-sm btn-round" data-toggle="modal" data-target="#myModal" onclick="clearData()"><i class="ft-plus"></i> Add New Courier</button>
+                                        </div>
+                                        <h4 class="form-section"><i class="ft-user"></i> List of Courier</h4>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="card-content collapse show vtpl-grid-align">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped" id="courierMastertblId">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Courier Name </th>
+                                                                    <th>Website</th>
+                                                                    <th style="width: 25px;">Edit</th>
+                                                                    <th style="width: 25px;">Delete</th>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+
+
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        var tblList;
+        $(document).ready(function () {
+            BindCourierList();
+            $("#Mobile").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter 
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110]) !== -1 ||
+                    // Allow: Shift+, Command+
+                    //(e.keyCode === 187 && (e.shiftKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+            $("#Contact").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and + and -
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 107, 189]) !== -1 ||
+                    // Allow: Ctrl+A, Command+A
+                    (e.keyCode === 187 && (e.shiftKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+            $(document).keyup(function (e) {
+                var keyCode = e.keyCode || e.which;
+
+                if (keyCode == 115) {
+                    // f4
+                    if (($("#myModal").data('bs.modal') || {})._isShown) {
+                        $("#saveCourierBtnId").focus();
+                        saveCourier();
+                    }
+                }
+                if (keyCode == 119) {
+                    // f8
+                    $('#btnAddCourierId').click();
+                }
+                if (keyCode == 70) {
+                    //shit + f
+                    if (e.shiftKey) {
+                        $('#courierMastertblId_filter input').focus();
+                    }
+                }
+            });
+        });
+        function saveCourier() {
+            if (ValidateForm()) { 
+                var modelObj = {
+                    Id: $("#Id").val(),
+                    CourierName: $("#CourierName").val(),
+                    Address: $("#Address").val(),
+                    Website: $("#Website").val(),
+                    Mobile: $("#Mobile").val(),
+                    Contact: $("#Contact").val(),
+                    Remarks: $("#Remarks").val(),
+                    Created_Date: $("#Created_Date").val()
+                };
+                $.ajax({
+                    type: "POST",
+                    url: '/api/Master/SaveCourier',
+                    data: modelObj,
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.isError == true) {
+                            swal("Error!", response.errorMessage, "error");
+                        }
+                        else {
+                            swal("Success!", response.successMessage, "success");
+                            $('#myModal').modal('hide');
+                            BindCourierList();
+                        }
+                    },
+                    error: function () {
+                        swal("Error!", "Some error had occur!", "error");
+                    }
+                });
+            }
+        }
+        function DeleteData(id) {
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this data!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            type: "GET",
+                            url: '/api/Master/DeleteCourierByKey?id=' + id,
+                            // data: id,
+                            dataType: "json",
+                            success: function (response) {
+                                if (response.isError == true) {
+                                    swal("Error!", response.errorMessage, "error");
+                                }
+                                else {
+                                    swal("Success!", response.successMessage, "success");
+                                    BindCourierList();
+                                }
+                            },
+                            error: function () {
+                                //swal("Error!", "Some error had occur!", "error");
+                            }
+                        });
+
+                    } 
+                });
+
+        }
+        function EditData(id) {
+            $.ajax({
+                type: "GET",
+                url: '/api/Master/GetCourierByKey?id=' + id,
+                // data: id,
+                dataType: "json",
+                success: function (response) {
+                    $("#Id").val(response.id),
+                        $("#CourierName").val(response.courierName),
+                        $("#Address").val(response.address),
+                        $("#Website").val(response.website),
+                        $("#Mobile").val(response.mobile),
+                        $("#Contact").val(response.contact),
+                        $("#Remarks").val(response.remarks),
+                        $("#Created_Date").val(response.created_Date),
+                        //$("#Modified_Date").val(response.modified_Date),
+                        $("#IsActive").val(response.isActive),
+                        $('#myModal').modal('show');
+                },
+                error: function () {
+                    //swal("Error!", "Some error had occur!", "error");
+                }
+            });
+        }
+        function BindCourierList() {
+            $.ajax({
+                type: "Get",
+                url: '/api/Master/GetAllCourier',
+                dataType: "json",
+                success: function (response) {
+                    if ($.fn.dataTable.isDataTable('#courierMastertblId')) {
+                        tblList.destroy();
+                    }
+                    tblList = $('#courierMastertblId').DataTable({
+                        data: response,
+                        "columns": [
+                            //{ "data": "id" },
+                            { "data": "courierName" },
+                            { "data": "website" },
+                            {
+                                "render": function (data, type, full, meta)
+                                { return "<a class='btn btn-info' href='#' onclick=EditData('" + full.id + "'); ><i class='ft-edit'></i></a>"; }
+                            },
+                            {
+                                data: null, render: function (data, type, row) {
+                                    return "<a href='#' class='btn btn-danger' onclick=DeleteData('" + row.id + "'); ><i class='ft-trash'></i></a>";
+                                }
+                            },
+                        ]
+                    });
+                },
+                error: function () {
+                    swal("Error!", "Some error had occur!", "error");
+                }
+            });
+        }
+
+        function ValidateForm() {
+            debugger;
+            var isValid = true;
+            try {
+                var courierName = $("#CourierName").val().trim();
+                var address = $("#Address").val().trim();
+                var mobile = $("#Mobile").val().trim();
+                var contact = $("#Contact").val().trim();
+                if (courierName == "") {
+                    swal("Error!", "Please Enter Courier Name", "error").then(function () {
+                        $("#CourierName").focus();
+                        $("#CourierName").val("");
+                    });
+                    return false;
+                }
+                if (address == "") {
+                    swal("Error!", "Please Enter Address", "error").then(function () {
+                        $("#Address").focus();
+                        $("#Address").val("");
+                    });
+                    return false;
+                }
+                if (/^((http|https|ftp):\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/i.test($("#Website").val())) {
+
+                } else {
+                    swal("Error!", "Please Enter valid Website", "error").then(function () {
+                        $("#Website").focus();
+                    });
+                    return false;
+                }
+                if (mobile == "") {
+                    swal("Error!", "Please Enter Mobile", "error").then(function () {
+                        $("#Mobile").focus();
+                        $("#Mobile").val("");
+                    });
+                    return false;
+                }
+                if (mobile.length < 10) {
+                    swal("Error!", "Please Enter atleast 10 degit in Mobile", "error").then(function () {
+                        $("#Mobile").focus();
+                    });
+                    return false;
+                }
+                if (contact != "") {
+                    if (contact.length < 10) {
+                        swal("Error!", "Please Enter atleast 10 degit in Contact", "error").then(function () {
+                            $("#Contact").focus();
+                        });
+                        return false;
+                    }
+                }
+
+            } catch (err) {
+                alert(err);
+                return false;
+            }
+            return isValid;
+        }
+        $("input[type='text']").on("focus", function () {
+            $(this).select();
+        });
+        $("#Remarks").focusout(function () {
+            $("#saveCourierBtnId").focus();
+        });
+        function clearData() {
+            $("#CourierName").val("");
+            $("#Address").val("");
+            $("#Website").val("");
+            $("#Mobile").val("");
+            $("#Contact").val("");
+            $("#Remarks").val("");
+            $("#Id").val("");
+            $("#Created_Date").val("");
+            $("#Modified_Date").val("");
+            $("#IsActive").val("");
+        }
+        $('#myModal').on('shown.bs.modal', function () {
+            $('#CourierName').focus();
+        })
+    </script>
+}

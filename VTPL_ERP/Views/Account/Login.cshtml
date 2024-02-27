@@ -1,0 +1,307 @@
+﻿@{
+    ViewData["Title"] = "Account Page";
+    Layout = null;
+}
+
+<html class="loading" lang="en" data-textdirection="ltr">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="description" content="Modern admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities with bitcoin dashboard.">
+    <meta name="keywords" content="admin template, modern admin template, dashboard template, flat admin template, responsive admin template, web app, crypto dashboard, bitcoin dashboard">
+    <meta name="author" content="PIXINVENT">
+    <title>
+        VTPL | Login
+    </title>
+    <link rel="apple-touch-icon" href="~/theme/app-assets/images/ico/apple-icon-120.png">
+    <link rel="shortcut icon" type="image/x-icon" href="~/theme/app-assets/images/ico/favicon.ico">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Quicksand:300,400,500,700"
+          rel="stylesheet">
+    <link href="https://maxcdn.icons8.com/fonts/line-awesome/1.1/css/line-awesome.min.css"
+          rel="stylesheet">
+    <!-- BEGIN VENDOR CSS-->
+    <link rel="stylesheet" type="text/css" href="~/theme/app-assets/css/vendors.css">
+    <link rel="stylesheet" type="text/css" href="~/theme/app-assets/vendors/css/forms/icheck/icheck.css">
+    <link rel="stylesheet" type="text/css" href="~/theme/app-assets/vendors/css/forms/icheck/custom.css">
+    <!-- END VENDOR CSS-->
+    <!-- BEGIN MODERN CSS-->
+    <link rel="stylesheet" type="text/css" href="~/theme/app-assets/css/app.css">
+    <!-- END MODERN CSS-->
+    <!-- BEGIN Page Level CSS-->
+    <link rel="stylesheet" type="text/css" href="~/theme/app-assets/css/core/menu/menu-types/vertical-menu.css">
+    <link rel="stylesheet" type="text/css" href="~/theme/app-assets/css/core/colors/palette-gradient.css">
+    <link rel="stylesheet" type="text/css" href="~/theme/app-assets/css/pages/login-register.css">
+    <!-- END Page Level CSS-->
+    <!-- BEGIN Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="~/theme/assets/css/style.css">
+    <link href="~/css/loader.css" rel="stylesheet" />
+    <!-- END Custom CSS-->
+</head>
+<body class="vertical-layout vertical-menu 1-column   menu-expanded blank-page blank-page"
+      data-open="click" data-menu="vertical-menu" data-col="1-column">
+    <!-- ////////////////////////////////////////////////////////////////////////////-->
+    <div class="app-content content">
+        <div class="content-wrapper">
+            <div class="content-header row">
+            </div>
+            <div class="content-body">
+                <div id="myModal" class="modal fade" role="dialog" tabindex='-1'>
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+                                <h4 class="modal-title"><i class="ft-user"></i> Forget Password </h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput1">Email </label>
+                                            <input type="text" id="emailId" class="form-control" name="email">
+                                            @*@Html.TextBoxFor(m => m.ProblemName, new { @class = "form-control", @maxlength = 150 })*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-warning mr-1" data-dismiss="modal">Close</button>
+                                    <button type="button" id="sendEmailBtnId" class="btn btn-primary" onclick="sendEmail()">
+                                        <i class="la la-check-square-o"></i> Send
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <section class="flexbox-container">
+                    <div class="col-12 d-flex align-items-center justify-content-center">
+                        <div class="col-md-4 col-10 box-shadow-2 p-0">
+                            <div class="card border-grey border-lighten-3 m-0">
+                                <div class="card-header border-0">
+                                    <div class="card-title text-center">
+                                        <div class="p-1 vtpl-width-full">
+                                            <img src="~/theme/img/loginlogo.png" alt="branding logo">
+                                        </div>
+                                    </div>
+                                    <h6 class="card-subtitle line-on-side text-muted text-center font-small-3 pt-2">
+                                        <span>Login with ERP</span>
+                                    </h6>
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-body">
+                                        <form class="form-horizontal form-simple" action="" novalidate>
+                                            <fieldset class="form-group position-relative has-icon-left mb-0">
+                                                <input type="text" class="form-control form-control-lg input-lg" id="username" placeholder="Your Username" maxlength="150"
+                                                       required>
+                                                <div class="form-control-position">
+                                                    <i class="ft-user"></i>
+                                                </div>
+                                            </fieldset>
+                                            <fieldset class="form-group position-relative has-icon-left">
+                                                <input type="password" class="form-control form-control-lg input-lg" id="userpassword" maxlength="50"
+                                                       placeholder="Enter Password" required>
+                                                <div class="form-control-position">
+                                                    <i class="la la-key"></i>
+                                                </div>
+                                            </fieldset>
+                                            <div class="form-group row">
+                                                <div class="col-md-6 col-12 text-center text-md-left">
+                                                    <fieldset>
+                                                        @*<input type="checkbox" id="remember-me" class="chk-remember">
+                                                        <label for="remember-me"> Remember Me</label>*@
+                                                        <label><input type='checkbox' id='remember-me'>Remember Me</label>
+                                                    </fieldset>
+                                                </div>
+                                                <div class="col-md-6 col-12 text-center text-md-right">
+                                                    @*<a href="#" class="card-link">Forgot Password?</a>*@
+                                                    <a href="#" id="btnForgetPswd" class="card-link" data-toggle="modal" onclick="clearEmail()" data-target="#myModal">Forgot Password?</a>
+                                                </div>
+                                            </div>
+                                            @*<a>
+                                        <div type="" class="btn btn-info btn-lg btn-block" onclick="loginUser()"><i class="ft-unlock"></i> Login</div>
+                                    </a>*@
+                                            <button type="button" id="btnLoginId" class="btn btn-info btn-lg btn-block" onclick="loginUser()">
+                                                <i class="ft-unlock"></i> Login
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="">
+                                        <p class="float-sm-left text-center m-0"><a href="#" class="card-link">Recover password</a></p>
+                                        <p class="float-sm-right text-center m-0">New to VTPL? <a href="#" class="card-link">Sign Up</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <div class="modalLoader"></div>
+    <!-- ////////////////////////////////////////////////////////////////////////////-->
+    <!-- BEGIN VENDOR JS-->
+    <script src="~/theme/app-assets/vendors/js/vendors.min.js" type="text/javascript"></script>
+    <!-- BEGIN VENDOR JS-->
+    <!-- BEGIN PAGE VENDOR JS-->
+    <script src="~/theme/app-assets/vendors/js/forms/icheck/icheck.min.js" type="text/javascript"></script>
+    <script src="~/theme/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"
+            type="text/javascript"></script>
+    <!-- END PAGE VENDOR JS-->
+    <!-- BEGIN MODERN JS-->
+    <script src="~/theme/app-assets/js/core/app-menu.js" type="text/javascript"></script>
+    <script src="~/theme/app-assets/js/core/app.js" type="text/javascript"></script>
+    <!-- END MODERN JS-->
+    <!-- BEGIN PAGE LEVEL JS-->
+    <script src="~/theme/app-assets/js/scripts/forms/form-login-register.js" type="text/javascript"></script>
+    <!-- END PAGE LEVEL JS-->
+</body>
+</html>
+<environment include="Development,Production">
+    <script src="~/js/sweetalert.min.js"></script>
+</environment>
+<script>
+    $(document).ready(function () { 
+        $("#username").focus();
+    });
+    function loginUser(){
+        debugger;
+        if (ValidateForm()) {
+            var modelObj = {
+                Email: $("#username").val(),
+                Password: $("#userpassword").val()
+            };
+            $.ajax({
+                type: "POST",
+                url: '/Account/LoginUser',
+                data: modelObj,
+                dataType: "json",
+                //processData: false,  // tell jQuery not to process the data
+                //contentType: false,
+                success: function (response) {
+                    if (response.isError == true) {
+                        swal("Error!", "Please enter valid Email and Password for Login!", "error").then(function () {
+                            $("#username").focus();
+                        });
+                    }
+                    else {
+                        if ($('#remember-me').is(':checked')) {
+                            localStorage.usrname = $('#username').val();
+                            localStorage.pass = $('#userpassword').val();
+                            localStorage.chkbx = $('#remember-me').val();
+                        } else {
+                            localStorage.usrname = '';
+                            localStorage.pass = '';
+                            localStorage.chkbx = '';
+                        }
+                        window.location.href = "/Dashboard/Index";
+                    }
+                },
+                error: function () {
+                    swal("Error!", "Some error had occur!", "error");
+                }
+            });
+        }
+    }
+    function sendEmail() {
+        var email = $("#emailId").val().trim();
+        if (email == "") {
+            swal("Error!", "Please Enter Email", "error").then(function () {
+                $("#emailId").focus();
+                $("#emailId").val("");
+            });
+            return false;
+        }
+        var regex = /^([a-zA-Z0-9_.+-])+\@@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        if (regex.test(email) == false) {
+            swal("Error!", "Please Enter valid Email", "error").then(function () {
+                $("#emailId").focus();
+            });
+            return false;
+        }
+        $.ajax({
+            type: "GET",
+            url: '/Account/SendEmail?EmailId=' + email,
+            dataType: "json",
+            success: function (response) {
+                if (response.isError == true) {
+                    swal("Error!", response.errorMessage, "error");
+                }
+                else {
+                    swal("Success!", response.successMessage, "success").then(function () {
+                        window.location.href = "/Account/Login";
+                    });
+                }
+            },
+            error: function () {
+                //swal("Error!", "Some error had occur!", "error");
+            }
+        });
+    }
+    $("input[type='text']").on("focus", function () {
+        $(this).select();
+    });
+    function ValidateForm() {
+        var isValid = true;
+        try {
+            var userName = $("#username").val();
+            var userPassword = $("#userpassword").val();
+            if (userName == "") {
+                swal("Error!", "Please Enter User Name", "error").then(function () {
+                    $("#username").focus();
+                });
+                return false;
+            }
+            if (userPassword == "") {
+                swal("Error!", "Please Enter User Password", "error").then(function () {
+                    $("#userpassword").focus();
+                });
+                return false;
+            }
+
+        } catch (err) {
+            alert(err);
+            return false;
+        }
+        return isValid;
+    }
+    $(function () {
+        if (localStorage.chkbx && localStorage.chkbx != '') {
+            $('#remember-me').attr('checked', 'checked');
+            $('#username').val(localStorage.usrname);
+            $('#userpassword').val(localStorage.pass);
+        } else {
+            $('#remember-me').removeAttr('checked');
+            $('#username').val('');
+            $('#userpassword').val('');
+        }
+    });
+    function clearEmail(){
+        $("#emailId").val("");
+    }
+    $('#myModal').on('shown.bs.modal', function () {
+        $('#emailId').focus();
+    });
+    $(document).keypress(function (event) {
+        if (event.keyCode === 13) {
+            if ((swal.getState().isOpen == false)) {
+                $("#btnLoginId").click();
+            }
+            if ((swal.getState().isOpen == true)) {
+                swal.close();
+            }
+        }
+    });
+</script>
+<script>
+    $body = $("body");
+
+    $(document).on({
+        ajaxStart: function () { $body.addClass("loading"); },
+        ajaxStop: function () { $body.removeClass("loading"); }
+    });
+</script>

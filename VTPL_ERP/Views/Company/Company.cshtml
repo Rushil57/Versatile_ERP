@@ -1,0 +1,522 @@
+﻿@model VTPL_ERP.Models.CompanyViewModel
+@{
+    ViewData["Title"] = "Company";
+
+}
+@*<h2>Unit_Master</h2>*@
+<div class="app-content content" id="mainDiv">
+    <div id="focusDiv"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <h4 style="float:left" class="modal-title"><strong>Company Information</strong></h4>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <form class="form">
+                                    <div class="form-body">
+                                        <h4 class="form-section"><i class="ft-user"></i> Company</h4>
+                                        <div class="row">
+                                            <div class='col-md-4'>
+                                                <div class='form-group'>
+                                                    <label for="user_title">Company Name</label>
+                                                    @Html.TextBoxFor(x => x.CompanyName, new { @class = "form-control", @maxlength = 200 })
+                                                    @Html.HiddenFor(m => m.CompanyId, new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                            <div class='col-md-4'>
+                                                <div class='form-group'>
+                                                    <label for="user_firstname">Company Address</label>
+                                                    @Html.TextAreaFor(x => x.CompanyAddress, new { @class = "form-control", @maxlength = 300 })
+                                                </div>
+                                            </div>
+                                            <div class='col-md-4'>
+                                                <div class='form-group'>
+                                                    <label for="user_firstname">City</label>
+                                                    @Html.TextBoxFor(x => x.City, new { @class = "form-control", @maxlength = 50 })
+                                                </div>
+                                            </div>
+                                            <div class='col-md-4'>
+                                                <div class='form-group' style="width:90%;">
+                                                    <label for="user_firstname">State</label>
+                                                    @Html.DropDownListFor(m => m.StateId, Model.StateSelectList, new { @class = "form-control", @onchange = "setGSTNoPrefix(this.value)" })
+                                                </div>
+                                            </div>
+                                            <div class='col-md-4'>
+                                                <div class='form-group'>
+                                                    <label for="user_firstname">Country</label>
+                                                    @Html.TextBoxFor(x => x.Country, new { @class = "form-control", @readonly = "readonly" })
+                                                </div>
+                                            </div>
+                                            <div class='col-md-4'>
+                                                <div class='form-group'>
+                                                    <label for="user_firstname">Zip Code</label>
+                                                    @Html.TextBoxFor(x => x.ZipCode, new { @class = "form-control", @maxlength = 6 })
+                                                </div>
+                                            </div>
+                                            <div class='col-md-4'>
+                                                <div class='form-group'>
+                                                    <label for="user_firstname">Email</label>
+                                                    @Html.TextBoxFor(x => x.Email, new { @class = "form-control", @maxlength = 50 })
+                                                </div>
+                                            </div>
+                                            <div class='col-md-4'>
+                                                <div class='form-group'>
+                                                    <label for="user_firstname">Contact Number</label>
+                                                    @Html.TextBoxFor(x => x.ContactNo, new { @class = "form-control", @minlength = 10, @maxlength = 12 })
+                                                </div>
+                                            </div>
+                                            <div class='col-md-4'>
+                                                <div class='form-group'>
+                                                    <label for="user_firstname">GST Number</label>
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">@Model.StateId</span>
+                                                        @Html.TextBoxFor(x => x.GSTNo, new { @class = "form-control", @maxlength = 13 })
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class='col-md-4'>
+                                                <div class='form-group'>
+                                                    <label for="user_firstname">CIN</label>
+                                                    @Html.TextBoxFor(x => x.CIN, new { @class = "form-control", @maxlength = 21 })
+                                                </div>
+                                            </div>
+                                            <div class='col-md-4'>
+                                                <div class='form-group'>
+                                                    <label for="user_firstname">Mailing Name</label>
+                                                    @Html.TextBoxFor(x => x.MailingName, new { @class = "form-control", @maxlength = 200 })
+                                                </div>
+                                            </div>
+                                            <div class='col-md-4'>
+                                                <div class='form-group'>
+                                                    <label for="user_firstname">Phone Number</label>
+                                                    @Html.TextBoxFor(x => x.PhoneNo, new { @class = "form-control", @minlength = 10, @maxlength = 10 })
+                                                </div>
+                                            </div>
+                                            <div class='col-md-4'>
+                                                <div class='form-group'>
+                                                    <label for="user_firstname">Website</label>
+                                                    @Html.TextBoxFor(x => x.Website, new { @class = "form-control", @maxlength = 50 })
+                                                </div>
+                                            </div>
+                                            <div class='col-md-4'>
+                                                <div class='form-group'>
+                                                    <label for="user_firstname">FAX Number</label>
+                                                    @Html.TextBoxFor(x => x.FAXNo, new { @class = "form-control", @minlength = 10, @maxlength = 13 })
+                                                </div>
+                                            </div>
+                                            <div class='col-md-4'>
+                                                <div class='form-group'>
+                                                    <label for="user_firstname">Financial Year Begins</label>
+                                                    @Html.TextBoxFor(x => x.FinancialYearBegins, new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                            <div class='col-md-4'>
+                                                <div class='form-group'>
+                                                    <label for="user_firstname">Books Beginnings From</label>
+                                                    @Html.TextBoxFor(x => x.BooksBeginningsFrom, new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                            <div class='col-md-4'>
+                                                <div class='form-group'>
+                                                    <label for="user_firstname">PAN Number</label>
+                                                    @Html.TextBoxFor(x => x.PANNumber, new { @class = "form-control", @minlength = 10, @maxlength = 10 })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="form-actions">
+                                                <button id="btnSaveCompany" type="button" class="btn btn-primary" onclick="saveCompany()">
+                                                    <i class="la la-check-square-o"></i> Save
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#FinancialYearBegins').datepicker({
+                format: 'dd/mm/yyyy',
+                forceParse: false
+            });
+            $('#BooksBeginningsFrom').datepicker({
+                format: 'dd/mm/yyyy',
+                forceParse: false
+            });
+            jQuery('#StateId').select2();
+            BindCompanyList();
+            $("#PhoneNo").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter
+                // for + 107
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110]) !== -1 ||
+                    // Allow: Shift+, Command+A
+                    //(e.keyCode === 187 && (e.shiftKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+            $("#ContactNo").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter, + and  -
+                // for + 107
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 107, 189]) !== -1 ||
+                    // Allow: Shift+, Command+A
+                    (e.keyCode === 187 && (e.shiftKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+            $("#FAXNo").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter
+                // for + 107
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110]) !== -1 ||
+                    // Allow: Shift+, Command+A
+                    //(e.keyCode === 187 && (e.shiftKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+            $("#ZipCode").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter
+                // for + 107
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110]) !== -1 ||
+                    // Allow: Shift+, Command+A
+                    //(e.keyCode === 187 && (e.shiftKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+            $('#CompanyName').focus();
+        });
+        function saveCompany() {
+            debugger;
+            if (ValidateForm()) {
+                var modelObj = {
+                    CompanyId: $("#CompanyId").val(),
+                    CompanyName: $("#CompanyName").val(),
+                    CompanyAddress: $("#CompanyAddress").val(),
+                    City: $("#City").val(),
+                    StatePrefix: $(".input-group-text").text(),
+                    State: $("#StateId").val(),
+                    Country: $("#Country").val(),
+                    ZipCode: $("#ZipCode").val(),
+                    ContactNo: $("#ContactNo").val(),
+                    Email: $("#Email").val(),
+                    GSTNo: $("#GSTNo").val(),
+                    CIN: $("#CIN").val(),
+                    MailingName: $("#MailingName").val(),
+                    PhoneNo: $("#PhoneNo").val(),
+                    FAXNo: $("#FAXNo").val(),
+                    Website: $("#Website").val(),
+                    FinancialYearBegins: $("#FinancialYearBegins").val(),
+                    BooksBeginningsFrom: $("#BooksBeginningsFrom").val(),
+                    FinancialYearBeginsString: $("#FinancialYearBegins").val(),
+                    BooksBeginningsFromString: $("#BooksBeginningsFrom").val(),
+                    PANNumber: $("#PANNumber").val()
+                };
+                $.ajax({
+                    type: "POST",
+                    url: '/api/Company/SaveCompany',
+                    data: modelObj,
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.isError == true) {
+                            swal("Error!", response.errorMessage, "error");
+                        }
+                        else {
+                            swal("Success!", response.successMessage, "success").then(function () {
+                                window.location.href = "/Dashboard/Index";
+                            });
+                        }
+                    },
+                    error: function () {
+                        swal("Error!", "Some error had occur!", "error");
+                    }
+                });
+            }
+        }
+        function setGSTNoPrefix(stateId) {
+            debugger;
+            $(".input-group-text").text(stateId);
+        }
+        function BindCompanyList() {
+            $.ajax({
+                type: "Get",
+                url: '/api/Company/GetAllCompany',
+                dataType: "json",
+                success: function (response) {
+                    if (response != null)
+                    {
+                        if (response.financialYearBegins != null && response.financialYearBegins.trim() != "") {
+                            var financialyearbegins = moment(response.financialYearBegins).format('DD/MM/YYYY');
+                            $('#FinancialYearBegins').datepicker('setDate', financialyearbegins);
+                        }
+
+                        if (response.booksBeginningsFrom != null && response.booksBeginningsFrom.trim() != "") {
+                            var booksbeginningsfrom = moment(response.booksBeginningsFrom).format('DD/MM/YYYY');
+                            $('#BooksBeginningsFrom').datepicker('setDate', booksbeginningsfrom);
+                        }
+
+                        $("#CompanyId").val(response.companyId);
+                        $("#CompanyName").val(response.companyName);
+                        $("#CompanyAddress").val(response.companyAddress);
+                        $("#City").val(response.city);
+                        $("#StateId").val(response.state).trigger('change');
+                        $("#Country").val(response.country);
+                        $("#ZipCode").val(response.zipCode);
+                        $("#ContactNo").val(response.contactNo);
+                        $("#Email").val(response.email);
+                        $("#GSTNo").val(response.gstNo);
+                        $("#CIN").val(response.cin);
+                        $("#MailingName").val(response.mailingName);
+                        $("#PhoneNo").val(response.phoneNo);
+                        $("#FAXNo").val(response.faxNo);
+                        $("#Website").val(response.website);
+
+
+                        $("#PANNumber").val(response.panNumber);
+                    }
+                },
+                error: function (response) {
+                    swal("Error!", "Some error had occur!", "error");
+                }
+            });
+        }
+        function ValidateForm() {
+            var isValid = true;
+            try {
+                var companyName = $("#CompanyName").val().trim();
+                var companyAddress = $("#CompanyAddress").val().trim();
+                var city = $("#City").val().trim();
+                var state = $("#StateId").val();
+                var country = $("#Country").val().trim();
+                var zipCode = $("#ZipCode").val().trim();
+                var contactNo = $("#ContactNo").val().trim();
+                var gstNo = $("#GSTNo").val().trim();
+                var cin = $("#CIN").val().trim();
+                var email = $("#Email").val().trim();
+                var mailingName = $("#MailingName").val().trim();
+                var phoneNo = $("#PhoneNo").val().trim();
+                var fAXNo = $("#FAXNo").val().trim();
+                var website = $("#Website").val().trim();
+                //var financialYearBegins = $("#FinancialYearBegins").val();
+                //var booksBeginningsFrom = $("#BooksBeginningsFrom").val();
+                var pANNumber = $("#PANNumber").val().trim();
+                if (companyName == "") {
+                    swal("Error!", "Please Enter Company Name", "error").then(function () {
+                        $("#CompanyName").focus();
+                        $("#CompanyName").val("");
+                    });
+                    return false;
+                }
+                if (companyAddress == "") {
+                    swal("Error!", "Please Enter Company Address", "error").then(function () {
+                        $("#CompanyAddress").focus();
+                        $("#CompanyAddress").val("");
+                    });
+                    return false;
+                }
+                if (city == "") {
+                    swal("Error!", "Please Enter City", "error").then(function () {
+                        $("#City").focus();
+                        $("#City").val("");
+                    });
+                    return false;
+                }
+                if (state == "") {
+                    swal("Error!", "Please Enter State", "error").then(function () {
+                        $("#StateId").focus();
+                    });
+                    return false;
+                }
+                if (country == "") {
+                    swal("Error!", "Please Enter Country", "error").then(function () {
+                        $("#Country").focus();
+                        $("#Country").val("");
+                    });
+                    return false;
+                }
+                if (zipCode == "") {
+                    swal("Error!", "Please Enter ZipCode", "error").then(function () {
+                        $("#ZipCode").focus();
+                        $("#ZipCode").val("");
+                    });
+                    return false;
+                }
+                if (email == "") {
+                    swal("Error!", "Please Enter Email", "error").then(function () {
+                        $("#Email").focus();
+                        $("#Email").val("");
+                    });
+                    return false;
+                }
+                var regex = /^([a-zA-Z0-9_.+-])+\@@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                if (regex.test(email) == false) {
+                    swal("Error!", "Please Enter valid Email", "error").then(function () {
+                        $("#Email").focus();
+                    });
+                    return false;
+                }
+                if (contactNo != "") {
+                    if (contactNo.length < 10) {
+                        swal("Error!", "Please Enter atleast 10 degit in Contact No", "error").then(function () {
+                            $("#ContactNo").focus();
+                        });
+                        return false;
+                    }
+                }
+                if (gstNo == "") {
+                    swal("Error!", "Please Enter GST Number", "error").then(function () {
+                        $("#GSTNo").focus();
+                        $("#GSTNo").val("");
+                    });
+                    return false;
+                }
+                if (cin == "") {
+                    swal("Error!", "Please Enter CIN", "error").then(function () {
+                        $("#CIN").focus();
+                        $("#CIN").val("");
+                    });
+                    return false;
+                }
+
+                if (mailingName == "") {
+                    swal("Error!", "Please Enter Mailing Name", "error").then(function () {
+                        $("#MailingName").focus();
+                        $("#MailingName").val("");
+                    });
+                    return false;
+                }
+                if (phoneNo == "") {
+                    swal("Error!", "Please Enter Phone Number", "error").then(function () {
+                        $("#PhoneNo").focus();
+                        $("#PhoneNo").val("");
+                    });
+                    return false;
+                }
+                if (phoneNo.length < 10) {
+                    swal("Error!", "Please Enter atleast 10 degit in Phone No", "error").then(function () {
+                        $("#PhoneNo").focus();
+                    });
+                    return false;
+                }
+                if (fAXNo != "") {
+                    if (fAXNo.length < 10) {
+                        swal("Error!", "Please Enter atleast 10 degit in Fax Number", "error").then(function () {
+                            $("#FAXNo").focus();
+                        });
+                        return false;
+                    }
+                }
+                if (website == "") {
+                    swal("Error!", "Please Enter Website", "error").then(function () {
+                        $("#Website").focus();
+                        $("#Website").val("");
+                    });
+                    return false;
+                }
+                if (/^((http|https|ftp):\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/i.test($("#Website").val()))
+                {
+
+                } else {
+                    swal("Error!", "Please Enter valid Website", "error").then(function () {
+                        $("#Website").focus();
+                    });
+                    return false;
+                }
+                //if (financialYearBegins == "") {
+                //    swal("Error!", "Please Enter Financial Year Begins", "error").then(function () {
+                //        $("#FinancialYearBegins").focus();
+                //    });
+                //    return false;
+                //}
+                //if (booksBeginningsFrom == "") {
+                //    swal("Error!", "Please Enter Books Beginnings From", "error").then(function () {
+                //        $("#BooksBeginningsFrom").focus();
+                //    });
+                //    return false;
+                //}
+                if (pANNumber == "") {
+                    swal("Error!", "Please Enter PAN Number", "error").then(function () {
+                        $("#PANNumber").focus();
+                        $("#PANNumber").val("");
+                    });
+                    return false;
+                }
+                if (pANNumber.length < 10) {
+                    swal("Error!", "Please Enter atleast 10 degit in PAN Number", "error").then(function () {
+                        $("#PANNumber").focus();
+                    });
+                    return false;
+                }
+
+            } catch (err) {
+                alert(err);
+                return false;
+            }
+            return isValid;
+        }
+        $("input[type='text']").on("focus", function () {
+            $(this).select();
+        });
+        $("#PANNumber").focusout(function () {
+            $("#btnSaveCompany").focus();
+        });
+        $(document).on('focus', '.select2', function () {
+            $(this).siblings('select').select2('open');
+        });
+        //function clearData() {
+        //    $("#CompanyId").val("");
+        //    $("#CompanyName").val("");
+        //    $("#CompanyAddress").val("");
+        //    $("#City").val("");
+        //    $("#State").val("");
+        //    $("#Country").val("");
+        //    $("#ZipCode").val("");
+        //    $("#ContactNo").val("");
+        //    $("#Email").val("");
+        //    $("#GSTNo").val("");
+        //    $("#CIN").val("");
+        //}
+    </script>
+}

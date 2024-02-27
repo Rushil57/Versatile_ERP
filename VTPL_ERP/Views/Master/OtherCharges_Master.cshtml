@@ -1,0 +1,313 @@
+﻿@model VTPL_ERP.Models.Master.OtherChargesMasterViewModel
+@{
+    ViewData["Title"] = "OtherCharges_Master";
+
+}
+@*<h2>OtherCharges_Master</h2>*@
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+            <!-- Revenue, Hit Rate & Deals -->
+            <div class="row">
+                @*===================*@
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @*<button type="button" class="btn btn-primary">Add New Courier</button>*@
+                        <h4 style="float:left" class="modal-title"><strong>Other Charges Master</strong></h4>
+                        @*<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" onclick="clearData()">Add New Unit</button>*@
+                    </div>
+                </div>
+                <div id="myModal" class="modal fade" role="dialog" tabindex='-1'>
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+                                <h4 class="modal-title"><i class="ft-user"></i> Other Charges </h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput1">Name </label>
+                                            @*<input type="text" id="projectinput1" class="form-control" placeholder="Ex : Bhavesh"
+                                                name="fname">*@
+                                            @Html.HiddenFor(m => m.Id, new { @class = "form-control" })
+                                            @Html.HiddenFor(m => m.IsActive, new { @class = "form-control" })
+                                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @maxlength = 50 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Rate</label>
+                                            @Html.TextBoxFor(m => m.Rate, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-warning mr-1" data-dismiss="modal">Close</button>
+                                    <button type="button" id="saveOtherChargesBtnId" class="btn btn-primary" onclick="saveOtherCharges()">
+                                        <i class="la la-check-square-o"></i> Save
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                @*================*@
+
+
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <form class="form">
+                                    <div class="form-body">
+                                        <div class="form-group">
+                                            <button type="button" id="btnAddNew" style="float:right" class="btn btn-info btn-sm btn-round" data-toggle="modal" data-target="#myModal" onclick="clearData()"><i class="ft-plus"></i> Add New Other Charges</button>
+                                        </div>
+                                        <h4 class="form-section"><i class="ft-user"></i> List of Other Charges</h4>
+                                        <div class="row">
+                                            <div class="col-md-12">
+
+
+
+                                                <div class="card-content collapse show vtpl-grid-align">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped" id="otherChargesMastertblId">
+                                                            <thead>
+                                                                <tr>
+                                                                    @*<th>#</th>*@
+                                                                    <th>Name</th>
+                                                                    <th>Rate</th>
+                                                                    <th style="width: 25px;">Edit</th>
+                                                                    <th style="width: 25px;">Delete</th>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+
+
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        var tblList;
+        $(document).ready(function () {
+            BindOtherChargesList();
+            $("#Rate").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter
+                // for + 107
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110]) !== -1 ||
+                    // Allow: Shift+, Command+A
+                    //(e.keyCode === 187 && (e.shiftKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+            $(document).keyup(function (e) {
+                var keyCode = e.keyCode || e.which;
+
+                if (keyCode == 115) {
+                    // f4
+                    if (($("#myModal").data('bs.modal') || {})._isShown) {
+                        $("#saveOtherChargesBtnId").focus();
+                        saveOtherCharges();
+                    }
+                }
+                if (keyCode == 119) {
+                    // f8
+                    $('#btnAddNew').click();
+                }
+                if (keyCode == 70) {
+                    //shit + f
+                    if (e.shiftKey) {
+                        $('#otherChargesMastertblId_filter input').focus();
+                    }
+                }
+            });
+        });
+        function saveOtherCharges() {
+            if (ValidateForm()) {
+                var modelObj = {
+                    Id: $("#Id").val(),
+                    Name: $("#Name").val(),
+                    Rate: $("#Rate").val()
+                };
+                $.ajax({
+                    type: "POST",
+                    url: '/api/Master/SaveOtherCharges',
+                    data: modelObj,
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.isError == true) {
+                            swal("Error!", response.errorMessage, "error");
+                        }
+                        else {
+                            swal("Success!", response.successMessage, "success");
+                            $('#myModal').modal('hide');
+                            BindOtherChargesList();
+                        }
+                    },
+                    error: function () {
+                        swal("Error!", "Some error had occur!", "error");
+                    }
+                });
+            }
+        }
+        function DeleteData(id) {
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this data!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            type: "GET",
+                            url: '/api/Master/DeleteOtherChargesByKey?id=' + id,
+                            // data: id,
+                            dataType: "json",
+                            success: function (response) {
+                                if (response.isError == true) {
+                                    swal("Error!", response.errorMessage, "error");
+                                }
+                                else {
+                                    swal("Success!", response.successMessage, "success");
+                                    BindOtherChargesList();
+                                }
+                            },
+                            error: function () {
+                                //swal("Error!", "Some error had occur!", "error");
+                            }
+                        });
+
+                    }
+                });
+
+        }
+        function EditData(id) {
+            $.ajax({
+                type: "GET",
+                url: '/api/Master/GetOtherChargesByKey?id=' + id,
+                // data: id,
+                dataType: "json",
+                success: function (response) {
+                    $("#Id").val(response.id),
+                        $("#Name").val(response.name),
+                        $("#Rate").val(response.rate),
+                        $("#IsActive").val(response.isActive),
+                        $('#myModal').modal('show');
+                },
+                error: function () {
+                    //swal("Error!", "Some error had occur!", "error");
+                }
+            });
+        }
+        function BindOtherChargesList() {
+            $.ajax({
+                type: "Get",
+                url: '/api/Master/GetAllOtherCharges',
+                dataType: "json",
+                success: function (response) {
+                    if ($.fn.dataTable.isDataTable('#otherChargesMastertblId')) {
+                        tblList.destroy();
+                    }
+                    tblList = $('#otherChargesMastertblId').DataTable({
+                        data: response,
+                        "columns": [
+                            //{ "data": "id" },
+                            { "data": "name" },
+                            { "data": "rate" },
+                            {
+                                "render": function (data, type, full, meta)
+                                { return "<a class='btn btn-info' href='#' onclick=EditData('" + full.id + "'); ><i class='ft-edit'></i></a>"; }
+                            },
+                            {
+                                data: null, render: function (data, type, row) {
+                                    return "<a href='#' class='btn btn-danger' onclick=DeleteData('" + row.id + "'); ><i class='ft-trash'></i></a>";
+                                }
+                            },
+                        ]
+                    });
+                },
+                error: function () {
+                    swal("Error!", "Some error had occur!", "error");
+                }
+            });
+        }
+
+        function ValidateForm() {
+            var isValid = true;
+            try {
+                var nname = $("#Name").val().trim();
+                var rrate = $("#Rate").val().trim();
+                if (nname == "") {
+                    swal("Error!", "Please Enter Name", "error").then(function () {
+                        $("#Name").focus();
+                        $("#Name").val("");
+                    });
+                    return false;
+                }
+                if (rrate == "") {
+                    swal("Error!", "Please Enter Rate", "error").then(function () {
+                        $("#Rate").focus();
+                        $("#Rate").val("");
+                    });
+                    return false;
+                }
+            } catch (err) {
+                alert(err);
+                return false;
+            }
+            return isValid;
+        }
+        $("input[type='text']").on("focus", function () {
+            $(this).select();
+        });
+        $("#Rate").focusout(function () {
+            $("#saveOtherChargesBtnId").focus();
+        });
+        function clearData() {
+            $("#Name").val("");
+            $("#Rate").val("");
+            $("#Id").val("");
+            $("#IsActive").val("");
+        }
+        $('#myModal').on('shown.bs.modal', function () {
+            $('#Name').focus();
+        })
+    </script>
+}
+

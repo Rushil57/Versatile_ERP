@@ -1,0 +1,532 @@
+﻿@model VTPL_ERP.Models.CompanyBankAccountViewModel
+@{
+    ViewData["Title"] = "Company_Bank_Account";
+
+}
+@*<h2>InventoryBrand_Master</h2>*@
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+            <!-- Revenue, Hit Rate & Deals -->
+            <div class="row">
+                @*===================*@
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @*<button type="button" class="btn btn-primary">Add New Courier</button>*@
+                        <h4 style="float:left" class="modal-title"><strong>Company Bank Account</strong></h4>
+                        @*<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" onclick="clearData()">Add New Unit</button>*@
+                    </div>
+                </div>
+                <div id="myModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+                                <h4 class="modal-title"><i class="ft-user"></i> Company Bank Account </h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class='col-md-6'>
+                                        <div class='form-group'>
+                                            <label for="user_firstname">Bank Name</label>
+                                            @Html.TextBoxFor(x => x.BankName, new { @class = "form-control" })
+                                            @Html.HiddenFor(x => x.Id, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Account Group</label>
+                                            @{
+                List<SelectListItem> listItemsAccountGroup = new List<SelectListItem>();
+                listItemsAccountGroup.Add(new SelectListItem
+                {
+                    Text = "Bank OD A/C",
+                    Value = "Bank OD A/C"
+                });
+                                            }
+
+                                            @Html.DropDownListFor(m => m.AccountGroup, listItemsAccountGroup, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Currency Of Ledger</label>
+                                            @Html.TextBoxFor(m => m.CurrencyOfLedger, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Activate Interest Calculation</label>
+                                            @{
+                List<SelectListItem> listItemsActivateInterestCalculation = new List<SelectListItem>();
+                listItemsActivateInterestCalculation.Add(new SelectListItem
+                {
+                    Text = "Yes",
+                    Value = "true"
+                });
+                listItemsActivateInterestCalculation.Add(new SelectListItem
+                {
+                    Text = "No",
+                    Value = "false"
+                });
+                                            }
+
+                                            @Html.DropDownListFor(model => model.IsActivateInterestCalculation, listItemsActivateInterestCalculation, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class='col-md-6'>
+                                        <div class='form-group'>
+                                            <label for="user_firstname">Set OD Limit</label>
+                                            @Html.TextBoxFor(x => x.ODLimit, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class='col-md-6'>
+                                        <div class='form-group'>
+                                            <label for="user_firstname">A/C Holder Name</label>
+                                            @Html.TextBoxFor(x => x.ACHolderName, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class='col-md-6'>
+                                        <div class='form-group'>
+                                            <label for="user_firstname">A/C Name</label>
+                                            @Html.TextBoxFor(x => x.ACName, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class='col-md-6'>
+                                        <div class='form-group'>
+                                            <label for="user_firstname">IFSC Code</label>
+                                            @Html.TextBoxFor(x => x.IFSCCode, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    @*<div class='col-md-6'>
+            <div class='form-group'>
+                <label for="user_firstname">Bank Name</label>
+                @Html.TextBoxFor(x => x.ODLimit, new { @class = "form-control" })
+            </div>
+        </div>*@
+                                    <div class='col-md-6'>
+                                        <div class='form-group'>
+                                            <label for="user_firstname">Branch Name</label>
+                                            @Html.TextBoxFor(x => x.Branch, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Set Cheque Books</label>
+                                            @{
+                List<SelectListItem> listItemsChequeBooks = new List<SelectListItem>();
+                listItemsChequeBooks.Add(new SelectListItem
+                {
+                    Text = "Yes",
+                    Value = "true"
+                });
+                listItemsChequeBooks.Add(new SelectListItem
+                {
+                    Text = "No",
+                    Value = "false"
+                });
+                                            }
+
+                                            @Html.DropDownListFor(model => model.IsChequeBooks, listItemsChequeBooks, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Set Cheque Printing Configuration</label>
+                                            @{
+                List<SelectListItem> listItemsChequePrintingConfg = new List<SelectListItem>();
+                listItemsChequePrintingConfg.Add(new SelectListItem
+                {
+                    Text = "Yes",
+                    Value = "true"
+                });
+                listItemsChequePrintingConfg.Add(new SelectListItem
+                {
+                    Text = "No",
+                    Value = "false"
+                });
+                                            }
+
+                                            @Html.DropDownListFor(model => model.IsChequePrintingConfg, listItemsChequePrintingConfg, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class='col-md-6'>
+                                        <div class='form-group'>
+                                            <label for="user_firstname">Balance</label>
+                                            @Html.TextBoxFor(x => x.Balance, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-warning mr-1" data-dismiss="modal">Close</button>
+                                    <button type="button" id="saveCompanyBankAccountBtnId" class="btn btn-primary" onclick="saveCompanyBankAccount()">
+                                        <i class="la la-check-square-o"></i> Save
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                @*================*@
+
+
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <form class="form">
+                                    <div class="form-body">
+                                        <div class="form-group">
+                                            <button type="button" id="btnAddNew" style="float:right" class="btn btn-info btn-sm btn-round" data-toggle="modal" data-target="#myModal" onclick="clearData()"><i class="ft-plus"></i> Add New Company Bank Account</button>
+                                        </div>
+                                        <h4 class="form-section"><i class="ft-user"></i> List of Company Bank Account</h4>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="card-content collapse show vtpl-grid-align">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped" id="companyBankAccounttblId">
+                                                            <thead>
+                                                                <tr>
+                                                                    @*<th>#</th>*@
+                                                                    <th>Bank Name</th>
+                                                                    <th>Account Holder Name</th>
+                                                                    <th>Account Name</th>
+                                                                    <th>Balance</th>
+                                                                    <th style="width: 25px;">Edit</th>
+                                                                    <th style="width: 25px;">Delete</th>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        var tblList;
+        var serialNoData = "";
+        $(document).ready(function () {
+            debugger;
+            
+            $("#AccountGroup").select2();
+            $("#IsActivateInterestCalculation").select2();
+            $("#IsChequeBooks").select2();
+            $("#IsChequePrintingConfg").select2();
+            $("#AccountGroup").select2("val", 0);
+            $("#IsActivateInterestCalculation").select2("val", 0);
+            $("#IsChequeBooks").select2("val", 0);
+            $("#IsChequePrintingConfg").select2("val", 0);
+            $('select').select2({
+                width: '100%'
+            });
+
+        BindCompanyBankAccountList();
+        $(document).keyup(function (e) {
+            var keyCode = e.keyCode || e.which;
+
+            if (keyCode == 115) {
+                // f4
+                if (($("#myModal").data('bs.modal') || {})._isShown) {
+                    $("#saveCompanyBankAccountBtnId").focus();
+                    saveCompanyBankAccount();
+                }
+            }
+            if (keyCode == 119) {
+                // f8
+                $('#btnAddNew').click();
+            }
+            if (keyCode == 70) {
+                //shit + f
+                if (e.shiftKey) {
+                    $('#companyBankAccounttblId_filter input').focus();
+                }
+            }
+        });
+        });
+        function saveCompanyBankAccount() {
+            if (ValidateForm()) {
+                var modelObj = {};
+                modelObj.Id = $("#Id").val();
+                modelObj.BankName = $("#BankName").val();
+                modelObj.IsActivateInterestCalculation = $("#IsActivateInterestCalculation").val();
+                modelObj.CurrencyOfLedger = $("#CurrencyOfLedger").val();
+                modelObj.ODLimit = $("#ODLimit").val();
+                modelObj.IsChequeBooks = $("#IsChequeBooks").val();
+                modelObj.IsChequePrintingConfg = $("#IsChequePrintingConfg").val();
+                modelObj.ACHolderName = $("#ACHolderName").val();
+                modelObj.ACName = $("#ACName").val();
+                modelObj.IFSCCode = $("#IFSCCode").val();
+                modelObj.Branch = $("#Branch").val();
+                modelObj.Balance = $("#Balance").val();
+                modelObj.AccountGroup = $("#AccountGroup").val();
+                $.ajax({
+                    type: "POST",
+                    url: '/api/CompanyBankAccount/SaveCompanyBankAccount',
+                    data: modelObj,
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.isError == true) {
+                            swal("Error!", response.errorMessage, "error");
+                        }
+                        else {
+                            swal("Success!", response.successMessage, "success");
+                            $('#myModal').modal('hide');
+                            BindCompanyBankAccountList();
+                        }
+                    },
+                    error: function () {
+                        swal("Error!", "Some error had occur!", "error");
+                    }
+                });
+            }
+        }
+        function DeleteData(id) {
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this data!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            type: "GET",
+                            url: '/api/CompanyBankAccount/DeleteCompanyBankAccountByKey?id=' + id,
+                            dataType: "json",
+                            success: function (response) {
+                                if (response.isError == true) {
+                                    swal("Error!", response.errorMessage, "error");
+                                }
+                                else {
+                                    swal("Success!", response.successMessage, "success");
+                                    BindCompanyBankAccountList();
+                                }
+                            },
+                            error: function () {
+                            }
+                        });
+
+                    }
+                });
+        }
+        function EditData(id) {
+            $.ajax({
+                type: "GET",
+                url: '/api/CompanyBankAccount/GetCompanyBankAccountByKey?id='+id,
+                dataType: "json",
+                success: function (response) {
+                    debugger;
+                    $("#Id").val(response.id);
+                    $("#BankName").val(response.bankName);
+                    $("#CurrencyOfLedger").val(response.currencyOfLedger); 
+                    $("#ODLimit").val(response.odLimit);
+                    $("#ACHolderName").val(response.acHolderName);
+                    $("#ACName").val(response.acName);
+                    $("#IFSCCode").val(response.ifscCode);
+                    $("#Branch").val(response.branch);
+                    $("#Balance").val(response.balance);
+                    $("#IsActivateInterestCalculation").val(response.isActivateInterestCalculation.toString()).trigger('change');
+                    $("#IsChequeBooks").val(response.isChequeBooks.toString()).trigger('change');
+                    $("#IsChequePrintingConfg").val(response.isChequePrintingConfg.toString()).trigger('change');
+                    $("#AccountGroup").val(response.accountGroup.toString()).trigger('change');
+                   // $("#serialNoId").val(response.serialNumber);
+                    $('#myModal').modal('show');
+                },
+                error: function () {
+                }
+            });
+        }
+        function BindCompanyBankAccountList() {
+            $.ajax({
+                type: "Get",
+                url: '/api/CompanyBankAccount/GetAllCompanyBankAccount',
+                dataType: "json",
+                success: function (response) {
+                    debugger;
+                    if ($.fn.dataTable.isDataTable('#companyBankAccounttblId')) {
+                        tblList.destroy();
+                    }
+                    tblList = $('#companyBankAccounttblId').DataTable({
+                        data: response,
+                        "columns": [
+                            //{ "data": "id" },
+                            { "data": "bankName" },
+                            { "data": "acHolderName" },
+                            { "data": "acName" },
+                            { "data": "balance" },
+                            {
+                                "render": function (data, type, full, meta)
+                                { return "<a class='btn btn-info' href='#' onclick=EditData('" + full.id + "'); ><i class='ft-edit'></i></a>"; }
+                            },
+                            {
+                                data: null, render: function (data, type, row) {
+                                    return "<a href='#' class='btn btn-danger' onclick=DeleteData('" + row.id + "'); ><i class='ft-trash'></i></a>";
+                                }
+                            },
+                        ]
+                    });
+                },
+                error: function () {
+                    swal("Error!", "Some error had occur!", "error");
+                }
+            });
+        }
+        function ValidateForm() {
+            debugger;
+            var isValid = true;
+            try {
+                var id = $("#Id").val();
+                var bankName = $("#BankName").val().trim();
+                var currencyOfLedger = $("#CurrencyOfLedger").val().trim();
+                var odLimit = $("#ODLimit").val().trim();
+                var acHolderName = $("#ACHolderName").val().trim();
+                var acName = $("#ACName").val().trim();
+                var ifscCode = $("#IFSCCode").val().trim();
+                var branch = $("#Branch").val().trim();
+                var balance = $("#Balance").val().trim();
+                var accountGroup = $("#AccountGroup").val();
+                var isActivateInterestCalculation = $("#IsActivateInterestCalculation").val();
+                var isChequeBooks = $("#IsChequeBooks").val();
+                var isChequePrintingConfg = $("#IsChequePrintingConfg").val();
+
+
+                if (bankName == "" || bankName == null) {
+                    swal("Error!", "Please insert Bank name", "error").then(function () {
+                        $("#BankName").focus();
+                        $("#BankName").val("");
+                    });
+                    return false;
+                }
+                if (accountGroup == "" || accountGroup == null) {
+                    swal("Error!", "Please select account group", "error").then(function () {
+                        $("#AccountGroup").focus();
+                    });
+                    return false;
+                }
+                if (currencyOfLedger == "" || currencyOfLedger == null) {
+                    swal("Error!", "Please Insert Currency of Ledger", "error").then(function () {
+                        $("#CurrencyOfLedger").focus();
+                        $("#CurrencyOfLedger").val("");
+                    });
+                    return false;
+                }
+                if (isActivateInterestCalculation == "" || isActivateInterestCalculation == null) {
+                    swal("Error!", "Please select active intrest calculation", "error").then(function () {
+                        $("#IsActivateInterestCalculation").focus();
+                    });
+                    return false;
+                }
+                if (odLimit == "" || odLimit == null) {
+                    swal("Error!", "Please Insert Over draft limit", "error").then(function () {
+                        $("#ODLimit").focus();
+                        $("#ODLimit").val("");
+                    });
+                    return false;
+                }
+                if (acHolderName == "" || acHolderName == null) {
+                    swal("Error!", "Please insert Account holder name", "error").then(function () {
+                        $("#ACHolderName").focus();
+                        $("#ACHolderName").val("");
+                    });
+                    return false;
+                }
+                if (acName == "" || acName == null) {
+                    swal("Error!", "Please insert Account name", "error").then(function () {
+                        $("#ACName").focus();
+                        $("#ACName").val("");
+                    });
+                    return false;
+                }
+                if (ifscCode == "" || ifscCode == null) {
+                    swal("Error!", "Please insert IFSC code", "error").then(function () {
+                        $("#IFSCCode").focus();
+                        $("#IFSCCode").val("");
+                    });
+                    return false;
+                }
+                if (branch == "" || branch == null) {
+                    swal("Error!", "Please insert branch name", "error").then(function () {
+                        $("#Branch").focus();
+                        $("#Branch").val("");
+                    });
+                    return false;
+                }
+                if (isChequeBooks == "" || isChequeBooks == null) {
+                    swal("Error!", "Please select set cheque book", "error").then(function () {
+                        $("#IsChequeBooks").focus();
+                    });
+                    return false;
+                }
+                if (balance == "" || balance == null) {
+                    swal("Error!", "Please insert Balance", "error").then(function () {
+                        $("#Balance").focus();
+                        $("#Balance").val("");
+                    });
+                    return false;
+                }
+               
+                
+                
+                if (isChequePrintingConfg == "" || isChequePrintingConfg == null) {
+                    swal("Error!", "Please select Set Cheque Printing Configuration", "error").then(function () {
+                        $("#IsChequePrintingConfg").focus();
+                    });
+                    return false;
+                }
+            } catch (err) {
+                alert(err);
+                return false;
+            }
+            return isValid;
+        }
+        
+        $("input[type='text']").on("focus", function () {
+            $(this).select();
+        });
+        $("#IsChequePrintingConfg").on("select2:close", function (e) {
+            $("#saveCompanyBankAccountBtnId").focus();
+        });
+        $(document).on('focus', '.select2', function () {
+            $(this).siblings('select').select2('open');
+        });
+        function clearData() {
+            debugger;
+            $("#Id").val("");
+            $("#BankName").val("");
+            $("#CurrencyOfLedger").val("");
+            $("#ODLimit").val("");
+            $("#ACHolderName").val("");
+            $("#ACName").val("");
+            $("#IFSCCode").val("");
+            $("#Branch").val("");
+            $("#Balance").val("");
+            $("#AccountGroup").select2("val", 0);
+            $("#IsActivateInterestCalculation").select2("val", 0);
+            $("#IsChequeBooks").select2("val", 0);
+            $("#IsChequePrintingConfg").select2("val", 0);
+        }
+       
+    </script>
+}
+

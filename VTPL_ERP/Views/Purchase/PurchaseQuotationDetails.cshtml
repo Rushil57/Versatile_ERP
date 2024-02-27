@@ -1,0 +1,150 @@
+﻿
+@{
+    ViewData["Title"] = "PurchaseQuotationDetails";
+}
+@*<h2>PurchaseQuotationDetails</h2>*@
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+            <!-- Revenue, Hit Rate & Deals -->
+            <div class="row">
+                @*===================*@
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <h4 style="float:left" class="modal-title"><strong>Purchase Quotation Details</strong></h4>
+                    </div>
+                </div>
+                @*================*@
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <form class="form">
+                                    <div class="form-body">
+                                        <div class="form-group">
+                                            <button type="button" id="btnAddNew" style="float:right" onclick="@("window.location.href='" + @Url.Action("PurchaseQuotation", "Purchase") + "'");" class="btn btn-info btn-sm btn-round"><i class="ft-plus"></i> Add New Purchase Quotation</button>
+                                        </div>
+                                        <h4 class="form-section"><i class="ft-user"></i> List of Purchase Quotation</h4>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="card-content collapse show vtpl-grid-align">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped" id="purchaseQuotationtblId">
+                                                            <thead>
+                                                                <tr>
+                                                                    @*<th>#</th>*@
+                                                                    <th>PQ No.</th>
+                                                                    <th>Total Amount</th>
+                                                                    <th>Branch Name</th>
+                                                                    <th>Supplier Name</th>
+                                                                    <th style="width: 25px;">View</th>
+                                                                    <th style="width: 25px;">Delete</th>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        var tblList;
+        $(document).ready(function () {
+            BindPQList();
+            $(document).keyup(function (e) {
+                var keyCode = e.keyCode || e.which;
+                if (keyCode == 119) {
+                    // f8
+                    $('#btnAddNew').click();
+                }
+                if (keyCode == 70) {
+                    //shit + f
+                    if (e.shiftKey) {
+                        $('#purchaseQuotationtblId_filter input').focus();
+                    }
+                }
+            });
+        });
+        function BindPQList() {
+            $.ajax({
+                type: "Get",
+                url: '/api/Purchase/GetAllPurchaseQuotation',
+                dataType: "json",
+                success: function (response) {
+                    if ($.fn.dataTable.isDataTable('#purchaseQuotationtblId')) {
+                        tblList.destroy();
+                    }
+                    tblList = $('#purchaseQuotationtblId').DataTable({
+                        data: response,
+                        "columns": [
+                            //{ "data": "id" },
+                            { "data": "pqNo" },
+                            { "data": "totalAmount" },
+                            { "data": "branchName" },
+                            { "data": "supplierName" },
+                            {
+                                "render": function (data, type, full, meta)
+                                { return "<a class='btn btn-info' href='/api/Purchase/ViewPurchaseQuotation?PQNo="+ full.pqNo +"'><i class='ft-eye'></i></a>"; }
+                            },
+                            {
+                                data: null, render: function (data, type, row) {
+                                    return "<a href='#' class='btn btn-danger' onclick=DeleteData('" + row.pqNo + "'); ><i class='ft-trash'></i></a>";
+                                }
+                            },
+                        ]
+                    });
+                },
+                error: function () {
+                    swal("Error!", "Some error had occur!", "error");
+                }
+            });
+        }
+        function DeleteData(pqNo) {
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this data!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            type: "GET",
+                            url: '/api/Purchase/DeletePurchaseQuotationByKey?PQNo=' + pqNo,
+                            // data: id,
+                            dataType: "json",
+                            success: function (response) {
+                                if (response.isError == true) {
+                                    swal("Error!", response.errorMessage, "error");
+                                }
+                                else {
+                                    swal("Success!", response.successMessage, "success");
+                                    BindPQList();
+                                }
+                            },
+                            error: function () {
+                                //swal("Error!", "Some error had occur!", "error");
+                            }
+                        });
+
+                    } else {
+                        //swal("Your data is safe!");
+                    }
+                });
+
+        }
+    </script>
+}

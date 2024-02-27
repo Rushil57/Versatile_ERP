@@ -1,0 +1,320 @@
+﻿@model VTPL_ERP.Models.PurchaseReturnEntryInfoViewModel
+@{
+    ViewData["Title"] = "PrintPurchaseReturnEntry";
+    Layout = null;
+}
+<style type="text/css">
+    .table th, .table td {
+        padding: 5px 5px 5px 5px !important;
+    }
+</style>
+<link rel="apple-touch-icon" href="~/theme/app-assets/images/ico/apple-icon-120.png">
+<link rel="shortcut icon" type="image/x-icon" href="~/theme/app-assets/images/ico/favicon.ico">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Quicksand:300,400,500,700"
+      rel="stylesheet">
+<link href="https://maxcdn.icons8.com/fonts/line-awesome/1.1/css/line-awesome.min.css"
+      rel="stylesheet">
+<!-- BEGIN VENDOR CSS-->
+<link rel="stylesheet" type="text/css" href="~/theme/app-assets/css/vendors.css">
+<link rel="stylesheet" type="text/css" href="~/theme/app-assets/vendors/css/forms/icheck/icheck.css">
+<link rel="stylesheet" type="text/css" href="~/theme/app-assets/vendors/css/forms/icheck/custom.css">
+<!-- END VENDOR CSS-->
+<!-- BEGIN MODERN CSS-->
+<link rel="stylesheet" type="text/css" href="~/theme/app-assets/css/app.css">
+<!-- END MODERN CSS-->
+<!-- BEGIN Page Level CSS-->
+<link rel="stylesheet" type="text/css" href="~/theme/app-assets/css/core/menu/menu-types/vertical-menu.css">
+<link rel="stylesheet" type="text/css" href="~/theme/app-assets/css/core/colors/palette-gradient.css">
+<link rel="stylesheet" type="text/css" href="~/theme/app-assets/css/pages/login-register.css">
+<!-- END Page Level CSS-->
+<!-- BEGIN Custom CSS-->
+<link rel="stylesheet" type="text/css" href="~/theme/assets/css/style.css">
+<link href="~/css/loader.css" rel="stylesheet" />
+<!-- END Custom CSS-->
+
+<div class="app-content content" id="mainDiv">
+    <div id="focusDiv"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <h4 class="modal-title text-right"><strong>INVOICE</strong></h4>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <form class="form">
+                                    <div class="form-body">
+                                        <div class="row" style="min-height:200px;">
+                                            <div class="col-md-12">
+                                                <div class="card-content collapse show vtpl-grid-align">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <td rowspan="2">
+                                                                        <p>
+                                                                            <b>@Model.CompanyData.CompanyName</b><br />
+                                                                            @Model.CompanyData.CompanyAddress<br />
+                                                                            @Model.CompanyData.City - @Model.CompanyData.ZipCode<br />
+                                                                            @Model.CompanyData.ContactNo<br />
+                                                                            GSTIN/UIN: @Model.CompanyData.GSTNo<br />
+                                                                            State Name:@Model.CompanyData.CompanyStateName, Code: @Model.CompanyData.State.<br />
+                                                                            CIN: @Model.CompanyData.CIN<br />
+                                                                            E-Mail: @Model.CompanyData.Email
+                                                                        </p>
+                                                                    </td>
+                                                                    <td style="vertical-align:top; height:50%">
+                                                                        <label for="user_firstname">No.</label><br />
+                                                                        <b>@Html.Label("DebitNoteNo", Model.PurchaseReturnEntryData.DebitNoteNo)</b>
+                                                                    </td>
+                                                                    <td style="vertical-align:top; height:50%">
+                                                                        <label for="user_firstname">Dated</label><br />
+                                                                        <b>@Html.Label("Dated", Model.PurchaseReturnEntryData.DebitNoteDate.ToString("dd/MM/yyyy"))</b>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    @*<td style="width:50%">
+                                                                            Party:<br/>
+                                                                            <b>@Html.Label("SupplierName", Model.PurchaseReturnEntryData.SupplierName)<br /></b>
+                                                                            @Html.Label("SupplierAddress", Model.PurchaseReturnEntryData.SupplierAddress)<br />
+                                                                            State Name: @Model.PurchaseReturnEntryData.SupplierStateName , Code: @Model.PurchaseReturnEntryData.SupplierStateTINNo
+                                                                        </td>*@
+                                                                    <td style="height:2%">
+                                                                        <label for="user_firstname">Supplier's Ref.</label><br />
+                                                                        <b>@Html.Label("InvoiceNo", Model.PurchaseReturnEntryData.DebitNoteNo)</b>
+                                                                        <b> dt. @Html.Label("Dated", Model.PurchaseReturnEntryData.DebitNoteDate.ToString("dd/MM/yyyy"))</b>
+                                                                    </td>
+                                                                    <td>
+                                                                        <label for="user_firstname" style="padding-bottom:26px">Other Reference(s)</label><br />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="width:50%">
+                                                                        Party:<br />
+                                                                        <b>@Html.Label("SupplierName", Model.PurchaseReturnEntryData.SupplierName)<br /></b>
+                                                                        @Html.Label("SupplierAddress", Model.PurchaseReturnEntryData.SupplierAddress)<br />
+                                                                        GSTIN/UIN: @Model.PurchaseReturnEntryData.SupplierGSTNumber ,<br />
+                                                                        State Name: @Model.PurchaseReturnEntryData.SupplierStateName , Code: @Model.PurchaseReturnEntryData.SupplierStateTINNo
+                                                                    </td>
+                                                                    <td colspan="2"></td>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="min-height:200px;">
+                                            <div class="col-md-12">
+                                                <div class="card-content collapse show vtpl-grid-align">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped" id="stockGrid">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>SI No.</th>
+                                                                    <th style="max-width:20px">Description of Goods</th>
+                                                                    <th>Quantity</th>
+                                                                    <th>Rate</th>
+                                                                    <th>per</th>
+                                                                    <th>Disc %</th>
+                                                                    <th>Tax %</th>
+                                                                    <th>Amount</th>
+                                                                </tr>
+                                                                @{int cnt = 1; }
+                                                                @foreach (var item in Model.PurchaseReturnEntryDetails)
+                                                                {
+                                                                    <tr>
+                                                                        <td style="vertical-align:top">@cnt</td>
+                                                                        <td style="vertical-align:top;max-width:20px">
+                                                                            <b>@item.InventoryItemName</b><br />
+                                                                            Batch: <b>@item.SerialIds.Replace(";", ",")</b>
+                                                                            @*<ol>
+                                                                                    @foreach (var id in item.SerialIds.Split(';'))
+                                                                                    {
+
+                                                                                        <li style="font-size:smaller">Batch  :   <b>@id</b></li>
+
+                                                                                    }
+                                                                                </ol>*@
+                                                                        </td>
+                                                                        <td style="vertical-align:top">
+                                                                            <b>@item.Qty  @item.Unit</b><br />
+                                                                            @*<ol style="padding:0;">
+                                                                                    @foreach (var id in item.SerialIds.Split(';'))
+                                                                                    {
+
+                                                                                        <li style="font-size:smaller">1 @item.Unit</li>
+
+                                                                                    }
+                                                                                </ol>*@
+                                                                        </td>
+                                                                        <td style="vertical-align:top">@item.Rate</td>
+                                                                        <td style="vertical-align:top">@item.Unit</td>
+                                                                        <td style="vertical-align:top">@item.Discount</td>
+                                                                        <td style="vertical-align:top">@item.Tax</td>
+                                                                        <td style="vertical-align:top"><b>@item.TotalAmount</b></td>
+                                                                    </tr>
+                                                                    cnt++;
+                                                                }
+                                                                @foreach (var item in Model.PurchaseReturnEntryOtherChargesDetails)
+                                                                {
+
+                                                                    <tr>
+                                                                        <th></th>
+                                                                        <th class="text-right">@item.OtherChargeName</th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                        <th>@item.FinalAmount</th>
+                                                                    </tr>
+                                                                }
+                                                                    <tr>
+                                                                        <th rowspan="4"></th>
+                                                                        <th class="text-right">SGST</th>
+                                                                        <th rowspan="4"></th>
+                                                                        <th rowspan="4"></th>
+                                                                        <th rowspan="4"></th>
+                                                                        <th rowspan="4"></th>
+                                                                        <th rowspan="4"></th>
+                                                                        <th>@Model.PurchaseReturnEntryData.SGST</th>
+                                                                    </tr>
+                                                                <tr>
+                                                                    @*<th></th>*@
+                                                                    <th class="text-right">CGST</th>
+                                                                    @*<th></th>*@
+                                                                    @*<th></th>*@
+                                                                    @*<th></th>*@
+                                                                    @*<th></th>*@
+                                                                    <th>@Model.PurchaseReturnEntryData.CGST</th>
+                                                                </tr>
+                                                                <tr>
+                                                                    @*<th></th>*@
+                                                                    <th class="text-right">ROUND OFF</th>
+                                                                    @*<th></th>*@
+                                                                    @*<th></th>*@
+                                                                    @*<th></th>*@
+                                                                    @*<th></th>*@
+                                                                    <th>@Model.PurchaseReturnEntryData.RoundOff</th>
+                                                                </tr>
+                                                                <tr>
+                                                                    @*<th></th>*@
+                                                                    <th class="text-right">Total</th>
+                                                                    @*<th></th>*@
+                                                                    @*<th></th>*@
+                                                                    @*<th></th>*@
+                                                                    @*<th></th>*@
+                                                                    <th>@Model.PurchaseReturnEntryData.TotalAmount</th>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                        <table class="table table-bordered table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <td colspan="7">Amount Chargeable (in words)<br /><b>@Model.TotalAmountinWord ONLY</b></td>
+                                                                    @*<td rowspan="2"></td>*@
+                                                                </tr>
+                                                                <tr>
+                                                                <tr>
+                                                                    <th>HSN/SAC</th>
+                                                                    <th>Taxable Value</th>
+                                                                    <th style="text-align: center;" colspan="2">Central Tax</th>
+                                                                    <th style="text-align: center;" colspan="2">State Tax</th>
+                                                                    <th>Total Tax Amount</th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                    <th>Rate %</th>
+                                                                    <th>Amount</th>
+                                                                    <th>Rate %</th>
+                                                                    <th>Amount</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                                @{
+                                                                    decimal totAmountSum = Model.PurchaseReturnEntryOtherChargesDetails.Sum(x => x.Amount);
+                                                                    decimal totFinalAmountSum = Model.PurchaseReturnEntryOtherChargesDetails.Sum(x => x.FinalAmount);
+                                                                    decimal totCGSTSum = 0;
+                                                                    decimal totSGSTSum = 0;
+                                                                    string FinalAmountinWords = VTPL_ERP.Util.ERP_Utitlity.NumberToWords((int)totFinalAmountSum);
+                                                                }
+                                                                @foreach (var item in Model.PurchaseReturnEntryOtherChargesDetails)
+                                                                {
+                                                                    decimal currentIGST = item.ChargeIGST;
+                                                                    decimal currentAmount = item.Amount;
+                                                                    decimal sgstcgst = (currentIGST / 2);
+                                                                    decimal cgstAmnt = (currentAmount * sgstcgst) / 100;
+                                                                    decimal sgstAmnt = (currentAmount * sgstcgst) / 100;
+                                                                    totCGSTSum += cgstAmnt;
+                                                                    totSGSTSum += sgstAmnt;
+                                                                    <tr class="othercharge-row">
+                                                                        <th class="item-hsncode">@item.ChargeHSNCode</th>
+                                                                        <th class="item-amount">@item.Amount</th>
+                                                                        <th class="item-cgst">@sgstcgst</th>
+                                                                        <th class="item-cgstamnt">@cgstAmnt</th>
+                                                                        <th class="item-sgst">@sgstcgst</th>
+                                                                        <th class="item-sgstamnt">@sgstAmnt</th>
+                                                                        <th class="item-finalamnt">@item.FinalAmount</th>
+                                                                    </tr>
+                                                                }
+                                                                <tr>
+                                                                    <th>Total</th>
+                                                                    <th>@totAmountSum</th>
+                                                                    <th> </th>
+                                                                    <th>@totCGSTSum</th>
+                                                                    <th> </th>
+                                                                    <th>@totCGSTSum</th>
+                                                                    <th>@totFinalAmountSum</th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colspan="7">Tax Amount (in words): <b>Indian Rupees @FinalAmountinWords ONLY</b></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colspan="4">
+                                                                        Company's PAN:         <b>@Model.CompanyData.PANNumber</b>
+                                                                    </td>
+                                                                    <td colspan="3"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colspan="4"></td>
+                                                                    <td colspan="3">
+                                                                        <b>for @Model.CompanyData.CompanyName</b><br /><br /><br />
+                                                                        Authorised Signatory
+                                                                    </td>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br />
+                                    </div>
+                                </form>
+                                <p style="text-align:center">This is a Computer Generated Document</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    window.onload = function () { window.print(); window.close(); }
+</script>
+@section scripts{
+    <script src="~/theme/app-assets/vendors/js/vendors.min.js" type="text/javascript"></script>
+    <script src="~/theme/app-assets/vendors/js/forms/icheck/icheck.min.js" type="text/javascript"></script>
+    <script src="~/theme/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js" type="text/javascript"></script>
+    <script src="~/theme/app-assets/js/core/app-menu.js" type="text/javascript"></script>
+    <script src="~/theme/app-assets/js/core/app.js" type="text/javascript"></script>
+    <script src="~/theme/app-assets/js/scripts/forms/form-login-register.js" type="text/javascript"></script>
+}

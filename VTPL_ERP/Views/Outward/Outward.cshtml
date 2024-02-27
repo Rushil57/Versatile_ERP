@@ -1,0 +1,482 @@
+﻿@model VTPL_ERP.Models.OutwardViewModel
+@{
+    ViewData["Title"] = "Outward";
+
+}
+@*<h2>Outward</h2>*@
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+            <!-- Revenue, Hit Rate & Deals -->
+            <div class="row">
+                @*===================*@
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @*<button type="button" class="btn btn-primary">Add New Courier</button>*@
+                        <h4 style="float:left" class="modal-title"><strong>Outward</strong></h4>
+                        @*<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" onclick="clearData()">Add New Unit</button>*@
+                    </div>
+                </div>
+                <div id="myModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+                                <h4 class="modal-title"><i class="ft-user"></i> Outward </h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class='col-md-6'>
+                                        <div class='form-group'>
+                                            <label for="user_firstname">Outward Date</label>
+                                            @Html.TextBoxFor(x => x.OutwardDateDisplay, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Inward Number</label>
+                                            @Html.DropDownListFor(m => m.InwardId, Model.InwardSelectList, new { @class = "form-control", @onchange = "getInwardDataByInwardId(this.value)" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Account Party Name</label>
+                                            @Html.TextBoxFor(m => m.AccountPartyName, new { @class = "form-control", @readonly = "readonly" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Item Name</label>
+                                            @Html.TextBoxFor(m => m.InventoryName, new { @class = "form-control", @readonly = "readonly" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Material Name</label>
+                                            @Html.TextBoxFor(m => m.BrandName, new { @class = "form-control", @readonly = "readonly" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Serial Number</label>
+                                            @Html.TextBoxFor(m => m.SerialNo, new { @class = "form-control", @readonly = "readonly" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Courier Name</label>
+                                            @Html.DropDownListFor(m => m.CourierId, Model.CourierSelectList, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class='col-md-6'>
+                                        <div class='form-group'>
+                                            <label for="user_firstname">Courier Date</label>
+                                            @Html.TextBoxFor(x => x.CourierDateDisplay, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Document Number</label>
+                                            @Html.HiddenFor(m => m.OutwardId, new { @class = "form-control" })
+                                            @Html.TextBoxFor(m => m.DocumentNo, new { @class = "form-control", @maxlength = 50 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Charges</label>
+                                            @Html.TextBoxFor(m => m.Charges, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Outward Image</label>
+                                            <input type="file" id="file" name="file" />
+                                            <div class="img1">
+                                                <img src="\Resources\Emp_Img\noimage.jpg" id="imgid" alt="Inward Image" height="42" width="42">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-warning mr-1" data-dismiss="modal">Close</button>
+                                    <button type="button" id="saveOutwardBtnId" class="btn btn-primary" onclick="saveOutward()">
+                                        <i class="la la-check-square-o"></i> Save
+                                    </button>
+                                </div>
+                            </div>
+                            <input type="hidden" id="imagePath" />
+                        </div>
+
+                    </div>
+                </div>
+                @*================*@
+
+
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <form class="form">
+                                    <div class="form-body">
+                                        <div class="form-group">
+                                            <button type="button" id="btnAddNew" style="float:right" class="btn btn-info btn-sm btn-round" data-toggle="modal" data-target="#myModal" onclick="clearData()"><i class="ft-plus"></i> Add New Outward</button>
+                                        </div>
+                                        <h4 class="form-section"><i class="ft-user"></i> List of Outward</h4>
+                                        <div class="row">
+                                            <div class="col-md-12">
+
+
+
+                                                <div class="card-content collapse show vtpl-grid-align">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped" id="outwardtblId">
+                                                            <thead>
+                                                                <tr>
+                                                                    @*<th>#</th>*@
+                                                                    <th>Inward No</th>
+                                                                    <th>Courier Name</th>
+                                                                    <th>Charges</th>
+                                                                    <th style="width: 25px;">Edit</th>
+                                                                    <th style="width: 25px;">Delete</th>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+
+
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+    var tblList;
+    $(document).ready(function () {
+        $('#OutwardDateDisplay').datepicker({
+            format: 'dd/mm/yyyy',
+            forceParse: false,
+            orientation: "bottom",
+        });
+        $('#CourierDateDisplay').datepicker({
+            format: 'dd/mm/yyyy',
+            forceParse: false,
+            orientation: "bottom",
+        });
+        $("#InwardId").select2();
+        $("#CourierId").select2();
+        $("#InwardId").select2("val", 0);
+        $("#CourierId").select2("val", 0);
+        $('select').select2({
+            width: '100%'
+        });
+        BindOutwardList();
+        $("#Charges").keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110]) !== -1 ||
+                // Allow: Shift+, Command+A
+                //(e.keyCode === 187 && (e.shiftKey === true || e.metaKey === true)) ||
+                // Allow: home, end, left, right, down, up
+                (e.keyCode >= 35 && e.keyCode <= 40)) {
+                // let it happen, don't do anything
+                return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+        $(document).keyup(function (e) {
+            var keyCode = e.keyCode || e.which;
+
+            if (keyCode == 115) {
+                // f4
+                if (($("#myModal").data('bs.modal') || {})._isShown) {
+                    $("#saveOutwardBtnId").focus();
+                    saveOutward();
+                }
+            }
+            if (keyCode == 119) {
+                // f8
+                $('#btnAddNew').click();
+            }
+            if (keyCode == 70) {
+                //shit + f
+                if (e.shiftKey) {
+                    $('#outwardtblId_filter input').focus();
+                }
+            }
+        });
+    });
+    function saveOutward() {
+        debugger;
+        if (ValidateForm()) {
+            var formData = new FormData();
+            formData.append("OutwardId", $("#OutwardId").val());
+            formData.append("File", $('#file')[0].files[0]);
+            formData.append("OutwardDate", $("#OutwardDateDisplay").val());
+            formData.append("OutwardDateDisplay", $("#OutwardDateDisplay").val());
+            formData.append("InwardId", $("#InwardId").val());
+            formData.append("CourierId", $("#CourierId").val());
+            formData.append("CourierDate", $("#CourierDateDisplay").val());
+            formData.append("CourierDateDisplay", $("#CourierDateDisplay").val());
+            formData.append("DocumentNo", $("#DocumentNo").val());
+            formData.append("Charges", $("#Charges").val());
+            formData.append("imagePath", $("#imagePath").val());
+            $.ajax({
+                type: "POST",
+                url: '/api/Outward/SaveOutward',
+                data: formData,
+                dataType: "json",
+                processData: false,  // tell jQuery not to process the data
+                contentType: false,
+                success: function (response) {
+                    if (response.isError == true) {
+                        swal("Error!", response.errorMessage, "error");
+                    }
+                    else {
+                        swal("Success!", response.successMessage, "success");
+                        $('#myModal').modal('hide');
+                        BindOutwardList();
+                    }
+                },
+                error: function () {
+                    swal("Error!", "Some error had occur!", "error");
+                }
+            });
+        }
+
+    }
+    function DeleteData(id) {
+        swal({
+            title: "Are you sure?",
+            text: "This action will also delete record from User data.",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: "GET",
+                        url: '/api/Outward/DeleteOutwardByKey?id=' + id,
+                        // data: id,
+                        dataType: "json",
+                        success: function (response) {
+                            if (response.isError == true) {
+                                swal("Error!", response.errorMessage, "error");
+                            }
+                            else {
+                                swal("Success!", "Successfully deleted Data.", "success");
+                                BindOutwardList();
+                            }
+                        },
+                        error: function () {
+                            //swal("Error!", "Some error had occur!", "error");
+                        }
+                    });
+
+                }
+            });
+
+    }
+    function EditData(id) {
+        $.ajax({
+            type: "GET",
+            url: '/api/Outward/GetOutwardByKey?id=' + id,
+            dataType: "json",
+            success: function (response) {
+                debugger;
+                var outwarddate = moment(response.outwardDate).format('DD/MM/YYYY');
+                var courierdate = moment(response.courierDate).format('DD/MM/YYYY');
+                $("#OutwardId").val(response.outwardId);
+                $('#OutwardDateDisplay').datepicker('setDate', outwarddate);
+                $("#InwardId").val(response.inwardId).trigger('change');
+                $("#CourierId").val(response.courierId).trigger('change');
+                $('#CourierDateDisplay').datepicker('setDate', courierdate);
+                $("#DocumentNo").val(response.documentNo);
+                $("#Charges").val(response.charges);
+                
+                $("#imagePath").val(response.imagePath);
+                if (response.imagePath == null)
+                {
+                    $('#imgid').attr("src", "\\Resources\\Emp_Img\\noimage.jpg");
+                }
+                else {
+                    $('#imgid').attr("src", response.imagePath);
+                }
+                $('#myModal').modal('show');
+            },
+            error: function () {
+                //swal("Error!", "Some error had occur!", "error");
+            }
+        });
+    }
+    function BindOutwardList() {
+        $.ajax({
+            type: "Get",
+            url: '/api/Outward/GetAllOutward',
+            dataType: "json",
+            success: function (response) {
+                if ($.fn.dataTable.isDataTable('#outwardtblId')) {
+                    tblList.destroy();
+                }
+                tblList = $('#outwardtblId').DataTable({
+                    data: response,
+                    "columns": [
+                        //{ "data": "id" },
+                        { "data": "inwardId" },
+                        { "data": "courierName" },
+                        { "data": "charges" },
+                        {
+                             "render": function (data, type, full, meta)
+                                { return "<a class='btn btn-info' href='#' onclick=EditData('" + full.outwardId + "'); ><i class='ft-edit'></i></a>"; }
+                        },
+                        {
+                            data: null, render: function (data, type, row) {
+                                return "<a href='#' class='btn btn-danger' onclick=DeleteData('" + row.outwardId + "'); ><i class='ft-trash'></i></a>";
+                            }
+                        },
+                    ]
+                });
+            },
+            error: function () {
+                swal("Error!", "Some error had occur!", "error");
+            }
+        });
+    }
+        function getInwardDataByInwardId(inwardId) {
+                $.ajax({
+                    type: "GET",
+                    url: '/Outward/GetInwardDataByInwardId?InwardId=' + inwardId,
+                    // data: id,
+                    dataType: "json",
+                    success: function (resp) {
+                        debugger;
+                        $("#AccountPartyName").val(resp.accountPartyName);
+                        $("#InventoryName").val(resp.inventoryName);
+                        $("#BrandName").val(resp.brandName);
+                        $("#SerialNo").val(resp.serialNo);
+                    },
+                    error: function () {
+                        //swal("Error!", "Some error had occur!", "error");
+                    }
+                });
+        }
+    function ValidateForm() {
+        debugger;
+        var isValid = true;
+        try {
+            var inwardId = $("#InwardId").val();
+            var courierId = $("#CourierId").val();
+            var documentNo = $("#DocumentNo").val();
+            var charges =  $("#Charges").val();
+            if (inwardId == "" || inwardId == null) {
+                swal("Error!", "Please Select Inward No", "error").then(function () {
+                    $("#InwardId").focus();
+                });
+                return false;
+            }
+            if (courierId == "" || courierId == null) {
+                swal("Error!", "Please Select Courier Name", "error").then(function () {
+                    $("#CourierId").focus();
+                });
+                return false;
+            }
+            if (documentNo == "") {
+                swal("Error!", "Please Enter Document Number", "error").then(function () {
+                    $("#DocumentNo").focus();
+                    $("#DocumentNo").val("");
+                });
+                return false;
+            }
+            if (charges == "") {
+                swal("Error!", "Please Enter Charges", "error").then(function () {
+                    $("#Charges").focus();
+                    $("#Charges").val("");
+                });
+                return false;
+            }
+            if ($('#file')[0].files[0] != undefined) {
+                var file = $('#file')[0].files[0];
+                var fileType = file["type"];
+                var ValidImageTypes = ["image/jpg", "image/jpeg", "image/png"];
+                if ($.inArray(fileType, ValidImageTypes) < 0) {
+                    swal("Error!", "Please Upload image as JPEG/JPG/PNG type", "error").then(function () {
+                        $("#file").focus();
+                    });
+                    return false;
+                }
+            }
+        } catch (err) {
+            alert(err);
+            return false;
+        }
+        return isValid;
+    }
+
+    function clearData() {
+        $("#OutwardId").val("");
+        var curDate = moment('@DateTime.Now').format('DD/MM/YYYY');
+        $('#OutwardDateDisplay').datepicker('setDate', curDate);
+        $("#InwardId").select2("val", 0);
+        $("#CourierId").select2("val", 0);
+        $('#CourierDateDisplay').datepicker('setDate', curDate);
+        $("#DocumentNo").val("");
+        $("#Charges").val("");
+        $("#AccountPartyName").val("");
+        $("#InventoryName").val("");
+        $("#BrandName").val("");
+        $("#SerialNo").val("");
+        $("#imgid").attr("src", "\\Resources\\Emp_Img\\noimage.jpg");
+    }
+    function readURL(input) {
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#imgid').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $("input[type='text']").on("focus", function () {
+        $(this).select();
+    });
+    $("#Charges").focusout(function () {
+        $("#saveOutwardBtnId").focus();
+    });
+    $(document).on('focus', '.select2', function () {
+        $(this).siblings('select').select2('open');
+    });
+    $("#file").change(function () {
+        readURL(this);
+    });
+    $('#myModal').on('shown.bs.modal', function () {
+        $('#OutwardDateDisplay').focus();
+    })
+    </script>
+}
+

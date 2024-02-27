@@ -1,0 +1,285 @@
+﻿@model VTPL_ERP.Models.Master.InventoryBrandMasterViewModel
+@{
+    ViewData["Title"] = "InventoryBrand_Master";
+
+}
+@*<h2>InventoryBrand_Master</h2>*@
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+            <!-- Revenue, Hit Rate & Deals -->
+            <div class="row">
+                @*===================*@
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @*<button type="button" class="btn btn-primary">Add New Courier</button>*@
+                        <h4 style="float:left" class="modal-title"><strong>Inventory Brand Master</strong></h4>
+                        @*<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" onclick="clearData()">Add New Unit</button>*@
+                    </div>
+                </div>
+                <div id="myModal" class="modal fade" role="dialog" tabindex='-1'>
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+                                <h4 class="modal-title"><i class="ft-user"></i> Inventory Brand </h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput1">Brand Name </label>
+                                            @*<input type="text" id="projectinput1" class="form-control" placeholder="Ex : Bhavesh"
+                                                name="fname">*@
+                                            @Html.HiddenFor(m => m.Id, new { @class = "form-control" })
+                                            @Html.HiddenFor(m => m.Created_Date, new { @class = "form-control" })
+                                            @Html.HiddenFor(m => m.Modified_Date, new { @class = "form-control" })
+                                            @Html.HiddenFor(m => m.IsActive, new { @class = "form-control" })
+                                            @Html.TextBoxFor(m => m.BrandName, new { @class = "form-control", @maxlength = 50 })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-warning mr-1" data-dismiss="modal">Close</button>
+                                    <button type="button" id="saveInventoryBrandBtnId" class="btn btn-primary" onclick="saveInventoryBrand()">
+                                        <i class="la la-check-square-o"></i> Save
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                @*================*@
+
+
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <form class="form">
+                                    <div class="form-body">
+                                        <div class="form-group">
+                                            <button type="button" id="btnAddNew" style="float:right" class="btn btn-info btn-sm btn-round" data-toggle="modal" data-target="#myModal" onclick="clearData()"><i class="ft-plus"></i> Add New Inventory Brand</button>
+                                        </div>
+                                        <h4 class="form-section"><i class="ft-user"></i> List of Inventory Brand</h4>
+                                        <div class="row">
+                                            <div class="col-md-12">
+
+
+
+                                                <div class="card-content collapse show vtpl-grid-align">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped" id="inventoryBrandMastertblId">
+                                                            <thead>
+                                                                <tr>
+                                                                    @*<th>#</th>*@
+                                                                    <th>Brand Name</th>
+                                                                    <th style="width: 25px;">Edit</th>
+                                                                    <th style="width: 25px;">Delete</th>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+
+
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+    var tblList;
+    $(document).ready(function () {
+        BindInventoryBrandList();
+        $(document).keyup(function (e) {
+            var keyCode = e.keyCode || e.which;
+
+            if (keyCode == 115) {
+                // f4
+                if (($("#myModal").data('bs.modal') || {})._isShown) {
+                    $("#saveInventoryBrandBtnId").focus();
+                    saveInventoryBrand();
+                }
+            }
+            if (keyCode == 119) {
+                // f8
+                $('#btnAddNew').click();
+            }
+            if (keyCode == 70) {
+                //shit + f
+                if (e.shiftKey) {
+                    $('#inventoryBrandMastertblId_filter input').focus();
+                }
+            }
+        });
+        });
+        function saveInventoryBrand() {
+            if (ValidateForm()) { 
+                var modelObj = {
+                    Id: $("#Id").val(),
+                    BrandName: $("#BrandName").val(),
+                    Created_Date: $("#Created_Date").val()
+                };
+                $.ajax({
+                    type: "POST",
+                    url: '/api/Master/SaveInventoryBrand',
+                    data: modelObj,
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.isError == true) {
+                            swal("Error!", response.errorMessage, "error");
+                        }
+                        else {
+                            swal("Success!", response.successMessage, "success");
+                            $('#myModal').modal('hide');
+                            BindInventoryBrandList();
+                        }
+                    },
+                    error: function () {
+                        swal("Error!", "Some error had occur!", "error");
+                    }
+                });
+            }
+        }
+        function DeleteData(id) {
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this data!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            type: "GET",
+                            url: '/api/Master/DeleteInventoryBrandByKey?id=' + id,
+                            // data: id,
+                            dataType: "json",
+                            success: function (response) {
+                                if (response.isError == true) {
+                                    swal("Error!", response.errorMessage, "error");
+                                }
+                                else {
+                                    swal("Success!", response.successMessage, "success");
+                                    BindInventoryBrandList();
+                                }
+                            },
+                            error: function () {
+                                //swal("Error!", "Some error had occur!", "error");
+                            }
+                        });
+
+                    }
+                });
+
+        }
+        function EditData(id) {
+            $.ajax({
+                type: "GET",
+                url: '/api/Master/GetInventoryBrandByKey?id='+id,
+               // data: id,
+                dataType: "json",
+                success: function (response) {
+                        $("#Id").val(response.id),
+                        $("#BrandName").val(response.brandName),
+                        $("#Created_Date").val(response.created_Date),
+                        //$("#Modified_Date").val(response.modified_Date),
+                        $("#IsActive").val(response.isActive),
+                        $('#myModal').modal('show');
+                },
+                error: function () {
+                    //swal("Error!", "Some error had occur!", "error");
+                }
+            });
+        }
+        function BindInventoryBrandList() {
+            $.ajax({
+                type: "Get",
+                url: '/api/Master/GetAllInventoryBrand',
+                dataType: "json",
+                success: function (response) {
+                    if ($.fn.dataTable.isDataTable('#inventoryBrandMastertblId')) {
+                        tblList.destroy();
+                    }
+                    tblList = $('#inventoryBrandMastertblId').DataTable({
+                        data: response,
+                        "columns": [
+                            //{ "data": "id" },
+                            { "data": "brandName" },
+                            {
+                                "render": function (data, type, full, meta)
+                                { return "<a class='btn btn-info' href='#' onclick=EditData('" + full.id + "'); ><i class='ft-edit'></i></a>"; }
+                            },
+                            {
+                                data: null, render: function (data, type, row) {
+                                    return "<a href='#' class='btn btn-danger' onclick=DeleteData('" + row.id + "'); ><i class='ft-trash'></i></a>";
+                                }
+                            },
+                        ]
+                    });
+                },
+                error: function () {
+                    swal("Error!", "Some error had occur!", "error");
+                }
+            });
+        }
+        function ValidateForm() {
+            var isValid = true;
+            try {
+                var brandName = $("#BrandName").val().trim();
+                if (brandName == "") {
+                    swal("Error!", "Please Enter Brand Name", "error").then(function () {
+                        $("#BrandName").focus();
+                        $("#BrandName").val("");
+                    });
+                    return false;
+                }
+
+            } catch (err) {
+                alert(err);
+                return false;
+            }
+            return isValid;
+        }
+        $("input[type='text']").on("focus", function () {
+            $(this).select();
+        });
+        $("#BrandName").focusout(function () {
+            $("#saveInventoryBrandBtnId").focus();
+        });
+        function clearData() {
+            $("#BrandName").val("");
+            $("#Id").val("");
+            $("#Created_Date").val("");
+            $("#Modified_Date").val("");
+            $("#IsActive").val("");
+        }
+        $('#myModal').on('shown.bs.modal', function () {
+            $('#BrandName').focus();
+        })
+    </script>
+}
+

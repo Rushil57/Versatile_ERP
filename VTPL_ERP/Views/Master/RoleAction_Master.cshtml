@@ -1,0 +1,281 @@
+﻿@model VTPL_ERP.Models.Master.RoleActionMasterViewModel
+@{
+    ViewData["Title"] = "RoleAction_Master";
+
+}
+@*<h2>RoleAction_Master</h2>*@
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+            <!-- Revenue, Hit Rate & Deals -->
+            <div class="row">
+                @*===================*@
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @*<button type="button" class="btn btn-primary">Add New Courier</button>*@
+                        <h4 style="float:left" class="modal-title"><strong>Action Master</strong></h4>
+                        @*<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" onclick="clearData()">Add New Unit</button>*@
+                    </div>
+                </div>
+                <div id="myModal" class="modal fade" role="dialog" tabindex='-1'>
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+                                <h4 class="modal-title"><i class="ft-user"></i> Action </h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput1">Action Name </label>
+                                            @*<input type="text" id="projectinput1" class="form-control" placeholder="Ex : Bhavesh"
+                                                name="fname">*@
+                                            @Html.HiddenFor(m => m.ActionId, new { @class = "form-control" })
+                                            @Html.HiddenFor(m => m.Created_Date, new { @class = "form-control" })
+                                            @Html.HiddenFor(m => m.Modified_Date, new { @class = "form-control" })
+                                            @Html.HiddenFor(m => m.IsActive, new { @class = "form-control" })
+                                            @Html.TextBoxFor(m => m.ActionName, new { @class = "form-control", @maxlength = 50 })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-warning mr-1" data-dismiss="modal">Close</button>
+                                    <button type="button" id="saveRoleActionBtnId" class="btn btn-primary" onclick="saveRoleAction()">
+                                        <i class="la la-check-square-o"></i> Save
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                @*================*@
+
+
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <form class="form">
+                                    <div class="form-body">
+                                        <div class="form-group">
+                                            <button type="button" id="btnAddNew" style="float:right" class="btn btn-info btn-sm btn-round" data-toggle="modal" data-target="#myModal" onclick="clearData()"><i class="ft-plus"></i> Add New Action</button>
+                                        </div>
+                                        <h4 class="form-section"><i class="ft-user"></i> List of Action</h4>
+                                        <div class="row">
+                                            <div class="col-md-12">
+
+
+
+                                                <div class="card-content collapse show vtpl-grid-align">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped" id="roleActionMastertblId">
+                                                            <thead>
+                                                                <tr>
+                                                                    @*<th>#</th>*@
+                                                                    <th>Action Name</th>
+                                                                    <th style="width: 25px;">Edit</th>
+                                                                    <th style="width: 25px;">Delete</th>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+
+
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+    var tblList;
+    $(document).ready(function () {
+        BindRoleActionList();
+        $(document).keyup(function (e) {
+            var keyCode = e.keyCode || e.which;
+
+            if (keyCode == 115) {
+                // f4
+                if (($("#myModal").data('bs.modal') || {})._isShown) {
+                    $("#saveRoleActionBtnId").focus();
+                    saveRoleAction();
+                }
+            }
+            if (keyCode == 119) {
+                // f8
+                $('#btnAddNew').click();
+            }
+        });
+        });
+        function saveRoleAction() {
+            if (ValidateForm()) { 
+                var modelObj = {
+                    ActionId: $("#ActionId").val(),
+                    ActionName: $("#ActionName").val(),
+                    Created_Date: $("#Created_Date").val()
+                };
+                $.ajax({
+                    type: "POST",
+                    url: '/api/Master/SaveRoleAction',
+                    data: modelObj,
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.isError == true) {
+                            swal("Error!", response.errorMessage, "error");
+                        }
+                        else {
+                            swal("Success!", response.successMessage, "success");
+                            $('#myModal').modal('hide');
+                            BindRoleActionList();
+                        }
+                    },
+                    error: function () {
+                        swal("Error!", "Some error had occur!", "error");
+                    }
+                });
+            }
+            
+        }
+        function DeleteData(id) {
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this data!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            type: "GET",
+                            url: '/api/Master/DeleteRoleActionByKey?id=' + id,
+                            // data: id,
+                            dataType: "json",
+                            success: function (response) {
+                                if (response.isError == true) {
+                                    swal("Error!", response.errorMessage, "error");
+                                }
+                                else {
+                                    swal("Success!", response.successMessage, "success");
+                                    BindRoleActionList();
+                                }
+                            },
+                            error: function () {
+                                //swal("Error!", "Some error had occur!", "error");
+                            }
+                        });
+
+                    }
+                });
+
+        }
+        function EditData(id) {
+            $.ajax({
+                type: "GET",
+                url: '/api/Master/GetRoleActionByKey?id='+id,
+               // data: id,
+                dataType: "json",
+                success: function (response) {
+                        $("#ActionId").val(response.actionId),
+                        $("#ActionName").val(response.actionName),
+                        $("#Created_Date").val(response.created_Date),
+                        //$("#Modified_Date").val(response.modified_Date),
+                        $("#IsActive").val(response.isActive),
+                        $('#myModal').modal('show');
+                },
+                error: function () {
+                    //swal("Error!", "Some error had occur!", "error");
+                }
+            });
+        }
+        function BindRoleActionList() {
+            $.ajax({
+                type: "Get",
+                url: '/api/Master/GetAllRoleAction',
+                dataType: "json",
+                success: function (response) {
+                    if ($.fn.dataTable.isDataTable('#roleActionMastertblId')) {
+                        tblList.destroy();
+                    }
+                    tblList = $('#roleActionMastertblId').DataTable({
+                        data: response,
+                        "columns": [
+                            //{ "data": "id" },
+                            { "data": "actionName" },
+                            {
+                                "render": function (data, type, full, meta)
+                                { return "<a class='btn btn-info' href='#' onclick=EditData('" + full.actionId + "'); ><i class='ft-edit'></i></a>"; }
+                            },
+                            {
+                                data: null, render: function (data, type, row) {
+                                    return "<a href='#' class='btn btn-danger' onclick=DeleteData('" + row.actionId + "'); ><i class='ft-trash'></i></a>";
+                                }
+                            },
+                        ]
+                    });
+                },
+                error: function () {
+                    swal("Error!", "Some error had occur!", "error");
+                }
+            });
+        }
+
+        function ValidateForm() {
+            var isValid = true;
+            try {
+                var actionName = $("#ActionName").val().trim();
+                if (actionName == "") {
+                    swal("Error!", "Please Enter Action Name", "error").then(function () {
+                        $("#ActionName").focus();
+                        $("#ActionName").val("");
+                    });
+                    return false;
+                }
+
+            } catch (err) {
+                alert(err);
+                return false;
+            }
+            return isValid;
+        }
+        $("input[type='text']").on("focus", function () {
+            $(this).select();
+        });
+        $("#ActionName").focusout(function () {
+            $("#saveRoleActionBtnId").focus();
+        });
+        function clearData() {
+            $("#ActionName").val("");
+            $("#ActionId").val("");
+            $("#Created_Date").val("");
+            $("#Modified_Date").val("");
+            $("#IsActive").val("");
+        }
+        $('#myModal').on('shown.bs.modal', function () {
+            $('#ActionName').focus();
+        })
+    </script>
+}
+

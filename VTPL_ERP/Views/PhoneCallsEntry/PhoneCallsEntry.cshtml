@@ -1,0 +1,378 @@
+﻿@model VTPL_ERP.Models.PhoneCallsEntryViewModel
+@{
+    ViewData["Title"] = "Phone_Calls_Entry";
+
+}
+@*<h2>InventoryBrand_Master</h2>*@
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+            <!-- Revenue, Hit Rate & Deals -->
+            <div class="row">
+                @*===================*@
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @*<button type="button" class="btn btn-primary">Add New Courier</button>*@
+                        <h4 style="float:left" class="modal-title"><strong>Phone Calls Entry</strong></h4>
+                        @*<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" onclick="clearData()">Add New Unit</button>*@
+                    </div>
+                </div>
+                <div id="myModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+                                <h4 class="modal-title"><i class="ft-user"></i> Phone Calls Entry </h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class='col-md-6'>
+                                        <div class='form-group'>
+                                            <label for="user_firstname">Date</label>
+                                            @Html.TextBoxFor(x => x.DateDisplay, new { @class = "form-control" })
+                                            @Html.HiddenFor(x => x.Id, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Account Party Name</label>
+                                            @Html.DropDownListFor(m => m.SelectedAccountPartyId, Model.AccountPartySelectList, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Sales Person Name or Reference</label>
+                                            @Html.DropDownListFor(m => m.SelectedEmployeeId, Model.EmployeeSelectList, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Model Name</label>
+                                            @Html.DropDownListFor(m => m.SelectedInventoryId, Model.InventorySelectList, new { @class = "form-control", @onchange = "getPESerialNos(this.value)" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Serial Number</label>
+                                            @*@Html.DropDownListFor(m => m.SelectedPurchaseEntryId, Model.PurchaseEntrySelectList, new { @class = "form-control" })*@
+                                            @*@Html.DropDownListFor(m => m.SelectedPurchaseEntryId,Model.PurchaseEntrySelectList, new SelectListItem { Value = "0", Text = "Select" })*@
+                                            <select name="Serial Number" id="serialNoId" class="form-control">
+                                               @* <option value="0">-- Select --</option>*@
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-warning mr-1" data-dismiss="modal">Close</button>
+                                    <button type="button" id="savePhoneCallsEntryBtnId" class="btn btn-primary" onclick="savePhoneCallsEntry()">
+                                        <i class="la la-check-square-o"></i> Save
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                @*================*@
+
+
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <form class="form">
+                                    <div class="form-body">
+                                        <div class="form-group">
+                                            <button type="button" id="btnAddNew" style="float:right" class="btn btn-info btn-sm btn-round" data-toggle="modal" data-target="#myModal" onclick="clearData()"><i class="ft-plus"></i> Add New Phone Calls Entry</button>
+                                        </div>
+                                        <h4 class="form-section"><i class="ft-user"></i> List of Phone Calls Entry</h4>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="card-content collapse show vtpl-grid-align">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped" id="phoneCallsEntrytblId">
+                                                            <thead>
+                                                                <tr>
+                                                                    @*<th>#</th>*@
+                                                                    <th>Account Party Name</th>
+                                                                    <th>Sales Person Name</th>
+                                                                    <th>Model Name</th>
+                                                                    <th>Serial Number</th>
+                                                                    <th style="width: 25px;">Edit</th>
+                                                                    <th style="width: 25px;">Delete</th>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        var tblList;
+        var serialNoData = "";
+        $(document).ready(function () {
+            debugger;
+            jQuery('#DateDisplay').datepicker({
+                format: 'mm/dd/yyyy',
+                orientation: "bottom",
+            });
+            jQuery('#DateDisplay').focus();
+            jQuery('#DateDisplay').focus();
+            $("#SelectedAccountPartyId").select2();
+            $("#SelectedEmployeeId").select2();
+            $("#SelectedInventoryId").select2();
+            $("#serialNoId").select2();
+            $("#SelectedAccountPartyId").select2("val", 0);
+            $("#SelectedEmployeeId").select2("val", 0);
+            $("#SelectedInventoryId").select2("val", 0);
+            //$("#serialNoId").select2("val", 0);
+            $('select').select2({
+                width: '100%'
+            });
+
+        BindPhoneCallsEntryList();
+        $(document).keyup(function (e) {
+            var keyCode = e.keyCode || e.which;
+
+            if (keyCode == 115) {
+                // f4
+                if (($("#myModal").data('bs.modal') || {})._isShown) {
+                    $("#savePhoneCallsEntryBtnId").focus();
+                    savePhoneCallsEntry();
+                }
+            }
+            if (keyCode == 119) {
+                // f8
+                $('#btnAddNew').click();
+            }
+            if (keyCode == 70) {
+                //shit + f
+                if (e.shiftKey) {
+                    $('#phoneCallsEntrytblId_filter input').focus();
+                }
+            }
+        });
+        });
+        function savePhoneCallsEntry() {
+            if (ValidateForm()) {
+                var modelObj = {};
+                modelObj.Id = $("#Id").val();
+                modelObj.Date = $("#DateDisplay").val();
+                modelObj.ACPartyName = $("#SelectedAccountPartyId").val();
+                modelObj.SalesPersonRef = $("#SelectedEmployeeId").val();
+                modelObj.ModelName = $("#SelectedInventoryId").val();
+                modelObj.SerialNumber = $("#serialNoId").val();
+                $.ajax({
+                    type: "POST",
+                    url: '/api/PhoneCallsEntry/SavePhoneCallsEntry',
+                    data: modelObj,
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.isError == true) {
+                            swal("Error!", response.errorMessage, "error");
+                        }
+                        else {
+                            swal("Success!", response.successMessage, "success");
+                            $('#myModal').modal('hide');
+                            BindPhoneCallsEntryList();
+                        }
+                    },
+                    error: function () {
+                        swal("Error!", "Some error had occur!", "error");
+                    }
+                });
+            }
+        }
+        function DeleteData(id) {
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this data!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            type: "GET",
+                            url: '/api/PhoneCallsEntry/DeletePhoneCallsEntryByKey?id=' + id,
+                            dataType: "json",
+                            success: function (response) {
+                                if (response.isError == true) {
+                                    swal("Error!", response.errorMessage, "error");
+                                }
+                                else {
+                                    swal("Success!", response.successMessage, "success");
+                                    BindPhoneCallsEntryList();
+                                }
+                            },
+                            error: function () {
+                            }
+                        });
+
+                    }
+                });
+        }
+        function EditData(id) {
+            $.ajax({
+                type: "GET",
+                url: '/api/PhoneCallsEntry/GetPhoneCallsEntryByKey?id='+id,
+                dataType: "json",
+                success: function (response) {
+                    debugger;
+                    var dob = moment(response.date).format('MM/DD/YYYY');
+                    serialNoData = response.serialNumber;
+                    $("#Id").val(response.id);
+                    $("#SelectedAccountPartyId").val(response.acPartyName).trigger('change');
+                    $("#SelectedEmployeeId").val(response.salesPersonRef).trigger('change');
+                    $("#SelectedInventoryId").val(response.modelName).trigger('change');
+                   // $("#serialNoId").val(response.serialNumber);
+                    $("#DateDisplay").val(dob);
+                    $('#myModal').modal('show');
+                },
+                error: function () {
+                }
+            });
+        }
+        function BindPhoneCallsEntryList() {
+            $.ajax({
+                type: "Get",
+                url: '/api/PhoneCallsEntry/GetAllPhoneCallsEntry',
+                dataType: "json",
+                success: function (response) {
+                    debugger;
+                    if ($.fn.dataTable.isDataTable('#phoneCallsEntrytblId')) {
+                        tblList.destroy();
+                    }
+                    tblList = $('#phoneCallsEntrytblId').DataTable({
+                        data: response,
+                        "columns": [
+                            //{ "data": "id" },
+                            { "data": "accountPartyName" },
+                            { "data": "employeeName" },
+                            { "data": "inventoryName" },
+                            { "data": "serialNumber" },
+                            {
+                                "render": function (data, type, full, meta)
+                                { return "<a class='btn btn-info' href='#' onclick=EditData('" + full.id + "'); ><i class='ft-edit'></i></a>"; }
+                            },
+                            {
+                                data: null, render: function (data, type, row) {
+                                    return "<a href='#' class='btn btn-danger' onclick=DeleteData('" + row.id + "'); ><i class='ft-trash'></i></a>";
+                                }
+                            },
+                        ]
+                    });
+                },
+                error: function () {
+                    swal("Error!", "Some error had occur!", "error");
+                }
+            });
+        }
+        function ValidateForm() {
+            debugger;
+            var isValid = true;
+            try {
+                var acPartyName = $("#SelectedAccountPartyId").val();
+                var salesPersonRef = $("#SelectedEmployeeId").val();
+                var modelName = $("#SelectedInventoryId").val();
+                var serialNumber = $("#serialNoId").val();
+                if (acPartyName == "0" || acPartyName == null) {
+                    swal("Error!", "Please Select Account Party Name", "error").then(function () {
+                        $("#SelectedAccountPartyId").focus();
+                    });
+                    return false;
+                }
+                if (salesPersonRef == "0" || salesPersonRef == null) {
+                    swal("Error!", "Please Select Sales Person Name", "error").then(function () {
+                        $("#SelectedEmployeeId").focus();
+                    });
+                    return false;
+                }
+                if (modelName == "0" || modelName == null) {
+                    swal("Error!", "Please Select Model Name", "error").then(function () {
+                        $("#SelectedInventoryId").focus();
+                    });
+                    return false;
+                }
+                if (serialNumber == "" || serialNumber == null) {
+                    swal("Error!", "Please select Serial Number", "error").then(function () {
+                        $("#serialNoId").focus();
+                    });
+                    return false;
+                }
+            } catch (err) {
+                alert(err);
+                return false;
+            }
+            return isValid;
+        }
+        function getPESerialNos(inventoryId) {
+            $.ajax({
+                type: "GET",
+                url: '/PhoneCallsEntry/GetPESerialNos?InventoryId=' + inventoryId,
+                // data: id,
+                dataType: "json",
+                success: function (response) {
+                    debugger;
+                    $('#serialNoId').empty().trigger("change");
+                    $("#serialNoId").select2({
+                        data: response
+                    });
+                    var countSerial = response.filter(function (obj) {
+                        return (obj == serialNoData);
+                    });
+                    if (countSerial.length >0 && $("#Id").val() != "") {
+                        $("#serialNoId").val(""+serialNoData+"").trigger('change');
+                    }
+                },
+                error: function () {
+                    //swal("Error!", "Some error had occur!", "error");
+                }
+            });
+
+        }
+        $("input[type='text']").on("focus", function () {
+            $(this).select();
+        });
+        $("#serialNoId").on("select2:close", function (e) {
+            $("#savePhoneCallsEntryBtnId").focus();
+        });
+        $(document).on('focus', '.select2', function () {
+            $(this).siblings('select').select2('open');
+        });
+        function clearData() {
+            debugger;
+            $("#Id").val("");
+            $("#SelectedAccountPartyId").select2("val", 0);
+            $("#SelectedEmployeeId").select2("val", 0);
+            $("#SelectedInventoryId").select2("val", 0);
+            $("#serialNoId").select2("val", 0);
+           // $("#serialNoId").val("0");
+        }
+        $('#myModal').on('shown.bs.modal', function () {
+            $('#DateDisplay').focus();
+        })
+    </script>
+}
+

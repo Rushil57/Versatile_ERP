@@ -1,0 +1,457 @@
+﻿@model VTPL_ERP.Models.InwardViewModel
+@{
+    ViewData["Title"] = "Inward";
+
+}
+@*<h2>Inward</h2>*@
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+            <!-- Revenue, Hit Rate & Deals -->
+            <div class="row">
+                @*===================*@
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @*<button type="button" class="btn btn-primary">Add New Courier</button>*@
+                        <h4 style="float:left" class="modal-title"><strong>Inward</strong></h4>
+                        @*<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" onclick="clearData()">Add New Unit</button>*@
+                    </div>
+                </div>
+                <div id="myModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+                                <h4 class="modal-title"><i class="ft-user"></i> Inward </h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class='col-md-6'>
+                                        <div class='form-group'>
+                                            <label for="user_firstname">Inward Date</label>
+                                            @Html.TextBoxFor(x => x.InwardDateDisplay, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Account Party Name</label>
+                                            @Html.DropDownListFor(m => m.ACPartyId, Model.AccountPartySelectList, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Item Name</label>
+                                            @Html.DropDownListFor(m => m.InventoryId, Model.InventorySelectList, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Material Name</label>
+                                            @Html.DropDownListFor(m => m.BrandId, Model.InventoryBrandSelectList, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Serial Number</label>
+                                            @Html.HiddenFor(m => m.InwardId, new { @class = "form-control" })
+                                            @Html.TextBoxFor(m => m.SerialNo, new { @class = "form-control", @maxlength = 15 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Problem Name</label>
+                                            @Html.DropDownListFor(m => m.ProblemId, Model.ProblemSelectList, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Approx Charge</label>
+                                            @Html.TextBoxFor(m => m.ApproxCharge, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Inward Image</label>
+                                            <input type="file" id="file" name="file" />
+                                            <div class="img1">
+                                                <img src="\Resources\Emp_Img\noimage.jpg" id="imgid" alt="Inward Image" height="42" width="42">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-warning mr-1" data-dismiss="modal">Close</button>
+                                    <button type="button" id="saveInwardBtnId" class="btn btn-primary" onclick="saveInward()">
+                                        <i class="la la-check-square-o"></i> Save
+                                    </button>
+                                </div>
+                            </div>
+                            <input type="hidden" id="imagePath" />
+                        </div>
+
+                    </div>
+                </div>
+                @*================*@
+
+
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <form class="form">
+                                    <div class="form-body">
+                                        <div class="form-group">
+                                            <button type="button" id="btnAddNew" style="float:right" class="btn btn-info btn-sm btn-round" data-toggle="modal" data-target="#myModal" onclick="clearData()"><i class="ft-plus"></i> Add New Inward</button>
+                                        </div>
+                                        <h4 class="form-section"><i class="ft-user"></i> List of Inward</h4>
+                                        <div class="row">
+                                            <div class="col-md-12">
+
+
+
+                                                <div class="card-content collapse show vtpl-grid-align">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped" id="inwardtblId">
+                                                            <thead>
+                                                                <tr>
+                                                                    @*<th>#</th>*@
+                                                                    <th>Account Party Name</th>
+                                                                    <th>Item Name</th>
+                                                                    <th>Approx Charge</th>
+                                                                    <th style="width: 25px;">Edit</th>
+                                                                    <th style="width: 25px;">Delete</th>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+
+
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+    var tblList;
+    $(document).ready(function () {
+        $('#InwardDateDisplay').datepicker({
+            format: 'dd/mm/yyyy',
+            forceParse: false,
+            orientation: "bottom",
+        });
+        $("#ACPartyId").select2();
+        $("#InventoryId").select2();
+        $("#BrandId").select2();
+        $("#ProblemId").select2();
+       // $("#Title").select2({ placeholder: 'Select Title' });
+        $("#ACPartyId").select2("val", 0);
+       // $("#RoleId").select2({ placeholder: 'Select Role' });
+        $("#InventoryId").select2("val", 0);
+        $("#BrandId").select2("val", 0);
+        $("#ProblemId").select2("val", 0);
+        $('select').select2({
+            width: '100%'
+        });
+        BindInwardList();
+        $("#ApproxCharge").keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110]) !== -1 ||
+                // Allow: Shift+, Command+A
+                //(e.keyCode === 187 && (e.shiftKey === true || e.metaKey === true)) ||
+                // Allow: home, end, left, right, down, up
+                (e.keyCode >= 35 && e.keyCode <= 40)) {
+                // let it happen, don't do anything
+                return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+        $(document).keyup(function (e) {
+            var keyCode = e.keyCode || e.which;
+
+            if (keyCode == 115) {
+                // f4
+                if (($("#myModal").data('bs.modal') || {})._isShown) {
+                    $("#saveInwardBtnId").focus();
+                    saveInward();
+                }
+            }
+            if (keyCode == 119) {
+                // f8
+                $('#btnAddNew').click();
+            }
+            if (keyCode == 70) {
+                //shit + f
+                if (e.shiftKey) {
+                    $('#inwardtblId_filter input').focus();
+                }
+            }
+        });
+    });
+    function saveInward() {
+        debugger;
+        if (ValidateForm()) {
+            var formData = new FormData();
+            formData.append("InwardId", $("#InwardId").val());
+            formData.append("File", $('#file')[0].files[0]);
+            formData.append("InwardDate", $("#InwardDateDisplay").val());
+            formData.append("InwardDateDisplay", $("#InwardDateDisplay").val());
+            formData.append("ACPartyId", $("#ACPartyId").val());
+            formData.append("InventoryId", $("#InventoryId").val());
+            formData.append("BrandId", $("#BrandId").val());
+            formData.append("SerialNo", $("#SerialNo").val());
+            formData.append("ProblemId", $("#ProblemId").val());
+            formData.append("ApproxCharge", $("#ApproxCharge").val());
+            formData.append("imagePath", $("#imagePath").val());
+            $.ajax({
+                type: "POST",
+                url: '/api/Inward/SaveInward',
+                data: formData,
+                dataType: "json",
+                processData: false,  // tell jQuery not to process the data
+                contentType: false,
+                success: function (response) {
+                    if (response.isError == true) {
+                        swal("Error!", response.errorMessage, "error");
+                    }
+                    else {
+                        swal("Success!", response.successMessage, "success");
+                        $('#myModal').modal('hide');
+                        BindInwardList();
+                    }
+                },
+                error: function () {
+                    swal("Error!", "Some error had occur!", "error");
+                }
+            });
+        }
+
+    }
+    function DeleteData(id) {
+        swal({
+            title: "Are you sure?",
+            text: "This action will also delete record from User data.",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: "GET",
+                        url: '/api/Inward/DeleteInwardByKey?id=' + id,
+                        // data: id,
+                        dataType: "json",
+                        success: function (response) {
+                            if (response.isError == true) {
+                                swal("Error!", response.errorMessage, "error");
+                            }
+                            else {
+                                swal("Success!", "Successfully deleted Data.", "success");
+                                BindInwardList();
+                            }
+                        },
+                        error: function () {
+                            //swal("Error!", "Some error had occur!", "error");
+                        }
+                    });
+
+                }
+            });
+
+    }
+    function EditData(id) {
+        $.ajax({
+            type: "GET",
+            url: '/api/Inward/GetInwardByKey?id=' + id,
+            dataType: "json",
+            success: function (response) {
+                debugger;
+                var inwarddate = moment(response.inwardDate).format('DD/MM/YYYY');
+                $("#InwardId").val(response.inwardId);
+                $("#ACPartyId").val(response.acPartyId).trigger('change');
+                $("#InventoryId").val(response.inventoryId).trigger('change');
+                $("#BrandId").val(response.brandId).trigger('change');
+                $("#ProblemId").val(response.problemId).trigger('change');
+                $("#SerialNo").val(response.serialNo);
+                $("#ApproxCharge").val(response.approxCharge);
+                $('#InwardDateDisplay').datepicker('setDate', inwarddate);
+                $("#imagePath").val(response.imagePath);
+                if (response.imagePath == null)
+                {
+                    $('#imgid').attr("src", "\\Resources\\Emp_Img\\noimage.jpg");
+                }
+                else {
+                    $('#imgid').attr("src", response.imagePath);
+                }
+                $('#myModal').modal('show');
+            },
+            error: function () {
+                //swal("Error!", "Some error had occur!", "error");
+            }
+        });
+    }
+    function BindInwardList() {
+        $.ajax({
+            type: "Get",
+            url: '/api/Inward/GetAllInward',
+            dataType: "json",
+            success: function (response) {
+                if ($.fn.dataTable.isDataTable('#inwardtblId')) {
+                    tblList.destroy();
+                }
+                tblList = $('#inwardtblId').DataTable({
+                    data: response,
+                    "columns": [
+                        //{ "data": "id" },
+                        { "data": "accountPartyName" },
+                        { "data": "inventoryName" },
+                        { "data": "approxCharge" },
+                        {
+                             "render": function (data, type, full, meta)
+                                { return "<a class='btn btn-info' href='#' onclick=EditData('" + full.inwardId + "'); ><i class='ft-edit'></i></a>"; }
+                        },
+                        {
+                            data: null, render: function (data, type, row) {
+                                return "<a href='#' class='btn btn-danger' onclick=DeleteData('" + row.inwardId + "'); ><i class='ft-trash'></i></a>";
+                            }
+                        },
+                    ]
+                });
+            },
+            error: function () {
+                swal("Error!", "Some error had occur!", "error");
+            }
+        });
+    }
+    function ValidateForm() {
+        debugger;
+        var isValid = true;
+        try {
+            var acpartyId = $("#ACPartyId").val();
+            var inventoryId = $("#InventoryId").val();
+            var brandId = $("#BrandId").val();
+            var problemId = $("#ProblemId").val();
+            var serialNo = $("#SerialNo").val();
+            var approxCharge =  $("#ApproxCharge").val();
+            if (acpartyId == "" || acpartyId == null) {
+                swal("Error!", "Please Select Account Party Name", "error").then(function () {
+                    $("#ACPartyId").focus();
+                });
+                return false;
+            }
+            if (inventoryId == "" || inventoryId == null) {
+                swal("Error!", "Please Select Item Name", "error").then(function () {
+                    $("#InventoryId").focus();
+                });
+                return false;
+            }
+            if (brandId == "" || brandId == null) {
+                swal("Error!", "Please Select Material Name", "error").then(function () {
+                    $("#BrandId").focus();
+                });
+                return false;
+            }
+            if (serialNo == "") {
+                swal("Error!", "Please Enter Serial Number", "error").then(function () {
+                    $("#SerialNo").focus();
+                    $("#SerialNo").val("");
+                });
+                return false;
+            }
+            if (problemId == "" || problemId == null) {
+                swal("Error!", "Please Select Problem Name", "error").then(function () {
+                    $("#ProblemId").focus();
+                });
+                return false;
+            }
+            if (approxCharge == "") {
+                swal("Error!", "Please Enter Approx Charge", "error").then(function () {
+                    $("#ApproxCharge").focus();
+                    $("#ApproxCharge").val("");
+                });
+                return false;
+            }
+            if ($('#file')[0].files[0] != undefined) {
+                var file = $('#file')[0].files[0];
+                var fileType = file["type"];
+                var ValidImageTypes = ["image/jpg", "image/jpeg", "image/png"];
+                if ($.inArray(fileType, ValidImageTypes) < 0) {
+                    swal("Error!", "Please Upload image as JPEG/JPG/PNG type", "error").then(function () {
+                        $("#file").focus();
+                    });
+                    return false;
+                }
+            }
+        } catch (err) {
+            alert(err);
+            return false;
+        }
+        return isValid;
+    }
+
+    function clearData() {
+        $("#InwardId").val("");
+        var curDate = moment('@DateTime.Now').format('DD/MM/YYYY');
+        $('#InwardDateDisplay').datepicker('setDate', curDate);
+        $("#ACPartyId").select2("val", 0);
+        $("#BrandId").select2("val", 0);
+        $("#InventoryId").select2("val", 0);
+        $("#ProblemId").select2("val", 0);
+        $("#SerialNo").val("");
+        $("#ApproxCharge").val("");
+        $("#imgid").attr("src", "\\Resources\\Emp_Img\\noimage.jpg");
+    }
+    function readURL(input) {
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#imgid').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $("input[type='text']").on("focus", function () {
+        $(this).select();
+    });
+    $("#ApproxCharge").focusout(function () {
+        $("#saveInwardBtnId").focus();
+    });
+    $(document).on('focus', '.select2', function () {
+        $(this).siblings('select').select2('open');
+    });
+    $("#file").change(function () {
+        readURL(this);
+    });
+    $('#myModal').on('shown.bs.modal', function () {
+        $('#InwardDateDisplay').focus();
+    })
+    </script>
+}
+

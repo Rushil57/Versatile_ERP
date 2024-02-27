@@ -1,0 +1,648 @@
+﻿@model VTPL_ERP.Models.Master.EmployeeMasterViewModel
+@{
+    ViewData["Title"] = "Employee_Master";
+
+}
+@*<h2>Employee_Master</h2>*@
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+            <!-- Revenue, Hit Rate & Deals -->
+            <div class="row">
+                @*===================*@
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @*<button type="button" class="btn btn-primary">Add New Courier</button>*@
+                        <h4 style="float:left" class="modal-title"><strong>Employee Master</strong></h4>
+                        @*<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" onclick="clearData()">Add New Unit</button>*@
+                    </div>
+                </div>
+                <div id="myModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+                                <h4 class="modal-title"><i class="ft-user"></i> Employee </h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Employee Image</label>
+                                            <input type="file" id="file" name="file" />
+                                            <div class="img1">
+                                                 <img src="\Resources\Emp_Img\noimage.jpg" id="imgid" alt="Employee Image" height="42" width="42">
+                                            </diV>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Employee Id</label>
+                                            @Html.TextBoxFor(m => m.EmpId, new { @class = "form-control", @readonly = "readonly" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Title</label>
+                                            @{
+                                            List<SelectListItem> listItemsTitle = new List<SelectListItem>();
+                                            listItemsTitle.Add(new SelectListItem
+                                            {
+                                            Text = "Mr.",
+                                            Value = "Mr."
+                                            });
+                                            listItemsTitle.Add(new SelectListItem
+                                            {
+                                            Text = "Mrs.",
+                                            Value = "Mrs."
+                                            });
+                                            listItemsTitle.Add(new SelectListItem
+                                            {
+                                            Text = "Miss",
+                                            Value = "Miss"
+                                            });
+                                            }
+
+                                            @Html.DropDownListFor(model => model.Title, listItemsTitle, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">First Name</label>
+                                            @Html.HiddenFor(m => m.EmpId, new { @class = "form-control" })
+                                            @Html.HiddenFor(m => m.Created_Date, new { @class = "form-control" })
+                                            @Html.HiddenFor(m => m.Modified_Date, new { @class = "form-control" })
+                                            @Html.HiddenFor(m => m.IsActive, new { @class = "form-control" })
+                                            @Html.HiddenFor(m => m.PageMode, new { @class = "form-control" })
+                                            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @maxlength = 50 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Last Name</label>
+                                            @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @maxlength = 50 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Gender</label>
+                                            <div class="radio">
+                                                @Html.RadioButton("Gender", "Male", new { id = "male" }) Male
+                                            </div>
+                                            <div class="radio">
+                                                @Html.RadioButton("Gender", "Female", new { id = "Female" }) Female
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput9">Date of Birth</label>
+                                            @Html.TextBoxFor(m => m.DateOfBirth, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput9">Hire Date</label>
+                                            @Html.TextBoxFor(m => m.HireDateDisplay, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Phone</label>
+                                            @Html.TextBoxFor(m => m.Phone, new { @class = "form-control", @minlength = 10, @maxlength = 10 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput8">Address</label>
+                                            @Html.TextAreaFor(m => m.Address, new { @class = "form-control", @maxlength = 500 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Email</label>
+                                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @maxlength = 150 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">IsUser</label>
+                                            @Html.CheckBoxFor(m => m.IsUser)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6" id="pswdDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput8">Password</label>
+                                            @Html.PasswordFor(m => m.UserPassword, new { @class = "form-control", @maxlength = 50 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Role</label>
+                                            @Html.DropDownListFor(m => m.RoleId, ViewBag.RoleDataList as IEnumerable<SelectListItem>,
+                                               new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-warning mr-1" data-dismiss="modal">Close</button>
+                                    <button type="button" id="saveEmployeeBtnId" class="btn btn-primary" onclick="saveEmployee()">
+                                        <i class="la la-check-square-o"></i> Save
+                                    </button>
+                                </div>
+                            </div>
+                            <input type="hidden" id="photoUrl"/>
+                        </div>
+
+                    </div>
+                </div>
+                @*================*@
+
+
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <form class="form">
+                                    <div class="form-body">
+                                        <div class="form-group">
+                                            <button type="button" id="btnAddNew" style="float:right" class="btn btn-info btn-sm btn-round" data-toggle="modal" data-target="#myModal" onclick="clearData()"><i class="ft-plus"></i> Add New Employee</button>
+                                        </div>
+                                        <h4 class="form-section"><i class="ft-user"></i> List of Employee</h4>
+                                        <div class="row">
+                                            <div class="col-md-12">
+
+
+
+                                                <div class="card-content collapse show vtpl-grid-align">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped" id="employeeMastertblId">
+                                                            <thead>
+                                                                <tr>
+                                                                    @*<th>#</th>*@
+                                                                    <th>First Name</th>
+                                                                    <th>Last Name</th>
+                                                                    <th style="width: 50px;">Hire Date</th>
+                                                                    <th>Email</th>
+                                                                    <th style="width: 25px;">Edit</th>
+                                                                    <th style="width: 25px;">Delete</th>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+
+
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+@section scripts{
+<script type="text/javascript">
+    var tblList;
+    $(document).ready(function () {
+        $('#DateOfBirth').datepicker({
+            format: 'dd/mm/yyyy',
+            forceParse: false
+        });
+        $('#HireDateDisplay').datepicker({
+            format: 'dd/mm/yyyy',
+            forceParse: false
+        });
+        $("#Title").select2();
+        $("#RoleId").select2();
+       // $("#Title").select2({ placeholder: 'Select Title' });
+        $("#Title").select2("val", 0);
+       // $("#RoleId").select2({ placeholder: 'Select Role' });
+        $("#RoleId").select2("val", 0);
+        $('select').select2({
+            width: '100%'
+        });
+        BindEmployeeList();
+        $("#pswdDivId").hide();
+        $("#Phone").keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110]) !== -1 ||
+                // Allow: Shift+, Command+A
+                //(e.keyCode === 187 && (e.shiftKey === true || e.metaKey === true)) ||
+                // Allow: home, end, left, right, down, up
+                (e.keyCode >= 35 && e.keyCode <= 40)) {
+                // let it happen, don't do anything
+                return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+        $(document).keyup(function (e) {
+            var keyCode = e.keyCode || e.which;
+
+            if (keyCode == 115) {
+                // f4
+                if (($("#myModal").data('bs.modal') || {})._isShown) {
+                    $("#saveEmployeeBtnId").focus();
+                    saveEmployee();
+                }
+            }
+            if (keyCode == 119) {
+                // f8
+                $('#btnAddNew').click();
+            }
+            if (keyCode == 70) {
+                //shit + f
+                if (e.shiftKey) {
+                    $('#employeeMastertblId_filter input').focus();
+                }
+            }
+        });
+    });
+    function saveEmployee() {
+        debugger;
+        if (ValidateForm()) {
+            var formData = new FormData();
+            formData.append("File", $('#file')[0].files[0]);
+            formData.append("EmpId", $("#EmpId").val());
+            formData.append("Title", $("#Title").val());
+            formData.append("FirstName", $("#FirstName").val());
+            formData.append("LastName", $("#LastName").val());
+            formData.append("Gender", $('input[name=Gender]:checked').val());
+            formData.append("DateOfBirth", $("#DateOfBirth").val());
+            formData.append("HireDate", $("#HireDateDisplay").val());
+            formData.append("DateOfBirthString", $("#DateOfBirth").val());
+            formData.append("HireDateString", $("#HireDateDisplay").val());
+            formData.append("Email", $("#Email").val());
+            formData.append("Phone", $("#Phone").val());
+            formData.append("IsUser", $("#IsUser").prop('checked'));
+            formData.append("Address", $("#Address").val());
+            formData.append("Created_Date", $("#Created_Date").val());
+            formData.append("PageMode", $("#PageMode").val());
+            formData.append("RoleId", $("#RoleId").val());
+            formData.append("UserPassword", $("#UserPassword").val());
+            formData.append("photoUrl", $("#photoUrl").val());
+            //var modelObj = {
+            //    EmpId: $("#EmpId").val(),
+            //    Title: $("#Title").val(),
+            //    FirstName: $("#FirstName").val(),
+            //    LastName: $("#LastName").val(),
+            //    Gender: $('input[name=Gender]:checked').val(),
+            //    DateOfBirth: $("#DateOfBirth").val(),
+            //    HireDate: $("#HireDate").val(),
+            //    Email: $("#Email").val(),
+            //    Phone: $("#Phone").val(),
+            //    IsUser: $("#IsUser").prop('checked'),
+            //    Address: $("#Address").val(),
+            //    Created_Date: $("#Created_Date").val(),
+            //    PageMode: $("#PageMode").val(),
+            //    RoleId: $("#RoleId").val(),
+            //    UserPassword: $("#UserPassword").val()
+            //};
+            $.ajax({
+                type: "POST",
+                url: '/api/Master/SaveEmployee',
+                data: formData,
+                dataType: "json",
+                processData: false,  // tell jQuery not to process the data
+                contentType: false,
+                success: function (response) {
+                    if (response.isError == true) {
+                        swal("Error!", response.errorMessage, "error");
+                    }
+                    else {
+                        swal("Success!", response.successMessage, "success");
+                        $('#myModal').modal('hide');
+                        BindEmployeeList();
+                    }
+                },
+                error: function () {
+                    swal("Error!", "Some error had occur!", "error");
+                }
+            });
+        }
+
+    }
+    function DeleteData(id) {
+        swal({
+            title: "Are you sure?",
+            text: "This action will also delete record from User data.",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: "GET",
+                        url: '/api/Master/DeleteEmployeeByKey?id=' + id,
+                        // data: id,
+                        dataType: "json",
+                        success: function (response) {
+                            if (response.isError == true) {
+                                swal("Error!", response.errorMessage, "error");
+                            }
+                            else {
+                                swal("Success!", "Successfully deleted Data.", "success");
+                                BindEmployeeList();
+                            }
+                        },
+                        error: function () {
+                            //swal("Error!", "Some error had occur!", "error");
+                        }
+                    });
+
+                }
+            });
+
+    }
+    function EditData(id) {
+        $.ajax({
+            type: "GET",
+            url: '/api/Master/GetEmployeeByKey?id=' + id,
+            dataType: "json",
+            success: function (response) {
+                debugger;
+                var dob = moment(response.dateOfBirth).format('DD/MM/YYYY');
+                var hirDate = moment(response.hireDate).format('DD/MM/YYYY');
+                $("#EmpId").val(response.empId);
+                $("#Title").val(response.title).trigger('change');
+                $("#FirstName").val(response.firstName);
+                $("#LastName").val(response.lastName);
+                $("input[name='Gender'][value='" + response.gender + "']").prop('checked', true);
+                $('#DateOfBirth').datepicker('setDate', dob);
+                $('#HireDateDisplay').datepicker('setDate', hirDate);
+                $("#Email").val(response.email);
+                $("#Phone").val(response.phone);
+                $("#IsUser").val(response.isUser);
+                $("input[name='IsUser']").prop('checked', response.isUser);
+                $("#Address").val(response.address);
+                $("#Created_Date").val(response.created_Date);
+                $("#IsActive").val(response.isActive);
+                $("#RoleId").val(response.roleId).trigger('change');
+                $("#UserPassword").val(response.userPassword);
+                $("#photoUrl").val(response.photoUrl);
+                $("#PageMode").val("UPDATE");
+                if (response.photoUrl == null)
+                {
+                    $('#imgid').attr("src", "\\Resources\\Emp_Img\\noimage.jpg");
+                }
+                else {
+                    $('#imgid').attr("src", response.photoUrl);
+                }
+                if (response.isUser == true)
+                {
+                    $("#pswdDivId").show();
+                }
+                else {
+                    $("#pswdDivId").hide();
+                }
+                $('#myModal').modal('show');
+            },
+            error: function () {
+                //swal("Error!", "Some error had occur!", "error");
+            }
+        });
+    }
+    function BindEmployeeList() {
+        $.ajax({
+            type: "Get",
+            url: '/api/Master/GetAllEmployee',
+            dataType: "json",
+            success: function (response) {
+                if ($.fn.dataTable.isDataTable('#employeeMastertblId')) {
+                    tblList.destroy();
+                }
+                tblList = $('#employeeMastertblId').DataTable({
+                    data: response,
+                    "columns": [
+                        //{ "data": "id" },
+                        { "data": "firstName" },
+                        { "data": "lastName" },
+                        {
+                            "render": function (data, type, full, meta) {
+                                var opndate = moment(full.hireDate).format('DD/MM/YYYY');
+                                return opndate;
+                            }
+                        },
+                        { "data": "email" },
+                        {
+                            "render": function (data, type, full, meta)
+                            { return "<a class='btn btn-info' href='#' onclick=EditData('" + full.empId + "'); ><i class='ft-edit'></i></a>"; }
+                        },
+                        {
+                            data: null, render: function (data, type, row) {
+                                return "<a href='#' class='btn btn-danger' onclick=DeleteData('" + row.empId + "'); ><i class='ft-trash'></i></a>";
+                            }
+                        },
+                    ]
+                });
+            },
+            error: function () {
+                swal("Error!", "Some error had occur!", "error");
+            }
+        });
+    }
+    function ValidateForm() {
+        debugger;
+        var isValid = true;
+        try {
+            var firstName = $("#FirstName").val().trim();
+            var email = $("#Email").val().trim();
+            var isUserr = $("#IsUser").is(":checked");
+            var title = $("#Title").val();
+            var lastName = $("#LastName").val().trim();
+            var dob = $("#DateOfBirth").val();
+            var hireDate = $("#HireDateDisplay").val();
+            var phone = $("#Phone").val();
+            var address = $("#Address").val().trim();
+            var userPassword = $("#UserPassword").val().trim();
+            var role = $("#RoleId").val();
+            if ($('#file')[0].files[0] != undefined) {
+                var file = $('#file')[0].files[0];
+                var fileType = file["type"];
+                var ValidImageTypes = ["image/jpg", "image/jpeg", "image/png"];
+                if ($.inArray(fileType, ValidImageTypes) < 0) {
+                    swal("Error!", "Please Upload image as JPEG/JPG/PNG type", "error").then(function () {
+                        $("#file").focus();
+                    });
+                    return false;
+                }
+            }
+            if (title == "" || title == null) {
+                swal("Error!", "Please Enter Title", "error").then(function () {
+                    $("#Title").focus();
+                });
+                return false;
+            }
+            if (firstName == "") {
+                swal("Error!", "Please Enter First Name", "error").then(function () {
+                    $("#FirstName").focus();
+                    $("#FirstName").val("");
+                });
+                return false;
+            }
+            if (lastName == "") {
+                swal("Error!", "Please Enter Last Name", "error").then(function () {
+                    $("#LastName").focus();
+                    $("#LastName").val("");
+                });
+                return false;
+            }
+            if (dob == "") {
+                swal("Error!", "Please Enter Date Of Birth", "error").then(function () {
+                    $("#DateOfBirth").focus();
+                });
+                return false;
+            }
+            if (hireDate == "") {
+                swal("Error!", "Please Enter Hire Date", "error").then(function () {
+                    $("#HireDateDisplay").focus();
+                });
+                return false;
+            }
+            if (phone != "") {
+                if (phone.length < 10) {
+                    swal("Error!", "Please Enter atleast 10 degit in Phone", "error").then(function () {
+                        $("#Phone").focus();
+                    });
+                    return false;
+                }
+            }
+            if (address == "") {
+                swal("Error!", "Please Enter Address", "error").then(function () {
+                    $("#Address").focus();
+                    $("#Address").val("");
+                });
+                return false;
+            }
+            if (email == "") {
+                swal("Error!", "Please Enter Email", "error").then(function () {
+                    $("#Email").focus();
+                    $("#Email").val("");
+                });
+                return false;
+            }
+            var regex = /^([a-zA-Z0-9_.+-])+\@@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            if (regex.test(email) == false) {
+                swal("Error!", "Please Enter valid Email", "error").then(function () {
+                    $("#Email").focus();
+                });
+                return false;
+            }
+            if (isUserr == "true") {
+                if (userPassword == "") {
+                    swal("Error!", "Please Enter Password", "error").then(function () {
+                        $("#UserPassword").focus();
+                        $("#UserPassword").val("");
+                    });
+                    return false;
+                }
+            }
+            if (role == "" || role == null) {
+                swal("Error!", "Please Enter Role", "error").then(function () {
+                    $("#RoleId").focus();
+                });
+                return false;
+            }
+        } catch (err) {
+            alert(err);
+            return false;
+        }
+        return isValid;
+    }
+
+    function clearData() {
+        $("#EmpId").val("");
+        $("#Title").val("");
+        $("#FirstName").val("");
+        $("#LastName").val("");
+        $("#Gender").val("");
+        $("#DateOfBirth").val("");
+        var curDate = moment('@DateTime.Now').format('DD/MM/YYYY');
+        $('#DateOfBirth').datepicker('setDate', curDate);
+        $('#HireDateDisplay').datepicker('setDate', curDate);
+        
+        $("#Email").val("");
+        $("#Phone").val("");
+        $("#IsUser").val("");
+        $("#Address").val("");
+        $("#Created_Date").val("");
+        $("#Modified_Date").val("");
+        $("#IsActive").val("");
+        $("#UserPassword").val("");
+        $("#RoleId").select2("val", 0);
+        $("#IsUser").prop("checked", false);
+        $("#imgid").attr("src", "\\Resources\\Emp_Img\\noimage.jpg");
+        $.ajax({
+            type: "GET",
+            url: '/api/Master/GetIdByTable',
+            dataType: "json",
+            success: function (response) {
+                debugger;
+                $("#EmpId").val(response);
+                $("#PageMode").val("NEW");
+            },
+            error: function () {
+                //swal("Error!", "Some error had occur!", "error");
+            }
+        });
+    }
+    $(':checkbox').change(function () {
+        debugger;
+        if ($("#IsUser").is(":checked")) {
+            $("#pswdDivId").show();
+        }
+        else {
+            $("#pswdDivId").hide();
+            $("#UserPassword").val("");
+        }
+    });
+    function readURL(input) {
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#imgid').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $("input[type='text']").on("focus", function () {
+        $(this).select();
+    });
+    $("#RoleId").on("select2:close", function (e) {
+        $("#saveEmployeeBtnId").focus();
+    });
+    $(document).on('focus', '.select2', function () {
+        $(this).siblings('select').select2('open');
+    });
+    $("#file").change(function () {
+        readURL(this);
+    });
+    $('#myModal').on('shown.bs.modal', function () {
+        $('#Title').focus();
+    })
+</script>
+}
+

@@ -1,0 +1,235 @@
+﻿@model VTPL_ERP.Models.Master.RolesAndRightsMasterViewModel
+@{
+    ViewData["Title"] = "RolesAndRights";
+}
+<style>
+    ul#actionList li {
+        display: inline;
+        padding: 15px;
+    }
+</style>
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+
+            <div class="row">
+                @*===================*@
+                <div class="col-md-12">
+                    <div class="form-group">
+                        @*<button type="button" class="btn btn-primary">Add New Courier</button>*@
+                        <h4 style="float:left" class="modal-title"><strong>Roles And Rights</strong></h4>
+                        @*<button type="button" style="float:right" class="btn btn-info btn-sm btn-round" data-toggle="modal" data-target="#myModal" onclick="clearData()"><i class="ft-plus"></i> Add New Branch</button>*@
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <form class="form">
+                                    <div class="form-body">
+                                        <h4 class="form-section"><i class="ft-user"></i> Roles And Rights</h4>
+                                        <div class="row">
+                                            <div class='col-md-4'>
+                                                <div class='form-group'>
+                                                    <label>Role:</label>
+                                                    <br />
+                                                    @Html.DropDownListFor(m => m.SelectedRoleId, Model.RolesSelectList, new { @class = "form-control" })
+                                                    @Html.HiddenFor(m => m.RightsId, new { @class = "form-control" })
+                                                    @Html.HiddenFor(m => m.Created_Date, new { @class = "form-control" })
+                                                    @Html.HiddenFor(m => m.Modified_Date, new { @class = "form-control" })
+                                                    @Html.HiddenFor(m => m.IsActive, new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                             <div class='col-md-4'>
+                                                  <div class='form-group'>
+                                                        <label>Page:</label>
+                                                        <br />
+                                                        @Html.DropDownListFor(m => m.SelectedPageId, Model.PageSelectList, new { @class = "form-control" })
+                                                  </div>
+                                              </div>
+                                        </div>
+                                        <div class="row" id="actionListDivId" style="display:none;">
+                                            <div class='col-md-12'>
+                                                <div class='form-group'>
+                                                    <label>Actions:</label>
+                                                    <br />
+                                                    <div class="row">
+                                                        <div class="col-lg-2" style="text-align:right;padding-top:5px">
+                                                            All <input type="checkbox" id="chkAll" onclick="CheckAll(this)" />
+                                                        </div>
+                                                        <div class="col-lg-8" style="text-align:left;">
+                                                            <ul id="actionList"></ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="form-actions">
+                                                <button type="button" class="btn btn-warning mr-1" onclick="cancelData()">Cancel</button>
+                                                <button type="button" id="saverolesandrightsBtnId" class="btn btn-primary" onclick="saveRolesAndRights()">
+                                                    <i class="la la-check-square-o"></i> Save
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        var tblList;
+        $(document).ready(function () {
+            $("#SelectedRoleId").select2({ placeholder: 'Select Role' });
+            $("#SelectedRoleId").select2("val", 0);
+            $("#SelectedPageId").select2({ placeholder: 'Select Page' });
+            $("#SelectedPageId").select2("val", 0);
+            $("#actionListDivId").hide();
+        });
+        $('#SelectedRoleId').on('select2:select', function (e) {
+            var roleId = $("#SelectedRoleId").val();
+            var pageId = $("#SelectedPageId").val();
+            getRoleAndRights(roleId, pageId);
+        });
+        $('#SelectedPageId').on('select2:select', function (e) {
+            var roleId = $("#SelectedRoleId").val();
+            var pageId = $("#SelectedPageId").val();
+            getRoleAndRights(roleId, pageId);
+        });
+        function getRoleAndRights(roleId, pageId) {
+            if (roleId != null && pageId != null)
+            {
+                $("#actionListDivId").show();
+                $("#actionList").empty();
+                $.ajax({
+                    type: "POST",
+                    url: '/api/RolesAndRights/GetRolesAndRights',
+                    data: {
+                        RoleId: roleId,
+                        PageId: pageId
+                    },
+                    //data: modelObj,
+                    dataType: "json",
+                    success: function (response) {
+                        $.each(response, function () {
+                            var item = $(this)[0];
+                            var isChecked = "";
+                            if (item.isRight) { 
+                                isChecked = "checked";
+                            }
+                            var li = "<li data-actionid='"+item.actionId+"'>" +
+                                "<label>" + item.actionName + "</label>" + "  " +
+                                "<input onclick='Check_click()' type='checkbox' " + isChecked+" /></li>";
+                            $("#actionList").append(li);
+                        });
+                        Check_click();
+                    },
+                    error: function () {
+                        swal("Error!", "Some error had occur!", "error");
+                    }
+                });
+            }
+            else {
+                return false;
+
+            }
+        }
+        function saveRolesAndRights() {
+            if (ValidateForm()) {
+                var modelObj = {};
+                modelObj.RightsId = $("#RightsId").val();
+                modelObj.RoleId = $("#SelectedRoleId").val();
+                modelObj.PageId = $("#SelectedPageId").val();
+                modelObj.Created_Date = $("#Created_Date").val();
+                var ActionItemsCollection = [];
+                var actionData = $("#actionList").find('li');
+                $.each(actionData, function () {
+                    var curRow = $(this)[0];
+                   var actionObj = {};
+                   actionObj.ActionId = $(curRow).attr('data-actionid');
+                   actionObj.IsRight = $(curRow).find('input').prop('checked');
+                   ActionItemsCollection.push(actionObj);
+                });
+                modelObj.ActionSelectList = ActionItemsCollection;
+                $.ajax({
+                    type: "POST",
+                    url: '/api/RolesAndRights/SaveRolesAndRights',
+                    data: modelObj,
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.isError == true) {
+                            swal("Error!", response.errorMessage, "error");
+                        }
+                        else {
+                            swal("Success!", response.successMessage, "success");
+                        }
+                    },
+                    error: function () {
+                        swal("Error!", "Some error had occur!", "error");
+                    }
+                });
+            }
+        }
+        function ValidateForm() {
+            debugger;
+            var isValid = true;
+            try {
+                var roleName = $("#SelectedRoleId").val();
+                var pageName = $("#SelectedPageId").val();
+                if (roleName == 0 || roleName == null) {
+                    swal("Error!", "Please Select Role", "error").then(function () {
+                        $("#SelectedRoleId").focus();
+                    });
+                    return false;
+                }
+                if (pageName == 0 || pageName == null) {
+                    swal("Error!", "Please Select Page", "error").then(function () {
+                        $("#SelectedPageId").focus();
+                    });
+                    return false;
+                }
+
+            } catch (err) {
+                alert(err);
+                return false;
+            }
+            return isValid;
+        }
+        function cancelData() {
+            debugger;
+            $("#actionListDivId").hide();
+            $("#SelectedRoleId").select2({ placeholder: 'Select Role' });
+            $("#SelectedRoleId").select2("val", 0);
+            $("#SelectedPageId").select2({ placeholder: 'Select Page' });
+            $("#SelectedPageId").select2("val", 0);
+        }
+
+        function CheckAll(chk) { 
+            if ($(chk).prop('checked')) {
+                $("#actionList").find('input').prop('checked', true);
+            }
+            else { 
+                $("#actionList").find('input').prop('checked', false);
+            }
+        }
+        function Check_click() { 
+            var allChk = $("#actionList").find('input').length;
+            if ($("#actionList").find('input[type=checkbox]:checked').length == allChk) {
+                $("#chkAll").prop('checked', true);
+            }
+            else { 
+                $("#chkAll").prop('checked', false);
+            }
+        }
+    </script>
+}

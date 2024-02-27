@@ -1,0 +1,244 @@
+﻿@model VTPL_ERP.Models.PQInfoViewModel
+@{
+    ViewData["Title"] = "ViewPurchaseQuotation";
+}
+@*<h2>ViewPurchaseQuotation</h2>*@
+<div class="app-content content" id="mainDiv">
+    <div id="focusDiv"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <h4 style="float:left" class="modal-title"><strong>Purchase Quotation Detail</strong></h4>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <form class="form">
+                                    <div class="form-body">
+                                        <h4 class="form-section"><i class="ft-user"></i> Purchase Quotation</h4>
+                                        <div class="row">
+                                            <div class='col-md-4'>
+                                                <div class='form-group'>
+                                                    <label for="user_title">Purchase Quotation No.</label>
+                                                    @Html.Label("PQNo", Model.PurchaseQuotationData.PQNo, new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                            <div class='col-md-4'>
+                                                <div class='form-group'>
+                                                    <label for="user_firstname">Purchase Quotation Date</label><br />
+                                                    @Html.Label("PQDate", Model.PurchaseQuotationData.PQDate.ToString("dd/MM/yyyy"), new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                            <div class='col-md-4'>
+                                                <div class='form-group'>
+                                                    <label>Branch</label>
+                                                    <br />
+                                                    @Html.Label("Branch", Model.PurchaseQuotationData.BranchName, new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='row'>
+                                            <div class='col-sm-3'>
+                                                <div class='form-group' style="width:90%;">
+                                                    <label>Suppliers</label>
+                                                    <br />
+                                                    @Html.Label("Supplier", Model.PurchaseQuotationData.SupplierName, new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="min-height:200px;">
+                                            <div class="col-md-12">
+                                                <div class="card-content collapse show vtpl-grid-align">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped" id="stockGrid">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Id</th>
+                                                                    <th>Item Name</th>
+                                                                    <th>QTY</th>
+                                                                    <th>Rate</th>
+                                                                    <th>Gross Amt.</th>
+                                                                    <th>Disc %</th>
+                                                                    <th>Disc Amt</th>
+                                                                    <th>Tax%</th>
+                                                                    <th>Tax Amt</th>
+                                                                    <th>Total Amount</th>
+                                                                </tr>
+                                                                    @foreach (var item in Model.PurchaseQuotationDetails)
+                                                                    {
+                                                                     <tr>
+                                                                        <td>@item.InventoryId</td>
+                                                                        <td>@item.InventoryItemName</td>
+                                                                        <td>@item.Qty</td>
+                                                                        <td>@item.Rate</td>
+                                                                        <td>@item.GrossAmt</td>
+                                                                        <td>@item.Discount</td>
+                                                                        <td>@item.DiscAmt</td>
+                                                                        <td>@item.Tax</td>
+                                                                        <td>@item.TaxAmt</td>
+                                                                        <td>@item.TotalAmount</td>
+                                                                      </tr>
+                                                                    }
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div><br />
+                                        <div class='row'>
+                                            <div class='col-sm-4'>
+                                                <div id="divotherChargesGrid">
+                                                    <table class="table table-bordered table-striped" id="otherChargesGrid">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="width:50px">Charges Name </th>
+                                                                <th style="width:50px">HSN Code </th>
+                                                                <th style="width:50px">Amount</th>
+                                                                <th style="width:50px">IGST </th>
+                                                                <th style="width:50px">Other Charge Amount </th>
+                                                            </tr>
+                                                               @foreach (var item in Model.PQOtherChargesDetails)
+                                                               {
+                                                            <tr>
+                                                                <td>@item.OtherChargeName</td>
+                                                                <td>@item.ChargeHSNCode</td>
+                                                                <td>@item.Amount</td>
+                                                                <td>@item.ChargeIGST</td>
+                                                                <td>@item.FinalAmount</td>
+                                                            </tr>
+                                                               }
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class='col-sm-7'>
+                                                <div class="card-content collapse show vtpl-grid-align">
+                                                    <div class="table-responsive" style="border:1px solid #c6c6c6;width:50%; float:right">
+                                                        <table id="TotalGrid" class="table table-bordered table-striped">
+                                                            <tr>
+                                                                <td>Amount</td>
+                                                                <td id="total-amt">@Model.PurchaseQuotationData.Amount</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Disc. Amount</td>
+                                                                <td id="total-discamt">@Model.PurchaseQuotationData.DiscAmount</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Other Charges</td>
+                                                                <td id="total-othercharges">@Model.PurchaseQuotationData.OtherCharges</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Tax Amount </td>
+                                                                <td id="total-taxamount">@Model.PurchaseQuotationData.TotalTaxAmount</td>
+                                                            </tr>
+                                                            @*<tr>
+                                                                    <td>SGST </td>
+                                                                    <td>0.00</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>CGST </td>
+                                                                    <td>0.00</td>
+                                                                </tr>*@
+                                                            <tr>
+                                                                <td>Round Off </td>
+                                                                <td id="total-roundoff">@Model.PurchaseQuotationData.RoundOff</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Total Amount </td>
+                                                                <td id="total-totalamt">@Model.PurchaseQuotationData.TotalAmount</td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><br />
+                                        <div class="row">
+                                            <div class='col-sm-11'>
+                                                <div class="card-content collapse show vtpl-grid-align">
+                                                    <div class="table-responsive" style="border:1px solid #c6c6c6;width:100%;">
+                                                        <table id="stockTaxGrid" class="table table-bordered table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>HSN/SAC</th>
+                                                                    <th>Taxable Value</th>
+                                                                    <th style="text-align: center;" colspan="2">Central Tax</th>
+                                                                    <th style="text-align: center;" colspan="2">State Tax</th>
+                                                                    <th>Total Tax Amount</th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                    <th>Rate %</th>
+                                                                    <th>Amount</th>
+                                                                    <th>Rate %</th>
+                                                                    <th>Amount</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                                @foreach (var item in Model.PurchaseQuotationDetails)
+                                                                {
+                                                                    <tr class="stocktax-row">
+                                                                        <td>@item.HSNCode</td>
+                                                                        <td class="item-grossamtdata">@item.GrossAmountData</td>
+                                                                        <td class="item-centraltax">@item.CentralTax</td>
+                                                                        <td class="item-centralamt"></td>
+                                                                        <td class="item-statetax">@item.StateTax</td>
+                                                                        <td class="item-stateamt"></td>
+                                                                        <td class="item-totaltaxamt"></td>
+                                                                    </tr>
+                                                                    
+                                                                }
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="form-actions">
+                                                <button type="button" align="left" class="btn btn-info mr-1" onclick="@("window.location.href='" + @Url.Action("PurchaseQuotationDetails", "Purchase") + "'");">Return to List</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () { 
+            var grossAmt = 0;
+            var centraltax = 0;
+            var statetax = 0;
+            var $dataRows = $("#stockTaxGrid").find('.stocktax-row');
+            $dataRows.each(function (i) {
+                grossAmt = parseFloat($(this).find('.item-grossamtdata').text()).toFixed(2);
+                centraltax = parseFloat($(this).find('.item-centraltax').text()).toFixed(2);
+                statetax = parseFloat($(this).find('.item-statetax').text()).toFixed(2);
+
+                var centralAmt = (parseFloat(grossAmt) * parseFloat(centraltax)) / 100;
+                $(this).find('.item-centralamt').html(parseFloat(centralAmt).toFixed(2));
+
+                var stateAmt = (parseFloat(grossAmt) * parseFloat(statetax)) / 100;
+                $(this).find('.item-stateamt').html(parseFloat(stateAmt).toFixed(2));
+
+                var totaltaxAmt = (parseFloat(centralAmt) + parseFloat(stateAmt));
+                $(this).find('.item-totaltaxamt').html(parseFloat(totaltaxAmt).toFixed(2));
+            });
+           
+        });
+</script>
+}

@@ -1,0 +1,877 @@
+﻿@model VTPL_ERP.Models.PartyPaymentDebitEntryViewModel
+@{
+    ViewData["Title"] = "Party_Payment_Debit_Entry";
+
+}
+@*<h2>Party_Payment_Entry</h2>*@
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+            <!-- Revenue, Hit Rate & Deals -->
+            <div class="row">
+                @*===================*@
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @*<button type="button" class="btn btn-primary">Add New Courier</button>*@
+                        <h4 style="float:left" class="modal-title"><strong>Party Payment Debit Entry</strong></h4>
+                        @*<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" onclick="clearData()">Add New Unit</button>*@
+                    </div>
+                </div>
+                <div id="pendingInvoiceModal" class="modal fade" role="dialog" style="z-index:99999">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+                                <h4 class="modal-title"><i class="ft-user"></i> Pending Bill Detail </h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card-content collapse show vtpl-grid-align">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered table-striped" id="pendingBillGrid">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width:10px">Select</th>
+                                                            <th style="width:10px">Invoice No.</th>
+                                                            <th style="width:10px">Date</th>
+                                                            <th style="width:10px">Pending Amount</th>
+                                                            <th style="width:10px">Amount</th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="form-actions">
+                                    <button type="button" id="savePaymentEntryBtnId" class="btn btn-primary">
+                                        <i class="la la-check-square-o"></i> Save
+                                    </button>
+                                    <button type="button" class="btn btn-warning mr-1" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="myModal" class="modal fade" role="dialog" style="overflow-y: initial !important">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+                                <h4 class="modal-title"><i class="ft-user"></i> Party Payment Debit Entry </h4>
+                            </div>
+                            <div class="modal-body" style="overflow-y: auto">
+                                <div class="row">
+                                    <div class='col-md-6'>
+                                        <div class='form-group'>
+                                            <label for="user_title">Receipt No.</label>
+                                            @Html.TextBoxFor(x => x.ReceiptNo, new { @class = "form-control", @readonly = "readonly" })
+                                        </div>
+                                    </div>
+                                    <div class='col-md-6'>
+                                        <div class='form-group'>
+                                            <label for="user_firstname">Payment Date</label>
+                                            @Html.TextBoxFor(x => x.PaymentDateDisplay, new { @class = "form-control" })
+                                            @Html.HiddenFor(m => m.Created_Date, new { @class = "form-control" })
+                                            @Html.HiddenFor(m => m.Modified_Date, new { @class = "form-control" })
+                                            @Html.HiddenFor(m => m.PageMode, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Company Bank</label>
+                                            @Html.DropDownListFor(m => m.CompanyBankId, Model.CompanyBankSelectList, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Account Party Name[ <a href="#" id="btnPendingInvoiceNo" class="card-link" data-toggle="modal" data-target="#pendingInvoiceModal">View</a> ]</label>
+                                            @Html.DropDownListFor(m => m.SelectedAccountPartyId, Model.AccountPartySelectList, new { @class = "form-control", @onchange = "getPendingBillDetails(this.value)" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="projectinput2">Sales Person Name</label>
+                                            @Html.DropDownListFor(m => m.SalesEntryId, Model.EmployeeSelectList, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class='col-md-6'>
+                                        <div class='form-group'>
+                                            <label for="user_firstname">Amount</label>
+                                            @Html.TextBoxFor(x => x.Amount, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class='col-md-6'>
+                                        <div class='form-group'>
+                                            <label for="user_firstname">Narration</label>
+                                            @Html.TextAreaFor(x => x.Narration, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class='col-md-6'>
+                                        <div class='form-group'>
+                                            <label for="user_firstname">Account Party Current Balance</label>
+                                            @Html.TextBoxFor(x => x.APCurrentBalance, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class='col-md-6'>
+                                        <div class='form-group'>
+                                            <label for="user_firstname">Agst Reference</label>
+                                            @Html.TextBoxFor(x => x.AgstRef, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class='col-md-6'>
+                                        <div class='form-group'>
+                                            <label for="user_firstname">Company Current Balance</label>
+                                            @Html.TextBoxFor(x => x.CompanyCurrentBalance, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6" id="paymentTypeDivId">
+                                        <div class="form-group">
+                                            <label for="projectinput8">Payment Type</label>
+                                            @{
+                                                List<SelectListItem> listItemsPaymentType = new List<SelectListItem>();
+                                                listItemsPaymentType.Add(new SelectListItem
+                                                {
+                                                    Text = "Cheque",
+                                                    Value = "Cheque"
+                                                });
+                                                listItemsPaymentType.Add(new SelectListItem
+                                                {
+                                                    Text = "NEFT",
+                                                    Value = "NEFT"
+                                                });
+                                            }
+                                            @Html.DropDownListFor(model => model.PaymentType, listItemsPaymentType, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class='col-md-6' id="chequeNoDivId">
+                                        <div class='form-group'>
+                                            <label for="user_firstname">Cheque Number</label>
+                                            @Html.TextBoxFor(x => x.ChequeNo, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class='col-md-6' id="chequeDateDivId">
+                                        <div class='form-group'>
+                                            <label for="user_firstname">Cheque Date</label>
+                                            @Html.TextBoxFor(x => x.ChequeDateDisplay, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class='col-md-6' id="bankDivId">
+                                        <div class='form-group'>
+                                            <label for="user_firstname">Bank</label>
+                                            @Html.TextBoxFor(x => x.Bank, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class='col-md-6' id="branchDivId">
+                                        <div class='form-group'>
+                                            <label for="user_firstname">Branch</label>
+                                            @Html.TextBoxFor(x => x.Branch, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class='col-md-6' id="remarksDivId">
+                                        <div class='form-group'>
+                                            <label for="user_firstname">Remarks</label>
+                                            @Html.TextBoxFor(x => x.Remarks, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class='col-md-6'>
+                                        <div class='form-group'>
+                                            <label for="user_firstname">Total Paid Amount</label>
+                                            @Html.TextBoxFor(x => x.TotalPaidAmount, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card-content collapse show vtpl-grid-align">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered table-striped" id="paymentEntrytblId">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Invoice No.</th>
+                                                            <th>Amount</th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-warning mr-1" data-dismiss="modal">Close</button>
+                                    <button type="button" id="savePartyPaymentEntryBtnId" class="btn btn-primary" onclick="savePartyPaymentDebitEntry()">
+                                        <i class="la la-check-square-o"></i> Save
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                @*================*@
+
+
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <form class="form">
+                                    <div class="form-body">
+                                        <div class="form-group">
+                                            <button type="button" id="btnAddNew" style="float:right" class="btn btn-info btn-sm btn-round" data-toggle="modal" data-target="#myModal" onclick="clearData()"><i class="ft-plus"></i> Add New Party Payment Debit Entry</button>
+                                        </div>
+                                        <h4 class="form-section"><i class="ft-user"></i> List of Party Payment Debit Entry</h4>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="card-content collapse show vtpl-grid-align">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped" id="partyPaymentDebitEntrytblId">
+                                                            <thead>
+                                                                <tr>
+                                                                    @*<th>#</th>*@
+                                                                    <th>Account Party Name</th>
+                                                                    <th>Sales Person Name</th>
+                                                                    <th>Amount</th>
+                                                                    <th>Total Paid Amount</th>
+                                                                    <th style="width: 25px;">Edit</th>
+                                                                    <th style="width: 25px;">Delete</th>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        var isEditRecord = false;
+    </script>
+
+    <script type="text/javascript">
+        var tblList;
+        $(document).ready(function () {
+            $('#PaymentDateDisplay').datepicker({
+                format: 'dd/mm/yyyy',
+                forceParse: false
+            });
+            $('#ChequeDateDisplay').datepicker({
+                format: 'dd/mm/yyyy',
+                forceParse: false
+            });
+           // jQuery('#PaymentDateDisplay').focus();
+            //jQuery('#PaymentDateDisplay').focus();
+            $("#SelectedAccountPartyId").select2();
+            //$("#SelectedAccountPartyId").select2({ placeholder: 'Select Supplier' });
+            $('#SelectedAccountPartyId').prepend('<option selected></option>').select2({
+                placeholder: "Select Account Party Name",
+                allowClear: true,
+                val:"0"
+            });
+            $("#SalesEntryId").select2();
+            $("#CompanyBankId").select2();
+            $("#PaymentType").select2();
+            //$("#SelectedAccountPartyId").select2("val", 0);
+            if ($("#PageMode").val() == "New") {
+                $("#SelectedAccountPartyId").select2("val", 0);
+            }
+            $("#SalesEntryId").select2("val", 0);
+            $("#CompanyBankId").select2("val", 0);
+            $("#PaymentType").select2("val", 0);
+            $("#chequeNoDivId").hide();
+            $("#chequeDateDivId").hide();
+            $("#bankDivId").hide();
+            $("#branchDivId").hide();
+            $("#remarksDivId").hide();
+            //$("#serialNoId").select2("val", 0);
+            $('select').select2({
+                width: '100%'
+            });
+
+            BindPartyPaymentDebitEntryList();
+            $('#pendingInvoiceModal').on('shown.bs.modal', function () {
+                var invoiceCollection = [];
+                var paymentEntryList = $("#paymentEntrytblId").find('.paymentEntry-row');
+                $.each(paymentEntryList, function () {
+                    var curRow = $(this)[0];
+                    var invoiceObj = {};
+                    invoiceObj = $(curRow).find('.item-salesNo').text();
+                    invoiceCollection.push(invoiceObj);
+                });
+                var invoiceListArray = invoiceCollection;
+                var pendingBillRows = $("#pendingBillGrid").find('.pendingbill-row');
+                $.each(pendingBillRows, function () {
+                    var curRow = $(this)[0];
+                    var invoiceNo = $(curRow).find('.item-salesNo').text();
+                    if ($.inArray(invoiceNo, invoiceListArray) > -1) {
+                        $(curRow).find('.item-select').prop('checked', true);
+                    }
+                });
+            });
+            $(document).keyup(function (e) {
+                var keyCode = e.keyCode || e.which;
+
+                if (keyCode == 115) {
+                    // f4
+                    if (($("#myModal").data('bs.modal') || {})._isShown) {
+                        $("#savePartyPaymentDebitEntryBtnId").focus();
+                        savePartyPaymentDebitEntry();
+                    }
+                }
+                if (keyCode == 119) {
+                    // f8
+                    $('#btnAddNew').click();
+                }
+                if (keyCode == 70) {
+                    //shit + f
+                    if (e.shiftKey) {
+                        $('#partyPaymentDebitEntrytblId_filter input').focus();
+                    }
+                }
+            });
+            $("#Amount").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Shift+A, Command+A
+                    //(e.keyCode === 65 && (e.shiftKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+            $("#APCurrentBalance").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Shift+A, Command+A
+                    //(e.keyCode === 65 && (e.shiftKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+            $("#CompanyCurrentBalance").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Shift+A, Command+A
+                    //(e.keyCode === 65 && (e.shiftKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+            $("#TotalPaidAmount").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Shift+A, Command+A
+                    //(e.keyCode === 65 && (e.shiftKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+        });
+        function savePartyPaymentDebitEntry() {
+            if (ValidateForm()) {
+                var modelObj = {};
+                modelObj.ReceiptNo = $("#ReceiptNo").val();
+                modelObj.PaymentDate = $("#PaymentDateDisplay").val();
+                modelObj.PaymentDateDisplay = $("#PaymentDateDisplay").val();
+                modelObj.Created_Date = $("#Created_Date").val();
+                modelObj.CompanyBankId = $("#CompanyBankId").val();
+                modelObj.AccountPartyId = $("#SelectedAccountPartyId").val();
+                modelObj.SalesEntryId = $("#SalesEntryId").val();
+                modelObj.Amount = $("#Amount").val();
+                modelObj.Narration = $("#Narration").val();
+                modelObj.APCurrentBalance = $("#APCurrentBalance").val();
+                modelObj.AgstRef = $("#AgstRef").val();
+                modelObj.CompanyCurrentBalance = $("#CompanyCurrentBalance").val();
+                modelObj.TotalPaidAmount = $("#TotalPaidAmount").val();
+                modelObj.PageMode = $("#PageMode").val();
+                modelObj.PaymentType = $("#PaymentType").val();
+                modelObj.ChequeNo = $("#ChequeNo").val();
+                modelObj.ChequeDate = $("#ChequeDateDisplay").val();
+                modelObj.ChequeDateDisplay = $("#ChequeDateDisplay").val();
+                modelObj.Bank = $("#Bank").val();
+                modelObj.Branch = $("#Branch").val();
+                modelObj.Remarks = $("#Remarks").val();
+                var PPDEDetailsCollection = [];
+                var paymentDebitEntryList = $("#paymentEntrytblId").find('tr.paymentEntry-row');
+                $.each(paymentDebitEntryList, function () {
+                    var curRow = $(this)[0];
+                    var partyPaymentDebitEntryDetailsObj = {};
+                    partyPaymentDebitEntryDetailsObj.ReceiptNo = $("#ReceiptNo").val();
+                    partyPaymentDebitEntryDetailsObj.InvoiceNo = $(curRow).find('.item-salesNo').text();
+                    partyPaymentDebitEntryDetailsObj.Amount = $(curRow).find('.item-amountData').val();
+                    PPDEDetailsCollection.push(partyPaymentDebitEntryDetailsObj);
+                });
+                modelObj.PartyPaymentDebitEntryDetails = PPDEDetailsCollection;
+                $.ajax({
+                    type: "POST",
+                    url: '/api/PartyPaymentDebitEntry/SavePartyPaymentDebitEntry',
+                    data: modelObj,
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.isError == true) {
+                            swal("Error!", response.errorMessage, "error");
+                        }
+                        else {
+                            swal("Success!", response.successMessage, "success");
+                            $('#myModal').modal('hide');
+                            BindPartyPaymentDebitEntryList();
+                        }
+                    },
+                    error: function () {
+                        swal("Error!", "Some error had occur!", "error");
+                    }
+                });
+            }
+        }
+        function DeleteData(id) {
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this data!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            type: "GET",
+                            url: '/api/PartyPaymentDebitEntry/DeletePartyPaymentDebitEntryByKey?id=' + id,
+                            dataType: "json",
+                            success: function (response) {
+                                if (response.isError == true) {
+                                    swal("Error!", response.errorMessage, "error");
+                                }
+                                else {
+                                    swal("Success!", response.successMessage, "success");
+                                    BindPartyPaymentDebitEntryList();
+                                }
+                            },
+                            error: function () {
+                            }
+                        });
+
+                    }
+                });
+        }
+        function EditData(id) {
+            $.ajax({
+                type: "GET",
+                url: '/api/PartyPaymentDebitEntry/GetPartyPaymentDebitEntryByKey?id=' + id,
+                dataType: "json",
+                success: function (response) {
+                    isEditRecord = true;
+                    var paymentdate = moment(response.paymentDate).format('DD/MM/YYYY');
+                    var chequedate = moment(response.chequeDate).format('DD/MM/YYYY');
+                    $("#ReceiptNo").val(response.receiptNo);
+                    $("#CompanyBankId").val(response.companyBankId).trigger('change');
+                    //$("#SelectedAccountPartyId").select2('val', response.accountPartyId);
+                    //$("#SelectedAccountPartyId").select2('data', { id: response.accountPartyId, text: response.accountPartyId.toString() });
+                    $("#SelectedAccountPartyId").val(response.accountPartyId).trigger('change');
+                    $("#SalesEntryId").val(response.salesEntryId).trigger('change');
+                    $("#Amount").val(response.amount);
+                    $("#Narration").val(response.narration);
+                    $("#APCurrentBalance").val(response.apCurrentBalance);
+                    $("#AgstRef").val(response.agstRef);
+                    $("#CompanyCurrentBalance").val(response.companyCurrentBalance);
+                    $("#TotalPaidAmount").val(response.totalPaidAmount);
+                    $("#PaymentDateDisplay").val(paymentdate);
+                    $("#Created_Date").val(response.created_Date);
+                    $("#PageMode").val("Edit");
+                    $("#PaymentType").val(response.paymentType).trigger('change');
+                    $("#ChequeNo").val(response.chequeNo);
+                    $("#ChequeDateDisplay").val(chequedate);
+                    $("#Bank").val(response.bank);
+                    $("#Branch").val(response.branch);
+                    $("#Remarks").val(response.remarks);
+                    if (response.paymentType == "Cheque") {
+                        $("#chequeNoDivId").show();
+                        $("#chequeDateDivId").show();
+                        $("#bankDivId").hide();
+                        $("#branchDivId").hide();
+                        $("#remarksDivId").hide();
+                        $("#Bank").val("");
+                        $("#Branch").val("");
+                        $("#Remarks").val("");
+                    }
+                    else {
+                        $("#chequeNoDivId").hide();
+                        $("#chequeDateDivId").hide();
+                        $("#bankDivId").show();
+                        $("#branchDivId").show();
+                        $("#remarksDivId").show();
+                        $("#ChequeNo").val("");
+                        var curDate = moment('@DateTime.Now').format('DD/MM/YYYY');
+                        $('#ChequeDateDisplay').datepicker('setDate', curDate);
+                    }
+                    if (response.partyPaymentDebitEntryDetailsData.length > 0) {
+                        // Details data
+                        debugger;
+                        $.each(response.partyPaymentDebitEntryDetailsData, function () {
+                            var data = $(this)[0];
+                            var cnt = $("#paymentEntrytblId").find('.paymentEntry-row').length + 1;
+                            var trRow = "<tr class='paymentEntry-row' data-item-id=" + cnt + ">" +
+                                "<td class='item-salesNo'>" + data.invoiceNo + "</td>" +
+                                "<td class='item-pendingAmount'><input type='text' class='item-amountData' name='Amount' value='"+ data.amount+"'></td>" +
+                                "</tr>";
+                            $("#paymentEntrytblId").append(trRow);
+                        });
+                            
+                    }
+                    $('#myModal').modal('show');
+                },
+                error: function () {
+                }
+            });
+        }
+        function BindPartyPaymentDebitEntryList() {
+            debugger;
+            $.ajax({
+                type: "Get",
+                url: '/api/PartyPaymentDebitEntry/GetAllPartyPaymentDebitEntry',
+                dataType: "json",
+                success: function (response) {
+                    debugger;
+                    if ($.fn.dataTable.isDataTable('#partyPaymentDebitEntrytblId')) {
+                        tblList.destroy();
+                    }
+                    tblList = $('#partyPaymentDebitEntrytblId').DataTable({
+                        data: response,
+                        "columns": [
+                            //{ "data": "id" },
+                            { "data": "accountPartyName" },
+                            { "data": "employeeName" },
+                            { "data": "amount" },
+                            { "data": "totalPaidAmount" },
+                            {
+                                "render": function (data, type, full, meta) { return "<a class='btn btn-info' href='#' onclick=EditData('" + full.receiptNo + "'); ><i class='ft-edit'></i></a>"; }
+                            },
+                            {
+                                data: null, render: function (data, type, row) {
+                                    return "<a href='#' class='btn btn-danger' onclick=DeleteData('" + row.receiptNo + "'); ><i class='ft-trash'></i></a>";
+                                }
+                            },
+                        ]
+                    });
+                },
+                error: function () {
+                    swal("Error!", "Some error had occur!", "error");
+                }
+            });
+        }
+        $('#PaymentType').change(function () {
+            if ($("#PaymentType").val() == "NEFT") {
+                $("#chequeNoDivId").hide();
+                $("#chequeDateDivId").hide();
+                $("#bankDivId").show();
+                $("#branchDivId").show();
+                $("#remarksDivId").show();
+                $("#Bank").focus();
+                $("#ChequeNo").val("");
+                var curDate = moment('@DateTime.Now').format('DD/MM/YYYY');
+                $('#ChequeDateDisplay').datepicker('setDate', curDate);
+            }
+            else {
+                $("#chequeNoDivId").show();
+                $("#chequeDateDivId").show();
+                $("#bankDivId").hide();
+                $("#branchDivId").hide();
+                $("#remarksDivId").hide();
+                $("#Bank").val("");
+                $("#Branch").val("");
+                $("#Remarks").val("");
+            }
+        });
+        function ValidateForm() {
+            debugger;
+            var isValid = true;
+            try {
+                var companyBankId = $("#CompanyBankId").val();
+                var accountPartyId = $("#SelectedAccountPartyId").val();
+                var salesEntryId = $("#SalesEntryId").val();
+                var amount = $("#Amount").val();
+                var narration = $("#Narration").val();
+                var apCurrentBalance = $("#APCurrentBalance").val();
+                var agstRef = $("#AgstRef").val();
+                var companyCurrentBalance = $("#CompanyCurrentBalance").val();
+                var totalPaidAmount = $("#TotalPaidAmount").val();
+                var paymentType = $("#PaymentType").val();
+                var bank = $("#Bank").val();
+                var branch = $("#Branch").val();
+                var remarks = $("#Remarks").val();
+                var chequeNo = $("#ChequeNo").val();
+                var chequeDate = $("#ChequeDateDisplay").val();
+                if (companyBankId == "0" || companyBankId == null) {
+                    swal("Error!", "Please Select Company Bank", "error").then(function () {
+                        $("#CompanyBankId").focus();
+                    });
+                    return false;
+                }
+                if (accountPartyId == "0" || accountPartyId == null) {
+                    swal("Error!", "Please Select Account Party Name", "error").then(function () {
+                        $("#SelectedAccountPartyId").focus();
+                    });
+                    return false;
+                }
+                if (salesEntryId == "0" || salesEntryId == null) {
+                    swal("Error!", "Please Select Sales Person Name", "error").then(function () {
+                        $("#SalesEntryId").focus();
+                    });
+                    return false;
+                }
+                if (amount == "0" || amount == null || amount == "") {
+                    swal("Error!", "Please enter Amount", "error").then(function () {
+                        $("#Amount").focus();
+                    });
+                    return false;
+                }
+                if (narration == "0" || narration == null || narration == "") {
+                    swal("Error!", "Please enter Narration", "error").then(function () {
+                        $("#Narration").focus();
+                    });
+                    return false;
+                }
+                if (apCurrentBalance == "" || apCurrentBalance == null || apCurrentBalance == "0") {
+                    swal("Error!", "Please enter Account Party Current Balance", "error").then(function () {
+                        $("#APCurrentBalance").focus();
+                    });
+                    return false;
+                }
+                if (agstRef == "0" || agstRef == null || agstRef == "") {
+                    swal("Error!", "Please enter AgstRef", "error").then(function () {
+                        $("#AgstRef").focus();
+                    });
+                    return false;
+                }
+                if (companyCurrentBalance == "0" || companyCurrentBalance == null || companyCurrentBalance == "") {
+                    swal("Error!", "Please enter Company Current Balance", "error").then(function () {
+                        $("#CompanyCurrentBalance").focus();
+                    });
+                    return false;
+                }
+                if (totalPaidAmount == "0" || totalPaidAmount == null || totalPaidAmount == "") {
+                    swal("Error!", "Please enter Total Paid Amount", "error").then(function () {
+                        $("#TotalPaidAmount").focus();
+                    });
+                    return false;
+                }
+                if (paymentType == "0" || paymentType == null) {
+                    swal("Error!", "Please Select Payment Type", "error").then(function () {
+                        $("#PaymentType").focus();
+                    });
+                    return false;
+                }
+                if (paymentType == "Cheque") {
+                    if (chequeNo == "") {
+                        swal("Error!", "Please Enter Cheque Number", "error").then(function () {
+                            $("#ChequeNo").focus();
+                            $("#ChequeNo").val("");
+                        });
+                        return false;
+                    }
+                    if (chequeDate == "") {
+                        swal("Error!", "Please Enter Cheque Date", "error").then(function () {
+                            $("#ChequeDateDisplay").focus();
+                        });
+                        return false;
+                    }
+                }
+                if (paymentType == "NEFT") {
+                    if (bank == "") {
+                        swal("Error!", "Please Enter Bank", "error").then(function () {
+                            $("#Bank").focus();
+                            $("#Bank").val("");
+                        });
+                        return false;
+                    }
+                    if (branch == "") {
+                        swal("Error!", "Please Enter Branch", "error").then(function () {
+                            $("#Branch").focus();
+                            $("#Branch").val("");
+                        });
+                        return false;
+                    }
+                    if (remarks == "") {
+                        swal("Error!", "Please Enter Remarks", "error").then(function () {
+                            $("#Remarks").focus();
+                            $("#Remarks").val("");
+                        });
+                        return false;
+                    }
+                }
+                if ($("#paymentEntrytblId").find('.paymentEntry-row').length == 0) {
+                    swal("Error!", "Please select atleast one Payment Entry !", "error").then(function () {
+                        $("#SelectedAccountPartyId").focus();
+                    });
+                    return false;
+                }
+            } catch (err) {
+                alert(err);
+                return false;
+            }
+            return isValid;
+        }
+        $("input[type='text']").on("focus", function () {
+            $(this).select();
+        });
+        $("#TotalPaidAmount").focusout(function () {
+            $("#savePartyPaymentDebitEntryBtnId").focus();
+        });
+        $(document).on('focus', '.select2', function () {
+            $(this).siblings('select').select2('open');
+        });
+        function getPendingBillDetails(supplierId) {
+            $("#paymentEntrytblId").find('.paymentEntry-row').remove();
+            $.ajax({
+                type: "GET",
+                url: '/api/PartyPaymentDebitEntry/GetPendingBillDetails?SupplierId=' + supplierId,
+                dataType: "json",
+                success: function (response) {
+                    if (response.isError == true) {
+                        swal("Error!", response.errorMessage, "error");
+                    }
+                    else {
+                        if (response.salesEntryData.length > 0) {
+                            // Stock Item
+                            $("#pendingBillGrid").find("tr:gt(0)").remove();
+                            $.each(response.salesEntryData, function () {
+                                var data = $(this)[0];
+                                var salesEntrydate = moment(data.salesEntryDate).format('DD/MM/YYYY');
+                                var cnt = $("#pendingBillGrid").find('.pendingbill-row').length + 1;
+                                var trRow = "<tr class='pendingbill-row' data-item-id=" + cnt + ">" +
+                                    "<td><input class='item-select' type='checkbox'></td>" +
+                                    "<td class='item-salesNo'>" + data.salesEntryNo + "</td>" +
+                                    "<td class='item-salesDate'>" + salesEntrydate + "</td>" +
+                                    "<td class='item-pendingAmount'>0</td>" +
+                                    "<td class='item-amount'>" + data.totalAmount + "</td>" +
+                                    "</tr>";
+                                $("#pendingBillGrid").append(trRow);
+                            });
+                            if (!isEditRecord) {
+                                $('#pendingInvoiceModal').modal('show');
+                            }
+                            isEditRecord = false;
+                        }
+                    }
+                },
+                error: function () {
+                    //swal("Error!", "Some error had occur!", "error");
+                }
+            });
+
+        }
+        $("#savePaymentEntryBtnId").on("click", function () {
+            $("#paymentEntrytblId").find('.paymentEntry-row').remove();
+            var allPendingBillRow = $("#pendingBillGrid").find('tr.pendingbill-row');
+            $.each(allPendingBillRow, function () {
+                var itemChecked = $(this).find('.item-select').is(":checked");
+                var salesEntryNo = $(this).find('.item-salesNo').html();
+                if (itemChecked == true) {
+                    var cnt = $("#paymentEntrytblId").find('.paymentEntry-row').length + 1;
+                    var trRow = "<tr class='paymentEntry-row' data-item-id=" + cnt + ">" +
+                        "<td class='item-salesNo'>" + salesEntryNo + "</td>" +
+                        "<td class='item-pendingAmount'><input type='text' class='item-amountData' name='Amount'></td>" +
+                        "</tr>";
+                    $("#paymentEntrytblId").append(trRow);
+                }
+            });
+            $('#pendingInvoiceModal').modal('hide');
+        });
+        function clearData() {
+            $("#CompanyBankId").select2("val", 0);
+            //$("#SelectedAccountPartyId").select2("val", 0);
+            $('#SelectedAccountPartyId').prepend('<option selected></option>').select2({
+                placeholder: "Select Account Party Name",
+                allowClear: true,
+                val: "0"
+            });
+            $('select').select2({
+                width: '100%'
+            });
+            $("#SalesEntryId").select2("val", 0);
+            $("#Amount").val("");
+            $("#Narration").val("");
+            $("#APCurrentBalance").val("");
+            $("#AgstRef").val("");
+            $("#CompanyCurrentBalance").val("");
+            $("#TotalPaidAmount").val("");
+            var curDate = moment('@DateTime.Now').format('DD/MM/YYYY');
+            $('#PaymentDateDisplay').datepicker('setDate', curDate);
+            $('#ChequeDateDisplay').datepicker('setDate', curDate);
+            $("#Created_Date").val("");
+            $("#Modified_Date").val("");
+            $("#PaymentType").select2("val", 0);
+            $("#chequeNoDivId").hide();
+            $("#chequeDateDivId").hide();
+            $("#bankDivId").hide();
+            $("#branchDivId").hide();
+            $("#remarksDivId").hide();
+            $("#Bank").val("");
+            $("#Branch").val("");
+            $("#Remarks").val("");
+            $("#ChequeNo").val("");
+            $("#paymentEntrytblId").find('.paymentEntry-row').remove();
+            $.ajax({
+                type: "GET",
+                url: '/api/PartyPaymentDebitEntry/GetIdByTable',
+                dataType: "json",
+                success: function (response) {
+                    debugger;
+                    $("#ReceiptNo").val(response);
+                    $("#PageMode").val("New");
+                },
+                error: function () {
+                    //swal("Error!", "Some error had occur!", "error");
+                }
+            });
+        }
+        $('#myModal').on('shown.bs.modal', function () {
+            $('#PaymentDateDisplay').focus();
+        });
+    </script>
+}
+
